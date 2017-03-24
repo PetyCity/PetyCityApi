@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+
  
   #resources :users
   
@@ -6,5 +8,11 @@ Rails.application.routes.draw do
   resources :users, except: [:new, :create], :defaults => { :format => 'json' }
   #resources :users
   root  'home#index', :defaults => { :format => 'json' }
+
+
+  #resources :images
+  #resources :sales
+  #resources :transactions
+  #resources :carts
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
