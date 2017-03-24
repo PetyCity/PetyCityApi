@@ -40,6 +40,7 @@ GEM
       tzinfo (~> 1.1)
     arel (7.1.4)
 
+
     bcrypt (3.1.11-x86-mingw32)
     builder (3.2.3)
     concurrent-ruby (1.0.5)
@@ -49,6 +50,9 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
+
+    builder (3.2.3)
+    concurrent-ruby (1.0.5)
 
     builder (3.2.3)
     concurrent-ruby (1.0.5)
@@ -71,7 +75,10 @@ GEM
     nokogiri (1.7.1-x86-mingw32)
       mini_portile2 (~> 2.1.0)
 
+
     orm_adapter (0.5.0)
+
+
 
     pg (0.20.0-x86-mingw32)
     puma (3.8.2)
@@ -103,6 +110,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (12.0.0)
 
+
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
     simple_token_authentication (1.15.1)
@@ -125,6 +133,7 @@ GEM
     tzinfo-data (1.2017.1)
       tzinfo (>= 1.0.0)
 
+
     warden (1.2.7)
       rack (>= 1.0)
 
@@ -139,11 +148,17 @@ PLATFORMS
 DEPENDENCIES
   byebug
 
+
   devise (~> 4.1, >= 4.1.1)
   pg (~> 0.18)
   puma (~> 3.0)
   rails (~> 5.0.2)
   simple_token_authentication (~> 1.0)
+
+  pg (~> 0.18)
+  puma (~> 3.0)
+  rails (~> 5.0.2)
+
 
   pg (~> 0.18)
   puma (~> 3.0)
