@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :publications, dependent: :destroy
   has_many :comment_Publications, dependent: :destroy  
   has_many :comment_Products, dependent: :destroy
+  has_many :products, through: :company
+  has_many :transactions, through: :cart
   # VALIDACIONES DE ATRIBUTOS
   validates :email, confirmation: true
   validates :email_confirmation, presence: true
@@ -18,7 +20,6 @@ class User < ApplicationRecord
               message: "only allows numbers " }, length: { minimum: 5 
              }, uniqueness: { case_sensitive: false }, presence: true, on: :update
 
- #allow_blank: true
   
   acts_as_token_authenticatable
   enum rol: [ :admin, :company, :customer ]

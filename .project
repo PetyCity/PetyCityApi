@@ -1,19 +1,18 @@
-
-</projectDescription>
-	</natures>
-		<nature>com.aptana.ruby.core.rubynature</nature>
-		<nature>com.aptana.projects.webnature</nature>
-	<natures>
-	</buildSpec>
-		</buildCommand>
-			</arguments>
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>PetyCityApi</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
 			<name>com.aptana.ide.core.unifiedBuilder</name>
 			<arguments>
-		<buildCommand>
-	<buildSpec>
-	</projects>
-	<projects>
-	<comment></comment>
-	<name>PetyCityApi</name>
-<projectDescription>
-<?xml version="1.0" encoding="UTF-8"?>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.aptana.projects.webnature</nature>
+		<nature>com.aptana.ruby.core.rubynature</nature>
+	</natures>
+</projectDescription>

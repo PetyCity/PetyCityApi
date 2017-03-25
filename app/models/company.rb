@@ -3,7 +3,7 @@ class Company < ApplicationRecord
   
   has_many :products, dependent: :destroy  
   belongs_to :user
-  
+  has_many :transactions, through: :products
   #validates :name, format: { with: /\A[a-zA-Z]+\z/,message: "only allows letters" } , length: { minimum: 5 }
   validates :name, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
      }, length: { minimum: 5 }, presence: true, on: :update

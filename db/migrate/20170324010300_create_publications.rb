@@ -1,9 +1,9 @@
 class CreatePublications < ActiveRecord::Migration[5.0]
   def change
     create_table :publications do |t|
-      t.string :title
-      t.text :body
-      t.references :user, foreign_key: true
+      t.string :title, null: false
+      t.text :body, null: false, default: ""
+      t.references :user, foreign_key: true, null:  false
 
       t.timestamps
     end

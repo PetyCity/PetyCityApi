@@ -23,7 +23,6 @@ gem 'puma', '~> 3.0'
 gem 'simple_token_authentication', '~> 1.0' 
 
 
->>>>>>> Modelos_Cart_Transaction_Sales_imagen
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
