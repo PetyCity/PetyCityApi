@@ -4,8 +4,15 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
-    render json: @users, status: :ok
+   # @users = User.all
+   #buscar por rol
+   #render json: User.users_by_rol("company"), status: :ok
+   #render json: User.users_by_rol(1), status: :ok
+    #buscar por rol e id
+   #render json: User.users_by_rol_and_id(1,2 ), status: :ok
+   
+   render json: User.users_By_companies, status: :ok
+   
   end
 
   # GET /users/1
@@ -94,6 +101,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:cedula,:name,:rol)
+      params.require(:user).permit(:cedula,:name,:block,:sendEmail,:rol)
     end
 end

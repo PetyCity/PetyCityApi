@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :users, except: [:new, :create], :defaults => { :format => 'json' }
   #resources :users
   root  'home#index', :defaults => { :format => 'json' }
-
+  resources :companies
 
   #resources :images
   #resources :sales
