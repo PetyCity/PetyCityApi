@@ -13,7 +13,7 @@ class CompaniesController < ApplicationController
     
     
     # la informacion de compañia en especifico para custummer
-    #@company = Company.company_by_id(1,1)
+    #@company = Company.company_by_id(1)
     #render json: @company  , status: :ok
     
     

@@ -35,7 +35,7 @@ class Company < ApplicationRecord
      .find_by_id(id)
   end
   #compañia en especifico
-  def self.company_by_id(comp,user)
+  def self.company_by_id(comp)
     where(companies: {
         id: comp
       })
