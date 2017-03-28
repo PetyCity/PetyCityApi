@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :users, except: [:new, :create], :defaults => { :format => 'json' }
   #resources :users
   root  'home#index', :defaults => { :format => 'json' }
+  resources :companies
 
 
   #resources :images
@@ -17,7 +18,9 @@ Rails.application.routes.draw do
   #resources :transactions
   #resources :carts
  # resources :categories
-  #resources :products
+  resources :products
+  resources :publications
+  resources :comment_publications
 #>>>>>>> "creating_categories"
 
 #  resources :coment_products

@@ -3,9 +3,20 @@ class CompaniesController < ApplicationController
 
   # GET /companies
   def index
-    @companies = Company.all
-
-    render json: @companies
+    #todos 
+    #@companies = Company.only_companies
+    #render json: @companies
+    
+    #toda la informacion de compañia en especifico
+    #@companies = Company.company_by_id_adminComp(1)
+    #render json: @companies, :include => [:products,:category_products]  , status: :ok
+    
+    
+    # la informacion de compañia en especifico para custummer
+    #@company = Company.company_by_id(1)
+    #render json: @company  , status: :ok
+    
+    
   end
 
   # GET /companies/1
@@ -46,6 +57,6 @@ class CompaniesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def company_params
-      params.require(:company).permit(:nit, :name, :address, :city, :phone, :permission, :user_id)
+      params.require(:company).permit(:nit, :name_comp, :address, :city, :phone, :permission, :user_id)
     end
 end

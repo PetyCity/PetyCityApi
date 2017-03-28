@@ -3,9 +3,17 @@ class PublicationsController < ApplicationController
 
   # GET /publications
   def index
-    @publications = Publication.all
-
-    render json: @publications
+    #@publications = Publication.only_publications
+    #render json: @publications
+  
+    
+    #@publications = Publication.publications_by_user(2)
+    #render json: @publications
+  
+    #@publications = Publication.publicacion_by_id(1)
+    #render json: @publications, :include => [:comment_Publications]  , status: :ok
+    
+    
   end
 
   # GET /publications/1
@@ -46,6 +54,6 @@ class PublicationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def publication_params
-      params.require(:publication).permit(:title, :body, :user_id)
+      params.require(:publication).permit(:title, :body_publication, :user_id)
     end
 end
