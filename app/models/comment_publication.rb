@@ -3,13 +3,29 @@ class CommentPublication < ApplicationRecord
   belongs_to :user
   validates :body_comment, presence: true ,allow_blank: false
   validates :user , presence: true
-  #COMENTARIOS de alguien en especifico 
-#def self.users_by_comments(user)
- #   joins(comment_Publications: :publication)
-  #  .select("users.*","comment_Publications.*","publications.title")      
-   #  .where(users: {
-    #    id: user
-     # })      
-# end
+  
+  
+  
+  #Queries
+  
+  #ver comentarios en especifico
+  def self.comment_publication(id)
+    where(comment_publications: {
+       id:  id
+      })
+  end
+  
+  #ver comentarios  por cada usuario
+  def self.comment_publication_by_user(user)
+    where(comment_publications: {
+        user_id:  user
+      })
+  end
+   #ver comentarios  por cada publicacion
+  def self.comment_publication_by_publication(pu)
+    where(comment_publications: {
+        publication_id:  pu
+      })
+  end  
   
 end

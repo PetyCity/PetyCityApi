@@ -3,9 +3,17 @@ class CommentPublicationsController < ApplicationController
 
   # GET /comment_publications
   def index
-    @comment_publications = CommentPublication.all
 
-    render json: @comment_publications
+ #   @comment_publications = CommentPublication.comment_publication_by_user(1)
+  #  render json: @comment_publications
+
+   #@comment_publications = CommentPublication.comment_publication_by_publication(2)
+    #render json: @comment_publications
+   
+   
+   #@comment_publications = CommentPublication.comment_publication(2)
+  # render json: @comment_publications
+
   end
 
   # GET /comment_publications/1
