@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :comment_Products, dependent: :destroy
   has_many :products, through: :company
   has_many :transactions, through: :cart
-  
+  #has_many :sales, through: :cart
   #VALIDACIONES
   
   validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
@@ -41,11 +41,16 @@ class User < ApplicationRecord
     company: :products,cart: :transactions)    
      .find_by_id(id)
   end
-  #Para company  y costummer
-  def self.user_by_id(user)
-    where(users: {
-        id: user
-      })
+  #Para company  
+  def self.user_company_by_id(user)
+    includes( company: :products)    
+     .find_by_id(id)
+  end
+   #Para  costummer
+  def self.user_custommer_by_id(user)
+    includes(:comment_Products,:comment_Publications,:publications,
+    cart: :transactions)    
+     .find_by_id(id)
   end
  #Para company  ver usuarios compañia
   def self.company_by_user()

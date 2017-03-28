@@ -3,9 +3,20 @@ class CompaniesController < ApplicationController
 
   # GET /companies
   def index
-    @companies = Company.all
-
-    render json: @companies
+    #todos 
+    #@companies = Company.only_companies
+    #render json: @companies
+    
+    #toda la informacion de compañia en especifico
+    #@companies = Company.company_by_id_adminComp(1)
+    #render json: @companies, :include => [:products,:category_products]  , status: :ok
+    
+    
+    # la informacion de compañia en especifico para custummer
+    #@company = Company.company_by_id(1,1)
+    #render json: @company  , status: :ok
+    
+    
   end
 
   # GET /companies/1
