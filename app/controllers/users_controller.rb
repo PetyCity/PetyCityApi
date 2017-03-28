@@ -4,15 +4,46 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-   # @users = User.all
+    @users = User.all
+    #TODOS LOS USUARIOS
+    #@user = User.only_users
+    #render json: @user, status: :ok
+    
+    
+    #Usuario by id, toda la informacion completa para admin
+    #@user = User.user_by_id_admin(1)
+    #render json: @user, :include => [:company,:products]  , status: :ok
+    #render json: @user, :include => [:company => {:only => :name_comp}}  , status: :ok
+    
+    #Usuario by id custumer and company    
+    #@user = User.user_by_id(2)
+    #render json: @user, status: :ok
+    
+    #Compañias  ---  ver usuario_compañias  
+    #@user = User.company_by_user()
+    #render json: @user, status: :ok
+    
+    #Compañia  ---  ver usuario_compañia  
+    #@user = User.company_prodruct_by_user
+    #render json: @user , status: :ok
+    
+    #PRODUCTOS en carrito
+#    @user = User.cart_by_user
+ #   render json: @user , status: :ok
+    
+    #PRODUCTOS ventas,  falta cambiar modleodddddddddddddddddddddd
+
+    
+    #publicaciones
+    #@user = User.users_by_publications
+    #render json: @user , status: :ok
+            
+    
+    
    #buscar por rol
    #render json: User.users_by_rol("company"), status: :ok
    #render json: User.users_by_rol(1), status: :ok
-    #buscar por rol e id
-   #render json: User.users_by_rol_and_id(1,2 ), status: :ok
-   
-   render json: User.users_By_companies, status: :ok
-   
+       
   end
 
   # GET /users/1
@@ -101,6 +132,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:cedula,:name,:block,:sendEmail,:rol)
+      params.require(:user).permit(:cedula,:name_user,:block,:sendEmail,:rol)
     end
 end

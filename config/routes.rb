@@ -12,12 +12,15 @@ Rails.application.routes.draw do
   root  'home#index', :defaults => { :format => 'json' }
   resources :companies
 
+
   #resources :images
   #resources :sales
   #resources :transactions
   #resources :carts
  # resources :categories
-  #resources :products
+  resources :products
+  resources :publications
+  resources :comment_publications
 #>>>>>>> "creating_categories"
 
 #  resources :coment_products
