@@ -2,6 +2,7 @@ class Cart < ApplicationRecord
   #RELATIONSHIPS
   belongs_to :user
   has_many :transactions
+  has_many :sales
 
   #VALIDATIONS
   validates :total_price, presence: true,  numericality: true
@@ -52,6 +53,10 @@ class Cart < ApplicationRecord
 
   def self.transactions()
     Transaction.where('id = ?', self.id )
+  end
+
+  def self.sales()
+    Sales.where('id = ?', self.id )
   end
 
 end

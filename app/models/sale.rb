@@ -1,6 +1,5 @@
 class Sale < ApplicationRecord
   #RELATIONSHIPS
-	belongs_to :trans, class_name: 'Transaction'
 	belongs_to :product
 	belongs_to :cart
 
@@ -64,11 +63,10 @@ class Sale < ApplicationRecord
 	  where("cart_id = ? and amount = ?", cart_id, amount).paginate(:page => page, :per_page => per_page)
 	end
 
-	def self.transaction()
-	  Transaction.where('transaction_id = ?', self.transaction_id)
-	end
-
 	def self.product()
 		Product.where('product_id = ?', self.product_id)
+	end
+	def self.cart()
+		Cart.where('cart_id = ?', self.cart_id)
 	end
 end
