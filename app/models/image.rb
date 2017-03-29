@@ -33,7 +33,7 @@ class Image < ApplicationRecord
 	end
 
 	def self.images_by_name(name_image, page = 1, per_page = 10)
-		where({name: name_image}).paginate(:page => page, :per_page => per_page)
+		where({name_image: name_image}).paginate(:page => page, :per_page => per_page)
 	end
 
 	def self.images_by_products(products_id, page = 1, per_page = 10)
