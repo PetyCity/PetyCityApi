@@ -1,6 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :company
-  has_many :coment_products
+  has_many :comment_products
   has_many :transactions
   has_many :category_products 
   has_many :categories, through: :category_products

@@ -3,9 +3,17 @@ class CommentProductsController < ApplicationController
 
   # GET /coment_products
   def index
-    @comment_products = CommentProduct.all
+   
+   # @coment_products = ComentProduct.coment_by_ids(6)
+    #render json: @coment_products
+    
+ 
+    #@coment_products = ComentProduct.coment_product_by_user(2)
+    #render json: @coment_products
 
-    render json: @comment_products
+    #@coment_products = ComentProduct.all_coments
+    #render json: @coment_products
+
   end
 
   # GET /coment_products/1
