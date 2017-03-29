@@ -3,13 +3,13 @@ class CartsController < ApplicationController
 
   # GET /carts
   def index
-    @carts = Cart.all
-
+    @carts = Cart.load_carts()
     render json: @carts
   end
 
   # GET /carts/1
   def show
+    @cart = Cart.cart_by_id(params[:id])
     render json: @cart
   end
 

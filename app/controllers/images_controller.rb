@@ -3,13 +3,14 @@ class ImagesController < ApplicationController
 
   # GET /images
   def index
-    @images = Image.all
-
+    #@images = Image.all
+    @images = Image.load_images()
     render json: @images
   end
 
   # GET /images/1
   def show
+    @image = Image.image_by_id(params[:id])
     render json: @image
   end
 
