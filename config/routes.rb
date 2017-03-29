@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
 
  
+  resources :comment_products
   #resources :users
   
   devise_for :users, :defaults => { :format => 'json' }

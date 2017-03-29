@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170324010313) do
+ActiveRecord::Schema.define(version: 20170329174343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,29 +39,29 @@ ActiveRecord::Schema.define(version: 20170324010313) do
     t.index ["product_id"], name: "index_category_products_on_product_id", using: :btree
   end
 
-  create_table "coment_products", force: :cascade do |t|
-    t.text     "body",       default: "", null: false
-    t.integer  "product_id",              null: false
-    t.integer  "user_id",                 null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.index ["product_id"], name: "index_coment_products_on_product_id", using: :btree
-    t.index ["user_id"], name: "index_coment_products_on_user_id", using: :btree
+  create_table "comment_products", force: :cascade do |t|
+    t.text     "body"
+    t.integer  "product_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_comment_products_on_product_id", using: :btree
+    t.index ["user_id"], name: "index_comment_products_on_user_id", using: :btree
   end
 
   create_table "comment_publications", force: :cascade do |t|
-    t.text     "body",           default: "", null: false
-    t.integer  "publication_id",              null: false
-    t.integer  "user_id",                     null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.text     "body_comment_Publication", default: "", null: false
+    t.integer  "publication_id",                        null: false
+    t.integer  "user_id",                               null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.index ["publication_id"], name: "index_comment_publications_on_publication_id", using: :btree
     t.index ["user_id"], name: "index_comment_publications_on_user_id", using: :btree
   end
 
   create_table "companies", force: :cascade do |t|
     t.bigint   "nit"
-    t.string   "name"
+    t.string   "name_comp"
     t.string   "address",    limit: 30
     t.string   "city",       limit: 20
     t.bigint   "phone"
@@ -93,11 +93,11 @@ ActiveRecord::Schema.define(version: 20170324010313) do
   end
 
   create_table "publications", force: :cascade do |t|
-    t.string   "title",                   null: false
-    t.text     "body",       default: "", null: false
-    t.integer  "user_id",                 null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.string   "title",                         null: false
+    t.text     "body_publication", default: "", null: false
+    t.integer  "user_id",                       null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.index ["user_id"], name: "index_publications_on_user_id", using: :btree
   end
 
@@ -114,32 +114,32 @@ ActiveRecord::Schema.define(version: 20170324010313) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.integer  "products_id"
+    t.integer  "product_id"
     t.integer  "cart_id"
     t.integer  "amount"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["cart_id"], name: "index_transactions_on_cart_id", using: :btree
-    t.index ["products_id"], name: "index_transactions_on_products_id", using: :btree
+    t.index ["product_id"], name: "index_transactions_on_product_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                             default: "", null: false
-    t.string   "encrypted_password",                default: "", null: false
+    t.string   "email",                             default: "",    null: false
+    t.string   "encrypted_password",                default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                     default: 0,  null: false
+    t.integer  "sign_in_count",                     default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.integer  "cedula"
-    t.string   "name"
-    t.boolean  "block"
-    t.boolean  "sendEmail"
+    t.string   "name_user"
+    t.boolean  "block",                             default: false
+    t.boolean  "sendEmail",                         default: false
     t.integer  "rol"
     t.integer  "image"
     t.string   "authentication_token",   limit: 30
@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 20170324010313) do
   add_foreign_key "carts", "users"
   add_foreign_key "category_products", "categories"
   add_foreign_key "category_products", "products"
-  add_foreign_key "coment_products", "products"
-  add_foreign_key "coment_products", "users"
+  add_foreign_key "comment_products", "products"
+  add_foreign_key "comment_products", "users"
   add_foreign_key "comment_publications", "publications"
   add_foreign_key "comment_publications", "users"
   add_foreign_key "companies", "users"
@@ -163,5 +163,5 @@ ActiveRecord::Schema.define(version: 20170324010313) do
   add_foreign_key "sales", "products"
   add_foreign_key "sales", "transactions"
   add_foreign_key "transactions", "carts"
-  add_foreign_key "transactions", "products", column: "products_id"
+  add_foreign_key "transactions", "products"
 end

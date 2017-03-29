@@ -1,10 +1,12 @@
 class CommentProductsController < ApplicationController
   before_action :set_comment_product, only: [:show, :update, :destroy]
 
-  # GET /coment_products
+  # GET /comment_products
   def index
-   
-   # @coment_products = ComentProduct.coment_by_ids(6)
+    #@comment_products = CommentProduct.all
+    #render json: @comment_products
+
+    # @coment_products = ComentProduct.coment_by_ids(6)
     #render json: @coment_products
     
  
@@ -16,12 +18,12 @@ class CommentProductsController < ApplicationController
 
   end
 
-  # GET /coment_products/1
+  # GET /comment_products/1
   def show
     render json: @comment_product
   end
 
-  # POST /coment_products
+  # POST /comment_products
   def create
     @comment_product = CommentProduct.new(comment_product_params)
 
@@ -32,7 +34,7 @@ class CommentProductsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /coment_products/1
+  # PATCH/PUT /comment_products/1
   def update
     if @comment_product.update(comment_product_params)
       render json: @comment_product
@@ -41,19 +43,19 @@ class CommentProductsController < ApplicationController
     end
   end
 
-  # DELETE /coment_products/1
+  # DELETE /comment_products/1
   def destroy
     @comment_product.destroy
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_coment_product
+    def set_comment_product
       @comment_product = CommentProduct.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
-    def coment_product_params
+    def comment_product_params
       params.require(:comment_product).permit(:body, :product_id, :user_id)
     end
 end
