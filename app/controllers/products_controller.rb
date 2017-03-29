@@ -3,9 +3,34 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    @products = Product.all
+   
+    #@products = Product.published
+    #render json: @products
+   
+    ################################
+    #@products = Product.ultimos
+    #render json: @products
+    ##############################
 
-    render json: @products
+    #@products = Product.products_by_ids(1)
+    #render json: @products
+
+    #@products = Product.products_by_company(2)
+    #render json: @products
+    
+
+
+    #@products = Product.all_products
+    #render json: @products
+
+
+    #@products = Product.products_by_category(3)
+    #render json: @products
+
+
+    #@products = Product.cheaper_than(30000)
+    #render json: @products
+    
   end
 
   # GET /products/1
