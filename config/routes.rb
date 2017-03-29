@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   resources :comment_publications
 #>>>>>>> "creating_categories"
 
-#  resources :coment_products
+  resources :comment_products
  # resources :category_products
   #resources :categories
   #resources :products
