@@ -3,9 +3,34 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    @products = Product.all
+   
+    #@products = Product.published
+    #render json: @products
+   
+    ################################
+    #@products = Product.ultimos
+    #render json: @products
+    ##############################
 
+    #@products = Product.products_by_ids(1)
+    #render json: @products
+
+    #@products = Product.products_by_company(2)
+    #render json: @products
+    
+
+
+    @products = Product.all_products
     render json: @products
+
+
+    #@products = Product.products_by_category(3)
+    #render json: @products
+
+
+    #@products = Product.cheaper_than(30000)
+    #render json: @products
+    
   end
 
   # GET /products/1
@@ -46,6 +71,6 @@ class ProductsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def product_params
-      params.require(:product).permit(:name, :description, :status, :value, :amount, :company_id)
+      params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
     end
 end

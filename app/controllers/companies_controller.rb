@@ -4,8 +4,8 @@ class CompaniesController < ApplicationController
   # GET /companies
   def index
     #todos 
-    #@companies = Company.only_companies
-    #render json: @companies
+    @companies = Company.only_companies
+    render json: @companies
     
     #toda la informacion de compañia en especifico
     #@companies = Company.company_by_id_adminComp(1)

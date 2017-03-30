@@ -3,9 +3,20 @@ class CategoriesController < ApplicationController
 
   # GET /categories
   def index
-    @categories = Category.all
+    #@categories = Category.all_categories
+    #render json: @categories
+   
+    #@categories = Category.categories_by_ids(2)
+    #render json: @categories
 
-    render json: @categories
+
+    #@categories = Category.categories_by_name("ropa")
+    #render json: @categories
+
+
+    #@categories = Category.categories_by_products
+    #render json: @categories
+
   end
 
   # GET /categories/1

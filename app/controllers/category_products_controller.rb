@@ -3,9 +3,17 @@ class CategoryProductsController < ApplicationController
 
   # GET /category_products
   def index
-    @category_products = CategoryProduct.all
+     #@category_products = CategoryProduct.all
 
-    render json: @category_products
+    #render json: @category_products
+
+    #@category_products = CategoryProduct.category_by_ids(1)
+    #render json: @category_products
+
+    #@category_products = CategoryProduct.product_by_category(1)
+    #render json: @category_products    
+
+
   end
 
   # GET /category_products/1
