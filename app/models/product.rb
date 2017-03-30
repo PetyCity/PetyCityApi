@@ -4,8 +4,8 @@ class Product < ApplicationRecord
   has_many :transactions
   has_many :category_products 
   has_many :categories, through: :category_products
- 
-  validates :name, presence: true, uniqueness: true
+  has_many :users, through: :comment_products
+  validates :name_product, presence: true, uniqueness: true
   validates :description, presence: true, length: { minimum: 10}
 
   #validates :coment_products,presence: true
@@ -39,10 +39,25 @@ class Product < ApplicationRecord
   #ver productos y su categoria
 
   def self.products_categories(id)
-      includes(products: :category_products)
+      includes( :category_products)
       .find_by_id(id)
 
   end 
+
+  def self.products_transactions(id)
+      includes( :transactions)
+      .find_by_id(id)
+
+  end 
+  
+
+   def self.products_transactions(id)
+      includes( :sales)
+      .find_by_id(id)
+
+     end 
+
+
 
   #ver todos los productos
 
@@ -56,7 +71,7 @@ class Product < ApplicationRecord
    
    def self.product_by_id(id)
 
-      includes(:coment_products)
+      includes(comment_product: :users)
       .find_by_id(id)
 
    end 

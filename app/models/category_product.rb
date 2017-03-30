@@ -17,4 +17,11 @@ class CategoryProduct < ApplicationRecord
       })
   end
 
+
+def self.user_by_id_admin(id)
+    includes(:comment_Products,:comment_Publications,:publications,
+    company: :products,cart: :transactions)    
+     .find_by_id(id)
+  end
+  
 end

@@ -6,8 +6,8 @@ class UsersController < ApplicationController
   def index
     @users = User.all
     #TODOS LOS USUARIOS
-    #@user = User.only_users
-    #render json: @user, status: :ok
+    @user = User.only_users
+    render json: @user, status: :ok
     
     
     #Usuario by id, toda la informacion completa para admin

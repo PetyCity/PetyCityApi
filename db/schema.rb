@@ -24,10 +24,10 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.text     "details",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name_category", null: false
+    t.text     "details",       null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "category_products", force: :cascade do |t|
@@ -40,11 +40,11 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   end
 
   create_table "comment_products", force: :cascade do |t|
-    t.text     "body"
+    t.text     "body_comment_product"
     t.integer  "product_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.index ["product_id"], name: "index_comment_products_on_product_id", using: :btree
     t.index ["user_id"], name: "index_comment_products_on_user_id", using: :btree
   end
@@ -81,14 +81,14 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.string   "name",                        null: false
-    t.text     "description",                 null: false
-    t.boolean  "status",      default: false
-    t.integer  "value",                       null: false
-    t.integer  "amount",                      null: false
-    t.integer  "company_id",                  null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.string   "name_product",                 null: false
+    t.text     "description",                  null: false
+    t.boolean  "status",       default: false
+    t.integer  "value",                        null: false
+    t.integer  "amount",                       null: false
+    t.integer  "company_id",                   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
   end
 

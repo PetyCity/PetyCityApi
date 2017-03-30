@@ -20,8 +20,8 @@ class ProductsController < ApplicationController
     
 
 
-    #@products = Product.all_products
-    #render json: @products
+    @products = Product.all_products
+    render json: @products
 
 
     #@products = Product.products_by_category(3)
@@ -71,6 +71,6 @@ class ProductsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def product_params
-      params.require(:product).permit(:name, :description, :status, :value, :amount, :company_id)
+      params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
     end
 end
