@@ -11,7 +11,7 @@ class SalesController < ApplicationController
   # GET /sales/1
   def show
     @sales = Sale.sales_by_id(params[:id])
-    render json: @sale
+    render json: @sale, :include => [:product, :cart]
   end
 
   # POST /sales

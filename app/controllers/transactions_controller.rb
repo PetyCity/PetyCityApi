@@ -11,7 +11,7 @@ class TransactionsController < ApplicationController
   # GET /transactions/1
   def show
     @transaction = Transaction.transaction_by_id(params[:id])
-    render json: @transaction
+    render json: @transaction, :include => [:product, :cart]
   end
 
   # POST /transactions

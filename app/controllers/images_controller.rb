@@ -5,13 +5,14 @@ class ImagesController < ApplicationController
   def index
     #@images = Image.all
     @images = Image.load_images()
+
     render json: @images
   end
 
   # GET /images/1
   def show
     @image = Image.image_by_id(params[:id])
-    render json: @image
+    render json: @image, :include => [:product]
   end
 
   # POST /images

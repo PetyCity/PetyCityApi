@@ -13,60 +13,49 @@ class Sale < ApplicationRecord
   	scope :order_by_id_desc, -> {order(id: :desc)}
 
 	#QUERIES
-	def self.load_sales(page = 1, per_page = 10)
-	  paginate(:page => page, :per_page => per_page)
+	def self.load_sales()
+	  self.all
 	end
 
 	def self.sales_by_id(id)
+		includes(:product,:cart).
 	  find_by_id(id)
 	end
 
-	def self.sales_by_ids(ids, page = 1, per_page = 10)
-	load_sales(page,per_page)
+	def self.sales_by_ids(ids)
+	load_sales()
 	  .where({id: ids })
 	end
 
-	def self.sales_by_not_ids(ids, page = 1, per_page = 10)
-	load_sales(page,per_page)
-	  .where.not({id: ids})
+	def self.sales_by_not_ids(ids)
+		load_sales()
+	  		.where.not({id: ids})
 	end
 
-	def self.sales_by_products(products_id, page = 1, per_page = 10)
-	  where({product_id: products_id}).paginate(:page => page, :per_page => per_page)
+	def self.sales_by_products(products_id)
+	  where({product_id: products_id})
 	end
 
-	def self.sales_by_not_products(products_id, page = 1, per_page = 10)
-	  where.not({product_id: products_id}).paginate(:page => page, :per_page => per_page)
+	def self.sales_by_not_products(products_id)
+	  where.not({product_id: products_id})
 	end
 
-	def self.sales_by_carts(carts_id, page = 1, per_page = 10)
-	  where({cart_id: carts_id}).paginate(:page => page, :per_page => per_page)
+	def self.sales_by_carts(carts_id)
+	  where({cart_id: carts_id})
 	end
 
-	def self.sales_by_not_carts(carts_id, page = 1, per_page = 10)
-	  where.not({cart_id: carts_id}).paginate(:page => page, :per_page => per_page)
+	def self.sales_by_not_carts(carts_id)
+	  where.not({cart_id: carts_id})
 	end
 
-	def self.sales_by_amounts(amounts, page = 1, per_page = 10)
-	  where({amount: amounts}).paginate(:page => page, :per_page => per_page)
+	def self.transactions_by_amounts(amount)
+	    where("amount = ?", amount)
 	end
 
-	def self.sales_by_not_amounts(amounts, page = 1, per_page = 10)
-	  where.not({amount: amounts}).paginate(:page => page, :per_page => per_page)
+	def self.transactions_by_amounts_greater(amount)
+	    where("amount < ?", amount)
 	end
-
-	def self.sales_by_product_amount(product_id, amount, page = 1, per_page = 10)
-	  where("product_id = ? and amount = ?", product_id, amount).paginate(:page => page, :per_page => per_page)
-	end
-
-	def self.sales_by_cart_amount(cart_id, amount, page = 1, per_page = 10)
-	  where("cart_id = ? and amount = ?", cart_id, amount).paginate(:page => page, :per_page => per_page)
-	end
-
-	def self.product()
-		Product.where('product_id = ?', self.product_id)
-	end
-	def self.cart()
-		Cart.where('cart_id = ?', self.cart_id)
+	def self.transactions_by_amounts_less(amount)
+	    where("amount > ?", amount)
 	end
 end

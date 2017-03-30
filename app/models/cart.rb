@@ -1,8 +1,9 @@
 class Cart < ApplicationRecord
-  #RELATIONSHIPS
+ #RELATIONSHIPS
   belongs_to :user
   has_many :transactions
   has_many :sales
+  has_many :products, through: :transactions
 
   #VALIDATIONS
   validates :total_price, presence: true,  numericality: true
@@ -14,49 +15,57 @@ class Cart < ApplicationRecord
   scope :order_by_id_desc, -> {order(id: :desc)}
 
   #QUERIES
-  def self.load_carts(page = 1, per_page = 10)
-      paginate(:page => page, :per_page => per_page)
+  def self.load_carts()
+      self.all
   end
 
   def self.cart_by_id(id)
-      find_by_id(id)
+      includes(:products, :sales)
+      .find_by_id(id)
   end
 
-  def self.carts_by_ids(ids, page = 1, per_page = 10)
-    load_carts(page,per_page)
-      .where({id: ids })
+  def self.carts_by_ids(ids)
+    load_carts().where({id: ids })
   end
 
-  def self.carts_by_not_ids(ids, page = 1, per_page = 10)
+  def self.carts_by_not_ids()
     load_carts(page,per_page)
       .where.not({id: ids})
   end
 
-  def self.carts_by_user_id(users_id, page = 1, per_page = 10)
-      where({user_id: users_id}).paginate(:page => page, :per_page => per_page)	
-  end
-  def self.carts_by_not_user_id(users_id, page = 1, per_page = 10)
-      where.not({user_id: users_id}).paginate(:page => page, :per_page => per_page) 
+  def self.carts_by_user_id(users_id)
+      includes(:products, :sales)
+      .where({user_id: users_id})
   end
 
-  def self.carts_by_total_prices(total_prices, page = 1, per_page = 10)
-      where({total_price: total_prices}).paginate(:page => page, :per_page => per_page)   
+  def self.carts_by_total_prices(total_price)
+      includes(:products, :sales)
+      .where("total_price = ?", total_price)
   end
 
-  def self.carts_by_not_total_prices(total_prices, page = 1, per_page = 10)
-      where.not({total_price: total_prices}).paginate(:page => page, :per_page => per_page) 
+  def self.carts_by_total_prices_greater (total_price)
+      includes(:products, :sales)
+      .where("total_price > ?", total_price)
   end
 
-  def self.user()
-    User.where('id = ?', self.user_id )
+  def self.carts_by_total_prices_less(total_price)
+      includes(:products, :sales)
+      .where("total_price < ?", total_price)
   end
 
-  def self.transactions()
-    Transaction.where('id = ?', self.id )
+  def self.transactions(cart_id)
+    includes(:transactions).
+    find_by_id(cart_id)
   end
 
-  def self.sales()
-    Sales.where('id = ?', self.id )
+  def self.sales(cart_id)
+    includes(:sales).
+    find_by_id(cart_id)
+  end
+
+  def self.products(cart_id)
+    includes(:products).
+    find_by_id(cart_id)
   end
 
 end
