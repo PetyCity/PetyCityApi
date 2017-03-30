@@ -3,14 +3,15 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transactions = Transaction.all
-
+    #@transactions = Transaction.all
+    @transactions = Transaction.load_transactions()
     render json: @transactions
   end
 
   # GET /transactions/1
   def show
-    render json: @transaction
+    @transaction = Transaction.transaction_by_id(params[:id])
+    render json: @transaction, :include => [:product, :cart]
   end
 
   # POST /transactions

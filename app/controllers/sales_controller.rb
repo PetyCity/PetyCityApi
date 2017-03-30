@@ -3,14 +3,15 @@ class SalesController < ApplicationController
 
   # GET /sales
   def index
-    @sales = Sale.all
-
+    #@sales = Sale.all
+    @sales = Sale.load_sales()
     render json: @sales
   end
 
   # GET /sales/1
   def show
-    render json: @sale
+    @sales = Sale.sales_by_id(params[:id])
+    render json: @sale, :include => [:product, :cart]
   end
 
   # POST /sales
