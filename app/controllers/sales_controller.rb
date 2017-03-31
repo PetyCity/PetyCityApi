@@ -3,8 +3,8 @@ class SalesController < ApplicationController
 
   # GET /sales
   def index
-    #@sales = Sale.all
-    @sales = Sale.transactions_by_amounts_less(2)
+    @sales = Sale.all
+    #@sales = Sale.transactions_by_amounts_less(2)
     render json: @sales
   end
 

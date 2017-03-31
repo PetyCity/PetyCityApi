@@ -9,6 +9,12 @@ class User < ApplicationRecord
   has_many :products, through: :company
   has_many :transactions, through: :cart
   has_many :sales, through: :cart
+  has_many :products , through: :sales
+  has_many :products , through: :transactions
+
+
+
+   
   #VALIDACIONES
   
   validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
@@ -42,43 +48,58 @@ class User < ApplicationRecord
      .find_by_id(id)
   end
   #Para company  
-  def self.user_company_by_id(user)
+  def self.user_company_by_id(id)
     includes( company: :products)    
      .find_by_id(id)
   end
    #Para  costummer
-  def self.user_custommer_by_id(user)
+  def self.user_custommer_by_id(id)
     includes(:comment_Products,:comment_Publications,:publications,
     cart: :transactions)    
      .find_by_id(id)
   end
+ 
  #Para company  ver usuarios compañia
   def self.company_by_user()
     includes(:company ).pluck(:name_user,:cedula,:name_comp,:nit,:permission)
   end
+ 
+
    #Para company  ver informacion de la compañia, usuario productos y  la compañia 
   def self.company_prodruct_by_user()
     includes(company: :products)
     .pluck(:name_user,:cedula,:name_comp,:nit,:permission,:name_product,:status)  
-      #.group("users.id")
-      #.group("companies.id")
-      #.group("products.id")
-      #.pluck(:name_user,:cedula,:name_comp,:nit,:permission,:name,:status)    
+      
   end
+
+
+
+
   #PRODUCTOS Comprados  
-  #def self.Product_by_user()
-   # joins(cart: :sales).select("users.name","sales.*")
-  #end
+  def self.Product_Sale_by_user()
+    includes(sales: :product)
+  end
+   
+#PRODUCTOS Comprados  pir id user
+  def self.Product_Sale_by_user_byID(id)
+    includes(sales: :product)
+    .find_by_id(id)
+  end
+
+
    #PRODUCTOS EN EL CARRITO 
   def self.cart_by_user()
-    joins(cart: :transactions).select("users.name_user","transactions.*")
+     includes(transactions: :product)
+  end
+  #PRODUCTOS EN EL CARRITO por id
+  def self.cart_by_userID(id)
+     includes(transactions: :product)
+     .find_by_id(id)
   end
  #PUBLICACIONES
  def self.users_by_publications()
-    joins(:publications).select("users.*","publications.*")
+    includes(:publications)
  end
- 
-#BIen
  #Para ver todos los usuarios segun un rol especifico
   def self.users_by_rol(type)
     where(users: {

@@ -4,10 +4,10 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    #@users = User.all
     #TODOS LOS USUARIOS
-    @user = User.only_users
-    render json: @user, status: :ok
+    #@user = User.only_users
+    #render json: @user, status: :ok
     
     
     #Usuario by id, toda la informacion completa para admin
@@ -27,6 +27,18 @@ class UsersController < ApplicationController
     #@user = User.company_prodruct_by_user
     #render json: @user , status: :ok
     
+
+    #@user = User.Product_Sale_by_user
+    #render json: @user, :include => [:sales, :products]  , status: :ok
+    
+
+
+   # @user = User.Product_Sale_by_user_byID(1)
+    #render json: @user, :include => [:sales, :products]  , status: :ok
+    
+
+
+
     #PRODUCTOS en carrito
 #    @user = User.cart_by_user
  #   render json: @user , status: :ok

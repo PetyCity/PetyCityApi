@@ -4,7 +4,7 @@ class PublicationsController < ApplicationController
   # GET /publications
   def index
     #@publications = Publication.only_publications
-    #render json: @publications
+    render json: @publications
   
     
     #@publications = Publication.publications_by_user(2)

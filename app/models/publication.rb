@@ -22,7 +22,7 @@ class Publication < ApplicationRecord
   end
   #publicacion  en especifico con sus comentarios
   def self.publicacion_by_id(id)
-    includes(:comment_Publications)
+    includes(comment_Publications: :user)
     .find_by_id(id)
   end
 

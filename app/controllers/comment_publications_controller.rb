@@ -4,8 +4,8 @@ class CommentPublicationsController < ApplicationController
   # GET /comment_publications
   def index
 
- #   @comment_publications = CommentPublication.comment_publication_by_user(1)
-  #  render json: @comment_publications
+    @comment_publications = CommentPublication.comment_publication_by_user(1)
+    render json: @comment_publications
 
    #@comment_publications = CommentPublication.comment_publication_by_publication(2)
     #render json: @comment_publications
@@ -54,6 +54,6 @@ class CommentPublicationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def comment_publication_params
-      params.require(:comment_publication).permit(:body_comment, :publication_id, :user_id)
+      params.require(:comment_publication).permit(:body_comment_Publication, :publication_id, :user_id)
     end
 end

@@ -4,6 +4,9 @@ class Company < ApplicationRecord
   has_many :transactions, through: :products
   has_many :category_products , through: :products, dependent: :destroy  
   
+
+  
+
   #has_many :sales, through: :products
   #validates :name, format: { with: /\A[a-zA-Z]+\z/,message: "only allows letters" } , length: { minimum: 5 }
   validates :name_comp, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
@@ -41,11 +44,16 @@ class Company < ApplicationRecord
       })
   end
 
-  #Productos vendidos
- # def self.product_sales(id)
-   # includes(products: :sales )    
-   #  .find_by_id(id)
-  #end
+  #Productos vendidos 
+  def self.product_sales()
+    includes(products: :sales )  
+  end
+
+  #Productos vendidos id
+  def self.product_salesID(id)
+    includes(products: :sales )    
+     .find_by_id(id)
+  end
   
   
   

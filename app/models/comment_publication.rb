@@ -1,7 +1,7 @@
 class CommentPublication < ApplicationRecord
   belongs_to :publication
   belongs_to :user
-  validates :body_comment, presence: true ,allow_blank: false
+  validates :body_comment_Publication, presence: true ,allow_blank: false
   validates :user , presence: true
   
   

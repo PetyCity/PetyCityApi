@@ -3,8 +3,8 @@ class ImagesController < ApplicationController
 
   # GET /images
   def index
-    #@images = Image.all
-    @images = Image.images_by_name("casa22")
+    @images = Image.all
+    #@images = Image.images_by_name("casa22")
 
     render json: @images
   end
