@@ -4,6 +4,7 @@ class CategoryProductsController < ApplicationController
   # GET /category_products
   def index
   
+  
    # @category_products = CategoryProduct.products_by_category(2)
     #render json: @category_products, :include => [:product]   
 
