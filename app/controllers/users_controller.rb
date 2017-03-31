@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     #Compañias  ---  ver usuario_compañias  
     #@user = User.company_by_user()
     #render json: @user, status: :ok
-    
+    ########################################
     #Compañia  ---  ver usuario_compañia  
     #@user = User.company_prodruct_by_user
     #render json: @user , status: :ok

@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
   # GET /images
   def index
     #@images = Image.all
-    @images = Image.load_images()
+    @images = Image.images_by_name("casa22")
 
     render json: @images
   end
@@ -48,6 +48,6 @@ class ImagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def image_params
-      params.require(:image).permit(:name, :product_id)
+      params.require(:image).permit(:name_image, :product_id)
     end
 end

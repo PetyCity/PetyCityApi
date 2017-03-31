@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   enable_extension "plpgsql"
 
   create_table "carts", force: :cascade do |t|
-    t.integer  "user_id"
-    t.float    "total_price"
+    t.integer  "user_id",     null: false
+    t.float    "total_price", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.index ["user_id"], name: "index_carts_on_user_id", using: :btree
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170329174343) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.index ["category_id"], name: "index_category_products_on_category_id", using: :btree
+    t.index ["product_id", "category_id"], name: "index_category_products_on_product_id_and_category_id", unique: true, using: :btree
     t.index ["product_id"], name: "index_category_products_on_product_id", using: :btree
   end
 
@@ -73,10 +74,10 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   end
 
   create_table "images", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "product_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name_image", limit: 20, null: false
+    t.integer  "product_id",            null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.index ["product_id"], name: "index_images_on_product_id", using: :btree
   end
 
@@ -90,6 +91,7 @@ ActiveRecord::Schema.define(version: 20170329174343) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
+    t.index ["name_product", "company_id"], name: "index_products_on_name_product_and_company_id", unique: true, using: :btree
   end
 
   create_table "publications", force: :cascade do |t|
@@ -102,23 +104,23 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   end
 
   create_table "sales", force: :cascade do |t|
-    t.integer  "transaction_id"
-    t.integer  "product_id"
-    t.integer  "cart_id"
-    t.integer  "amount"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.integer  "product_id", null: false
+    t.integer  "cart_id",    null: false
+    t.bigint   "amount",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id", "product_id"], name: "index_sales_on_cart_id_and_product_id", unique: true, using: :btree
     t.index ["cart_id"], name: "index_sales_on_cart_id", using: :btree
     t.index ["product_id"], name: "index_sales_on_product_id", using: :btree
-    t.index ["transaction_id"], name: "index_sales_on_transaction_id", using: :btree
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.integer  "product_id"
-    t.integer  "cart_id"
-    t.integer  "amount"
+    t.integer  "product_id", null: false
+    t.integer  "cart_id",    null: false
+    t.bigint   "amount",     null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cart_id", "product_id"], name: "index_transactions_on_cart_id_and_product_id", unique: true, using: :btree
     t.index ["cart_id"], name: "index_transactions_on_cart_id", using: :btree
     t.index ["product_id"], name: "index_transactions_on_product_id", using: :btree
   end
@@ -161,7 +163,6 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   add_foreign_key "publications", "users"
   add_foreign_key "sales", "carts"
   add_foreign_key "sales", "products"
-  add_foreign_key "sales", "transactions"
   add_foreign_key "transactions", "carts"
   add_foreign_key "transactions", "products"
 end

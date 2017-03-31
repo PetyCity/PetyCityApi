@@ -12,10 +12,8 @@ Rails.application.routes.draw do
   #resources :users
   root  'home#index', :defaults => { :format => 'json' }
   resources :companies
-
-
-  #resources :images
-  #resources :sales
+  resources :images
+  resources :sales
   resources :transactions
   resources :carts
  # resources :categories

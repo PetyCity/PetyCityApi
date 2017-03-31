@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :comment_Products, dependent: :destroy
   has_many :products, through: :company
   has_many :transactions, through: :cart
-  #has_many :sales, through: :cart
+  has_many :sales, through: :cart
   #VALIDACIONES
   
   validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
@@ -54,12 +54,12 @@ class User < ApplicationRecord
   end
  #Para company  ver usuarios compañia
   def self.company_by_user()
-    joins(:company ).pluck(:name_user,:cedula,:name_comp,:nit,:permission)
+    includes(:company ).pluck(:name_user,:cedula,:name_comp,:nit,:permission)
   end
    #Para company  ver informacion de la compañia, usuario productos y  la compañia 
   def self.company_prodruct_by_user()
-    joins(company: :products)
-    .pluck(:name_user,:cedula,:name_comp,:nit,:permission,:name,:status)  
+    includes(company: :products)
+    .pluck(:name_user,:cedula,:name_comp,:nit,:permission,:name_product,:status)  
       #.group("users.id")
       #.group("companies.id")
       #.group("products.id")

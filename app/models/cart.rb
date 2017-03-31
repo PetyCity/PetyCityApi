@@ -7,6 +7,7 @@ class Cart < ApplicationRecord
 
   #VALIDATIONS
   validates :total_price, presence: true,  numericality: true
+  validates :user, presence: true
 
   #SCOPES
   default_scope {order(total_price: :asc)}
@@ -34,7 +35,7 @@ class Cart < ApplicationRecord
   end
 
   def self.carts_by_user_id(users_id)
-      includes(:products, :sales)
+      includes(:products, :sales,:transactions)
       .where({user_id: users_id})
   end
 
@@ -45,12 +46,12 @@ class Cart < ApplicationRecord
 
   def self.carts_by_total_prices_greater (total_price)
       includes(:products, :sales)
-      .where("total_price > ?", total_price)
+      .where("total_price >= ?", total_price)
   end
 
   def self.carts_by_total_prices_less(total_price)
       includes(:products, :sales)
-      .where("total_price < ?", total_price)
+      .where("total_price <= ?", total_price)
   end
 
   def self.transactions(cart_id)

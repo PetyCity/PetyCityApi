@@ -5,6 +5,8 @@ class Sale < ApplicationRecord
 
 	#VALIDATES
 	validates :amount, presence: true, numericality: true
+	validates :porduct, presence: true
+	validates :cart, presence: true
 
 	#SCOPES
 	default_scope {order(amount: :asc)}
@@ -53,9 +55,9 @@ class Sale < ApplicationRecord
 	end
 
 	def self.transactions_by_amounts_greater(amount)
-	    where("amount < ?", amount)
+	    where("amount >= ?", amount)
 	end
 	def self.transactions_by_amounts_less(amount)
-	    where("amount > ?", amount)
+	    where("amount <= ?", amount)
 	end
 end

@@ -7,6 +7,6 @@ class CreateSales < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-    add_index :transactions,[:cart_id, :product_id], unique: true
+    add_index :sales,[:cart_id, :product_id], unique: true
   end
 end

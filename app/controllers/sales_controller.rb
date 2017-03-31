@@ -4,7 +4,7 @@ class SalesController < ApplicationController
   # GET /sales
   def index
     #@sales = Sale.all
-    @sales = Sale.load_sales()
+    @sales = Sale.transactions_by_amounts_less(2)
     render json: @sales
   end
 

@@ -5,3 +5,29 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+def generate_code(number)
+  charset = Array('A'..'Z') + Array('a'..'z')
+  Array.new(number) { charset.sample }.join
+end
+rols = ["admin","company","custommer"]
+ for num in 1..5
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

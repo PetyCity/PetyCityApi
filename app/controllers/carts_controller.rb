@@ -4,14 +4,14 @@ class CartsController < ApplicationController
   # GET /carts
   def index
     #@carts = Cart.all
-    @carts = Cart.load_carts()
+    @carts = Cart.transactions(3)
     render json: @carts#, :include => [:product, :cart]
   end
 
   # GET /carts/1
   def show
     @cart = Cart.cart_by_id(params[:id])
-    render json: @cart, :include => [:products, :sales]
+    render json: @cart, :include => [:products, :sales,:transactions]
   end
 
   # POST /carts
