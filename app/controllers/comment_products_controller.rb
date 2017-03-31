@@ -3,8 +3,8 @@ class CommentProductsController < ApplicationController
 
   # GET /comment_products
   def index
-    #@comment_products = CommentProduct.all
-    #render json: @comment_products
+    @comment_products = CommentProduct.all
+    render json: @comment_products
 
     # @coment_products = ComentProduct.coment_by_ids(6)
     #render json: @coment_products
@@ -56,6 +56,6 @@ class CommentProductsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def comment_product_params
-      params.require(:comment_product).permit(:body, :product_id, :user_id)
+      params.require(:comment_product).permit(:body_comment_product, :product_id, :user_id)
     end
 end

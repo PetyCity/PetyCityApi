@@ -1,27 +1,26 @@
 class CategoryProduct < ApplicationRecord
   belongs_to :product
   belongs_to :category
-
-
+  validates :product , presence: true
+  validates :category , presence: true
+  
+  
   #ver categorias en especifico no esta sirviendo
  
-  def self.category_by_ids(ids)
-     where(category_products:{
-        id: ids
-      })
+  def self.products_by_category(cat)
+     includes(:product)  
+     .where(category_products: {
+        category_id: cat
+      })     
   end
 
-  def self.product_by_category(cat)
-	where(category_products: {
-        id:  cat
-      })
+  def self.categories_by_product(pro)
+     includes(:category)  
+	   .where(category_products: {
+        product_id: pro
+      })  
   end
 
 
-def self.user_by_id_admin(id)
-    includes(:comment_Products,:comment_Publications,:publications,
-    company: :products,cart: :transactions)    
-     .find_by_id(id)
-  end
   
 end

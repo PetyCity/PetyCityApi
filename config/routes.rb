@@ -16,8 +16,8 @@ Rails.application.routes.draw do
 
   #resources :images
   #resources :sales
-  #resources :transactions
-  #resources :carts
+  resources :transactions
+  resources :carts
  # resources :categories
   resources :products
   resources :publications
@@ -25,8 +25,8 @@ Rails.application.routes.draw do
 #>>>>>>> "creating_categories"
 
   resources :comment_products
- # resources :category_products
-  #resources :categories
+  resources :category_products
+  resources :categories
   #resources :products
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

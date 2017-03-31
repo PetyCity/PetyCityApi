@@ -46,6 +46,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def transaction_params
-      params.require(:transaction).permit(:producto_id, :cart_id, :amount)
+      params.require(:transaction).permit(:product_id, :cart_id, :amount)
     end
 end

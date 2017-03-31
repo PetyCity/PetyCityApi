@@ -2,7 +2,7 @@ class Category < ApplicationRecord
 
 	default_scope {order("categories.created_at desc")}
   
-	validates:name, presence:true 
+	validates :name_category, presence:true, uniqueness: true
 	 
 	has_many :products, through: :category_products
 	has_many :category_products

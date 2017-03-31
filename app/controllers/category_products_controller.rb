@@ -3,15 +3,12 @@ class CategoryProductsController < ApplicationController
 
   # GET /category_products
   def index
-     #@category_products = CategoryProduct.all
+  
+   # @category_products = CategoryProduct.products_by_category(2)
+    #render json: @category_products, :include => [:product]   
 
-    #render json: @category_products
-
-    #@category_products = CategoryProduct.category_by_ids(1)
-    #render json: @category_products
-
-    #@category_products = CategoryProduct.product_by_category(1)
-    #render json: @category_products    
+    @category_products = CategoryProduct.categories_by_product(2)
+    render json: @category_products, :include => [:category]   
 
 
   end
