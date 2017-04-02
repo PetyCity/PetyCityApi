@@ -28,8 +28,8 @@ class UsersController < ApplicationController
     #render json: @user , status: :ok
     
 
-    #@user = User.Product_Sale_by_user
-    #render json: @user, :include => [:sales, :products]  , status: :ok
+    @user = User.prueba("eDnwC")
+    render json: @user, :include => [:sales, :products,:categories]  , status: :ok
     
 
 

@@ -6,13 +6,21 @@ class User < ApplicationRecord
   has_many :publications, dependent: :destroy
   has_many :comment_Publications, dependent: :destroy  
   has_many :comment_Products, dependent: :destroy
-  has_many :products, through: :company
+  has_many :c_products, through: :company,source: :product
   has_many :transactions, through: :cart
   has_many :sales, through: :cart
-  has_many :products , through: :sales
-  has_many :products , through: :transactions
+  has_many :s_products , through: :sales, source: :prodcut
+  has_many :t_products , through: :transactions, source: :product
+  #has_many :categories , through: :products
 
 
+#
+def self.prueba(name)
+    joins(sales: [{product: :categories}]).select("users.id").
+    where(categories: {
+        name_category: name
+      })    
+  end
 
    
   #VALIDACIONES
