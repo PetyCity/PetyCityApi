@@ -1,4 +1,4 @@
-class CategoryProductsController < ApplicationController
+class Api::V1::CategoryProductsController < ApplicationController
   before_action :set_category_product, only: [:show, :update, :destroy]
 
   # GET /category_products

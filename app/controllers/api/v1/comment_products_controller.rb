@@ -1,4 +1,4 @@
-class CommentProductsController < ApplicationController
+class Api::V1::CommentProductsController < ApplicationController
   before_action :set_comment_product, only: [:show, :update, :destroy]
 
   # GET /comment_products

@@ -1,4 +1,4 @@
-class PublicationsController < ApplicationController
+class Api::V1::PublicationsController < ApplicationController
   before_action :set_publication, only: [:show, :update, :destroy]
 
   # GET /publications

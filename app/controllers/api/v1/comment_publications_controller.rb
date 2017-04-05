@@ -1,4 +1,4 @@
-class CommentPublicationsController < ApplicationController
+class Api::V1::CommentPublicationsController < ApplicationController
   before_action :set_comment_publication, only: [:show, :update, :destroy]
 
   # GET /comment_publications
