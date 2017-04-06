@@ -1,13 +1,12 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  #before_action :set_user, only: [:show, :edit, :update, :destroy]
   #before_filter :authenticate_user!
   # GET /users
   # GET /users.json
-  def index
-    #@users = User.all
-    #TODOS LOS USUARIOS
-    #@user = User.only_users
-    #render json: @user, status: :ok
+  def index 
+   
+    @user = User.only_users    
+    render json: @user, :include => []  , status: :ok
     
     
     #Usuario by id, toda la informacion completa para admin
@@ -28,8 +27,8 @@ class Api::V1::UsersController < ApplicationController
     #render json: @user , status: :ok
     
 
-    @user = User.prueba("eDnwC")
-    render json: @user, :include => [:sales, :products,:categories]  , status: :ok
+    #@user = User.prueba("eDnwC")
+    #render json: @user, :include => [:sales, :products,:categories]  , status: :ok
     
 
 
@@ -61,11 +60,15 @@ class Api::V1::UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-   #if  ! @user.admin?
-    #  redirect_to users_url       
-   #else
-    render json: @user, status: :ok
-   # end
+   #if   @user.admin?
+    #    @user = User.user_by_id_admin()
+    #elsif @user.company?
+    #    @user = User.only_users
+   # elsif @user.company_customer?
+    #    @user = User.only_users
+    #else 
+    #   @user = User.only_users
+    #end
   end
 """
   # GET /users/new

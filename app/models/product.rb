@@ -17,50 +17,31 @@ class Product < ApplicationRecord
   default_scope {order("products.name_product ASC")}
   
   scope :ultimos, ->{ order("created_at DESC").limit(4) }
-
-
-
   #ver todos los productos
 
   def self.all_products()
     select("products.*") 
   end
-
-
   #ver productos por id
   def self.products_by_id(id)
       where(products:{
         id: id
       })
-  end
-  
+  end  
   #ver productos por compañia
   def self.products_by_company(comp)
       where(products:{
         company_id: comp
       })
   end
-
-
-
   #para administrador observar los productos que ya estan publicados
   def self.published()
   	Product.where(status:"true")
   end
-
- 
-
-
-
-
-
   def self.products_transactions(id)
       includes( :transactions)
       .find_by_id(id)
-
   end 
-  
-
   def self.products_sales(id)
       includes( :sales)
       .find_by_id(id)

@@ -11,16 +11,9 @@ class User < ApplicationRecord
   has_many :sales, through: :cart
   has_many :s_products , through: :sales, source: :prodcut
   has_many :t_products , through: :transactions, source: :product
-  #has_many :categories , through: :products
 
 
-#
-def self.prueba(name)
-    joins(sales: [{product: :categories}]).select("users.id").
-    where(categories: {
-        name_category: name
-      })    
-  end
+
 
    
   #VALIDACIONES
@@ -84,12 +77,12 @@ def self.prueba(name)
 
 
   #PRODUCTOS Comprados  
-  def self.Product_Sale_by_user()
+  def self.product_sale_by_user()
     includes(sales: :product)
   end
    
 #PRODUCTOS Comprados  pir id user
-  def self.Product_Sale_by_user_byID(id)
+  def self.product_sale_by_user_byID(id)
     includes(sales: :product)
     .find_by_id(id)
   end
@@ -115,5 +108,12 @@ def self.prueba(name)
       })
   end  
 
+#
+def self.prueba(name)
+    joins(sales: [{product: :categories}]).select("users.id").
+    where(categories: {
+        name_category: name
+      })    
+  end
 end
 

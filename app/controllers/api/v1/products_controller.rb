@@ -5,41 +5,29 @@ class Api::V1::ProductsController < ApplicationController
   def index
    
     @products = Product.all_products
-    render json: @products
-    
-    #@products = Product.products_by_id(5)
-    #render json: @products
-    
-   # @products = Product.products_by_company(3)
-    #render json: @products
-   
-   
+    #render json: @products, root: "products"     
+    #@products = Product.products_by_id(1)
+    #render json: @products    
+    #@products = Product.products_by_company(1)
+    #render json: @products   
     #@products = Product.published
-    #render json: @products
-   
-  
+    #render json: @products  
     #@products = Product.products_transactions(2)
     #render json: @products
-    #.............................
+        #.............................
     #@products = Product.products_sales(2)
-   # render json: @products
-    
+   # render json: @products   
    # @products = Product.comment_product_by_id(2)
     #render json: @products , :include => [:comment_products,:users]  
-     
-     
     #@products = Product.ultimos
     #render json: @products
-  
-
-
     #@products = Product.products_by_category(3)
     #render json: @products
-
-
     #@products = Product.cheaper_than(10003)
-    #render json: @products
     
+    
+    render json: @products, :include => []
+   
   end
 
   # GET /products/1

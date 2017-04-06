@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do 
        # devise_for :users, :defaults => { :format => 'json' }
          #get '/catego' => "categories#show_by_name"
-        #resources :products
+        resources :users
 
         get 'home/mostsales', to: 'product#productsMostSales'      
         get 'home/lastproducts', to: 'product#lastproducts'
