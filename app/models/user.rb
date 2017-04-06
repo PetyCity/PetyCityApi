@@ -6,11 +6,11 @@ class User < ApplicationRecord
   has_many :publications, dependent: :destroy
   has_many :comment_Publications, dependent: :destroy  
   has_many :comment_Products, dependent: :destroy
-  has_many :c_products, through: :company,source: :product
+  has_many :products, through: :company,source: :product
   has_many :transactions, through: :cart
   has_many :sales, through: :cart
-  has_many :s_products , through: :sales, source: :prodcut
-  has_many :t_products , through: :transactions, source: :product
+  has_many :products , through: :sales, source: :prodcut
+  has_many :products , through: :transactions, source: :product
 
 
 
@@ -61,8 +61,9 @@ class User < ApplicationRecord
   end
  
  #Para company  ver usuarios compañia
-  def self.company_by_user()
-    includes(:company ).pluck(:name_user,:cedula,:name_comp,:nit,:permission)
+  def self.company_by_user_id(id)
+    includes(:company )
+    .find_by_id(id)
   end
  
 
@@ -70,7 +71,7 @@ class User < ApplicationRecord
   def self.company_prodruct_by_user()
     includes(company: :products)
     .pluck(:name_user,:cedula,:name_comp,:nit,:permission,:name_product,:status)  
-      
+    
   end
 
 

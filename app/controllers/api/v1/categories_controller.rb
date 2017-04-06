@@ -3,16 +3,17 @@ class Api::V1::CategoriesController < ApplicationController
 
   # GET /categories
   def index
-    @categories = Category.all_categories
-    render json: @categories
+    #@categories = Category.all_categories
+  #  render json: @categories
    
     #@categories = Category.categories_by_ids(2)
     #render json: @categories
 
+    def categories_by_name
 
-    #@categories = Category.categories_by_name("ropa")
-    #render json: @categories
-
+      @categories = Category.categories_by_name("name_category")
+      render json: @categories
+     end
 
     #@categories = Category.categories_by_products
     #render json: @categories
@@ -21,6 +22,9 @@ class Api::V1::CategoriesController < ApplicationController
 
   # GET /categories/1
   def show
+
+    @category = Category.find(params[:name_category])
+   
     render json: @category
   end
 

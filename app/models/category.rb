@@ -17,7 +17,7 @@ class Category < ApplicationRecord
   	#categoria por nombre
 
   	def self.categories_by_name(name)	
-      Category.where("categories.name LIKE ?", "#{name.downcase}")
+      Category.where("categories.name_category LIKE ?", "#{name}")
   	end
     
 

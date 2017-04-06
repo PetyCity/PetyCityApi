@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
-
+devise_for :users, :defaults => { :format => 'json' }
+       
   namespace :api do     
     namespace :v1 do 
-       # devise_for :users, :defaults => { :format => 'json' }
+       devise_for :users, :defaults => { :format => 'json' }
          #get '/catego' => "categories#show_by_name"
         resources :users
 
+        get 'catego' , to: 'categories#categories_by_name'
+        
         get 'home/mostsales', to: 'product#productsMostSales'      
         get 'home/lastproducts', to: 'product#lastproducts'
         resources :products, only: [:index, :show] do
@@ -19,10 +22,13 @@ Rails.application.routes.draw do
         resources :companies, only: [:index, :show]
         get 'supplier/:id', to: 'users#supplier'
 
+        #change
+        resources :categories, only: [:index, :show]
+
       #Administrator 
 
         scope '/admin' , defaults: {format: :json} do
-          resources :users, only: [:edit, :show, :update] do     
+          resources :users, only: [:edit, :show, :update, :destroy] do     
             get 'home/mostsales', to: 'product#productsMostSales'      
             get 'home/lastproducts', to: 'product#lastproducts'
             resources :users, only: [:index, :show, :destroy]
@@ -69,6 +75,8 @@ Rails.application.routes.draw do
             get 'home/mostsales', to: 'product#productsmostsales'      
             get 'home/lastproducts', to: 'product#lastproducts'
             get 'productsbought' , to: 'product#productsbought'
+            #change
+            
             resources :publications do
               resources :comment_publications ##
             end

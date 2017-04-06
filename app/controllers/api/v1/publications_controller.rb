@@ -3,7 +3,7 @@ class Api::V1::PublicationsController < ApplicationController
 
   # GET /publications
   def index
-    #@publications = Publication.only_publications
+    @publications = Publication.only_publications
     render json: @publications
   
     
