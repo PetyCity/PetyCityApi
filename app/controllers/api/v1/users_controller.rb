@@ -1,13 +1,12 @@
-class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+class Api::V1::UsersController < ApplicationController
+  #before_action :set_user, only: [:show, :edit, :update, :destroy]
   #before_filter :authenticate_user!
   # GET /users
   # GET /users.json
-  def index
-    #@users = User.all
-    #TODOS LOS USUARIOS
-    #@user = User.only_users
-    #render json: @user, status: :ok
+  def index 
+   
+    @user = User.only_users    
+    render json: @user, :include => []  , status: :ok
     
     
     #Usuario by id, toda la informacion completa para admin
@@ -28,8 +27,8 @@ class UsersController < ApplicationController
     #render json: @user , status: :ok
     
 
-    @user = User.prueba("eDnwC")
-    render json: @user, :include => [:sales, :products,:categories]  , status: :ok
+    #@user = User.prueba("eDnwC")
+    #render json: @user, :include => [:sales, :products,:categories]  , status: :ok
     
 
 
@@ -61,12 +60,48 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-   #if  ! @user.admin?
-    #  redirect_to users_url       
-   #else
-    render json: @user, status: :ok
-   # end
+     @user = User.find_by_id(params[:id])
+     
+    if params.has_key?(:user_id)
+
+      if  @user.admin?
+
+            @user = User.user_by_id_admin(params[:id])
+            render json: @user, :include => [], status: :ok
+
+        elsif @user.company?
+            @user = User.user_company_by_id(params[:id])
+            render json: @user, :include => [], status: :ok
+
+        elsif @user.company_customer?
+            @user = User.user_custommer_by_id(params[:id])
+            render json: @user, :include => [], status: :ok
+
+      else 
+           @user = User.user_custommer_by_id(params[:id])
+           render json: @user, :include => [], status: :ok
+
+      end
+    
+     else  
+      # if current_user.id == params[:id])
+          
+          render json: @user, :include => []
+      #end
   end
+        
+    
+  end
+  
+
+  def supplier
+
+    @user = User.company_by_user_id(params[:id])
+    render json: @user, :include => [:company]
+  end 
+
+
+
 """
   # GET /users/new
   def new

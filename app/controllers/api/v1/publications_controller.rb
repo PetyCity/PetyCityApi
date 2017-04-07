@@ -1,9 +1,9 @@
-class PublicationsController < ApplicationController
+class Api::V1::PublicationsController < ApplicationController
   before_action :set_publication, only: [:show, :update, :destroy]
 
   # GET /publications
   def index
-    #@publications = Publication.only_publications
+    @publications = Publication.only_publications
     render json: @publications
   
     

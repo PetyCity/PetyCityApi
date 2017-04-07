@@ -1,4 +1,4 @@
-class ImagesController < ApplicationController
+class Api::V1::ImagesController < ApplicationController
   before_action :set_image, only: [:show, :update, :destroy]
 
   # GET /images
@@ -14,6 +14,7 @@ class ImagesController < ApplicationController
     @image = Image.image_by_id(params[:id])
     render json: @image, :include => [:product]
   end
+
 
   # POST /images
   def create

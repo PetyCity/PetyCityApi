@@ -1,4 +1,4 @@
-class SalesController < ApplicationController
+class Api::V1::SalesController < ApplicationController
   before_action :set_sale, only: [:show, :update, :destroy]
 
   # GET /sales

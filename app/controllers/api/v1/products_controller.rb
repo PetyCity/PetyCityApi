@@ -1,4 +1,4 @@
-class ProductsController < ApplicationController
+class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: [:show, :update, :destroy]
 
   # GET /products
@@ -14,29 +14,25 @@ class ProductsController < ApplicationController
     #render json: @products
    
    
+    @products = Product.random
+    #render json: @products, root: "products"     
+    #@products = Product.products_by_id(1)
+    #render json: @products    
+    #@products = Product.products_by_company(1)
+    #render json: @products   
     #@products = Product.published
-    #render json: @products
-   
-  
+    #render json: @products  
     #@products = Product.products_transactions(2)
     #render json: @products
-    #.............................
+        #.............................
     #@products = Product.products_sales(2)
-   # render json: @products
-    
+   # render json: @products   
    # @products = Product.comment_product_by_id(2)
     #render json: @products , :include => [:comment_products,:users]  
-     
-     
     #@products = Product.ultimos
     #render json: @products
-  
-
-
     #@products = Product.products_by_category(3)
     #render json: @products
-
-
     #@products = Product.cheaper_than(10003)
     #render json: @products
    
@@ -44,12 +40,39 @@ class ProductsController < ApplicationController
     render json: @products, :include => [:images]
    
     
+    
+    render json: @products , :include => []
+   
   end
 
   # GET /products/1
   def show
     render json: @product
   end
+
+
+  def lastproducts
+    @products = Product.ultimos
+    render json: @products,:include => []
+  end 
+
+
+
+  def productsmostsales
+
+   @products = Product.products_most_sales
+    render json: @products, :include => [:sales]
+
+  end
+
+  def productrandom
+   @products = Product.random
+  render json: @products, :include => []
+
+  end
+
+  
+
 
   # POST /products
   def create
@@ -86,4 +109,6 @@ class ProductsController < ApplicationController
     def product_params
       params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
     end
+
+
 end

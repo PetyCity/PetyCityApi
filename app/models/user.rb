@@ -7,12 +7,12 @@ class User < ApplicationRecord
   has_many :publications, dependent: :destroy
   has_many :comment_Publications, dependent: :destroy
   has_many :comment_Products, dependent: :destroy
-  has_many :c_products, through: :company,source: :product
+  has_many :products, through: :company,source: :product
   has_many :transactions, through: :cart
   has_many :sales, through: :cart
-  has_many :s_products , through: :sales, source: :prodcut
-  has_many :t_products , through: :transactions, source: :product
-  #has_many :categories , through: :products
+  has_many :products , through: :sales, source: :prodcut
+  has_many :products , through: :transactions, source: :product
+
 
 
 #
@@ -22,7 +22,6 @@ def self.prueba(name)
         name_category: name
       })
   end
-
 
   #VALIDACIONES
 
@@ -69,8 +68,9 @@ def self.prueba(name)
   end
 
  #Para company  ver usuarios compañia
-  def self.company_by_user()
-    includes(:company ).pluck(:name_user,:cedula,:name_comp,:nit,:permission)
+  def self.company_by_user_id(id)
+    includes(:company )
+    .find_by_id(id)
   end
 
 
@@ -82,15 +82,13 @@ def self.prueba(name)
   end
 
 
-
-
-  #PRODUCTOS Comprados
-  def self.Product_Sale_by_user()
+  #PRODUCTOS Comprados  
+  def self.product_sale_by_user()
     includes(sales: :product)
   end
 
 #PRODUCTOS Comprados  pir id user
-  def self.Product_Sale_by_user_byID(id)
+  def self.product_sale_by_user_byID(id)
     includes(sales: :product)
     .find_by_id(id)
   end
@@ -116,4 +114,11 @@ def self.prueba(name)
       })
   end
 
+#
+def self.prueba(name)
+    joins(sales: [{product: :categories}]).select("users.id").
+    where(categories: {
+        name_category: name
+      })    
+  end
 end

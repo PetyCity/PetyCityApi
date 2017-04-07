@@ -1,4 +1,4 @@
-class CategoriesController < ApplicationController
+class Api::V1::CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :update, :destroy]
 
   # GET /categories
@@ -9,10 +9,7 @@ class CategoriesController < ApplicationController
     #@categories = Category.categories_by_ids(2)
     #render json: @categories
 
-
-    #@categories = Category.categories_by_name("ropa")
-    #render json: @categories
-
+   
 
     #@categories = Category.categories_by_products
     #render json: @categories
@@ -21,9 +18,22 @@ class CategoriesController < ApplicationController
 
   # GET /categories/1
   def show
+
+    
+   
     render json: @category
   end
+  
 
+  def catego
+
+      @categories = Category.categories_by_name("qDAJM")
+      render json: @categories, :include => [:category]
+  end
+
+
+ 
+  
   # POST /categories
   def create
     @category = Category.new(category_params)

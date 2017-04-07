@@ -9,9 +9,8 @@ end
 
 gem 'devise', '~> 4.1', '>= 4.1.1'
 
+
 gem 'carrierwave', '~> 1.0'
-
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.2'
 # Use postgresql as the database for Active Record
@@ -37,7 +36,8 @@ gem 'will_paginate'
 # gem 'capistrano-rails', group: :development
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
+gem 'rack-cors', :require => 'rack/cors'
+gem 'active_model_serializers','~> 0.10.0' 
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
