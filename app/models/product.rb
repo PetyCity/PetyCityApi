@@ -16,14 +16,18 @@ class Product < ApplicationRecord
 
   #Scopes
 
-  default_scope {order("products.name_product ASC")}
+ 
 
  # default_scope {order("products.name_product ASC")}
   
   scope :ultimos, ->{ order("created_at DESC").limit(4) }
   
-  scope :random, ->{ order('random()') }
-
+  #scope :random, ->{ order('random()') }
+ 
+ def self.rand(page = 1, per_page = 10)
+     includes( :images).
+    order('random()')
+  end
 
   #ver todos los productos
 
@@ -38,8 +42,7 @@ class Product < ApplicationRecord
       .paginate(:page => page,:per_page => per_page)
   end
 
-
-  end  
+ 
   #ver productos por compañia
   def self.products_by_company(comp, page = 1, per_page = 10)
       where(products:{
@@ -51,12 +54,6 @@ class Product < ApplicationRecord
   def self.published(page = 1, per_page = 10)
   	Product.where(status:"true").paginate(:page => page,:per_page => per_page)
   end
-
-
-
-
-
-
 
 
   def self.products_transactions(id, page = 1, per_page = 10)
@@ -82,9 +79,9 @@ class Product < ApplicationRecord
 
  # def self.products_most_sales
 
-  #    includes( :sales)
-   #   .group("products.id")
-    #  .sum("amount").sort("created_at DESC").limit(4) 
+      #includes( :sales)
+      #.group("products.id")
+     # .sum("amount").sort("created_at DESC").limit(4) 
     #end 
 
 
@@ -101,11 +98,12 @@ class Product < ApplicationRecord
       where("products.value <= ?", price)
       .paginate(:page => page,:per_page => per_page)
    end
+
+
    def self.major_than(price, page = 1, per_page = 10)
       where("products.value >= ?", price)
       .paginate(:page => page,:per_page => per_page)
    end
-
 
 
 end

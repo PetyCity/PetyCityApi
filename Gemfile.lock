@@ -50,7 +50,6 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.0.5)
@@ -136,11 +135,14 @@ GEM
     will_paginate (3.1.5)
 
 PLATFORMS
+  rack-unknown
+  tzinfo-unknown
+  unknown
   x86-mingw32
 
-  bcrypt
+DEPENDENCIES
   active_model_serializers (~> 0.10.0)
-
+  bcrypt
   byebug
   carrierwave (~> 1.0)
   devise (~> 4.1, >= 4.1.1)

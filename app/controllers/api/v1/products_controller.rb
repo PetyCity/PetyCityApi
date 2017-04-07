@@ -1,9 +1,10 @@
 class Api::V1::ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :update, :destroy]
+  before_action :set_product, only: [ :update, :destroy]
 
   # GET /products
   def index
    
+    @products = Product.rand
     #@products = Product.all_products
     #render json: @products
     
@@ -14,8 +15,7 @@ class Api::V1::ProductsController < ApplicationController
     #render json: @products
    
    
-    @products = Product.random
-    #render json: @products, root: "products"     
+        #render json: @products, root: "products"     
     #@products = Product.products_by_id(1)
     #render json: @products    
     #@products = Product.products_by_company(1)
@@ -36,18 +36,19 @@ class Api::V1::ProductsController < ApplicationController
     #@products = Product.cheaper_than(10003)
     #render json: @products
    
-    @products = Product.image_by_product(25)
-    render json: @products, :include => [:images]
+    
    
     
     
-    render json: @products , :include => []
+    render json: @products , :include => [:images]
    
   end
 
   # GET /products/1
   def show
-    render json: @product
+    @products = Product.image_by_product(params[:id])
+    render json: @products, :include => [:images]
+
   end
 
 
@@ -70,6 +71,7 @@ class Api::V1::ProductsController < ApplicationController
   render json: @products, :include => []
 
   end
+
 
   
 

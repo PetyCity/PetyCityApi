@@ -23,7 +23,7 @@ class CategoryProduct < ApplicationRecord
       })
       .paginate(:page => page,:per_page => per_page)
 
-
+  end
 
 
 end

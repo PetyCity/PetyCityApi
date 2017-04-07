@@ -21,8 +21,9 @@ class Category < ApplicationRecord
   	def self.categories_by_name(name, page = 1, per_page = 10)
       Category.where("categories.name LIKE ?", "#{name.downcase}")
 			.paginate(:page => page,:per_page => per_page)
-
-  	def self.categories_by_name(name)	
+    end
+  	
+    def self.categories_by_name(name)	
       Category.where("categories.name_category LIKE ?", "#{name}")
   	end
 
