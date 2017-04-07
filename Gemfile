@@ -9,7 +9,7 @@ end
 
 gem 'devise', '~> 4.1', '>= 4.1.1'
 
-
+gem 'carrierwave', '~> 1.0'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

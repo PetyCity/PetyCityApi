@@ -3,9 +3,9 @@ class Image < ApplicationRecord
 	belongs_to :product
 
 	#VALIDATES
-	validates :name_image, presence: true, length: { in: 3..20 }, uniqueness: true
+	#validates :name_image, presence: true, length: { in: 3..20 }, uniqueness: true
   validates :product, presence: true
-
+  mount_uploader :name_image, NameImageUploader
 	#SCOPES
 
 	default_scope {order(name_image: :asc)}

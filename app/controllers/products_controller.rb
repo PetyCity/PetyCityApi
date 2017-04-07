@@ -4,8 +4,8 @@ class ProductsController < ApplicationController
   # GET /products
   def index
    
-    @products = Product.all_products
-    render json: @products
+    #@products = Product.all_products
+    #render json: @products
     
     #@products = Product.products_by_id(5)
     #render json: @products
@@ -39,6 +39,10 @@ class ProductsController < ApplicationController
 
     #@products = Product.cheaper_than(10003)
     #render json: @products
+   
+    @products = Product.image_by_product(25)
+    render json: @products, :include => [:images]
+   
     
   end
 

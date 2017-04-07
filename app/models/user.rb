@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-
+  mount_uploader :image, ImageUploader
+  
   #Asociasiones
   has_one :cart, dependent: :destroy
   has_one :company, dependent: :destroy

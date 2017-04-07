@@ -6,6 +6,7 @@ class Product < ApplicationRecord
   has_many :category_products
   has_many :categories, through: :category_products
   has_many :users, through: :comment_products
+  has_many :images
   validates :name_product, presence: true
   validates :description, presence: true, length: { minimum: 10}
 
@@ -60,6 +61,11 @@ class Product < ApplicationRecord
       includes( :transactions)
       .find_by_id(id)
       .paginate(:page => page,:per_page => per_page)
+  end
+  
+  def self.image_by_product(id, page = 1, per_page = 5)
+      includes( :images)
+      .find_by_id(id)
   end
 
 
