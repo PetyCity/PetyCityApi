@@ -64,9 +64,9 @@ for num in 1..100
  	Cart.create( user_id:num, total_price: 0)
 end	
 """
-for num in 1..5		
- 	Category.create( name_category: generate_code(5) , details:generate_code(7))
-end
+#for num in 1..5		
+# 	Category.create( name_category: generate_code(5) , details:generate_code(7))
+#end
 """
 for num in 1..100		
  	CategoryProduct.create( product_id:num, category_id:num)
@@ -76,13 +76,9 @@ for num in 1..100
  	Transaction.create( product_id: num , cart_id: num, amount: 10)
 end
 
-for num in 1..100		
- 	Sale.create( product_id: num , cart_id: num, amount: 10)
-end
+
 """
 
-
-
-
-
-	
+for num in 1..100		
+ 	Sale.create( product_id: num , cart_id: num, amount: )
+end	

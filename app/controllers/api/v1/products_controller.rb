@@ -4,7 +4,7 @@ class Api::V1::ProductsController < ApplicationController
   # GET /products
   def index
    
-    @products = Product.all_products
+    @products = Product.random
     #render json: @products, root: "products"     
     #@products = Product.products_by_id(1)
     #render json: @products    
@@ -26,7 +26,7 @@ class Api::V1::ProductsController < ApplicationController
     #@products = Product.cheaper_than(10003)
     
     
-    render json: @products, :include => []
+    render json: @products , :include => []
    
   end
 
@@ -34,6 +34,30 @@ class Api::V1::ProductsController < ApplicationController
   def show
     render json: @product
   end
+
+
+  def lastproducts
+    @products = Product.ultimos
+    render json: @products,:include => []
+  end 
+
+
+
+  def productsmostsales
+
+   @products = Product.products_most_sales
+    render json: @products, :include => [:sales]
+
+  end
+
+  def productrandom
+   @products = Product.random
+  render json: @products, :include => []
+
+  end
+
+  
+
 
   # POST /products
   def create
@@ -70,4 +94,6 @@ class Api::V1::ProductsController < ApplicationController
     def product_params
       params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
     end
+
+
 end

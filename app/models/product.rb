@@ -14,9 +14,13 @@ class Product < ApplicationRecord
   #probando products?
 
   #Scopes
-  default_scope {order("products.name_product ASC")}
+ # default_scope {order("products.name_product ASC")}
   
   scope :ultimos, ->{ order("created_at DESC").limit(4) }
+  
+  scope :random, ->{ order('random()') }
+
+
   #ver todos los productos
 
   def self.all_products()
@@ -44,8 +48,16 @@ class Product < ApplicationRecord
   end 
   def self.products_sales(id)
       includes( :sales)
-      .find_by_id(id)
-     end 
+      .find_by_id(id)     
+  end
+
+ # def self.products_most_sales
+
+  #    includes( :sales)
+   #   .group("products.id")
+    #  .sum("amount").sort("created_at DESC").limit(4) 
+    #end 
+
 
    
    #producto con su comentario especifico

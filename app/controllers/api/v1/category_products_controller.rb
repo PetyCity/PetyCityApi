@@ -21,15 +21,30 @@ class Api::V1::CategoryProductsController < ApplicationController
     render json: @category_product
   end
 
+  def categoproduct
+       # if params.has_key?(:user_id)
+      @category_products = CategoryProduct.categories_by_product( params[:id] )
+     #@category_products = CategoryProduct.categories_by_product( @category_products.id)
+      render json: @category_products, :include => [:category,:product]   
+
+    #
+    #render json: @category_products, :include => [:category] 
+    #render json: @category_product
+    
+
+  
+
+  end
+
   # POST /category_products
   def create
     @category_product = CategoryProduct.new(category_product_params)
-
-    if @category_product.save
-      render json: @category_product, status: :created, location: @category_product
-    else
-      render json: @category_product.errors, status: :unprocessable_entity
-    end
+    @category_product.save
+  #  if @category_product.save
+     # render json: @category_product, status: :created, location: @category_product
+   # else
+      #render json: @category_product.errors, status: :unprocessable_entity
+    #end
   end
 
   # PATCH/PUT /category_products/1

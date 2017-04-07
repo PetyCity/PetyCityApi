@@ -1,18 +1,23 @@
 Rails.application.routes.draw do
-devise_for :users, :defaults => { :format => 'json' }
-       
+
+
+
+    
+
   namespace :api do     
     namespace :v1 do 
+      resources :category_products
        devise_for :users, :defaults => { :format => 'json' }
          #get '/catego' => "categories#show_by_name"
         resources :users
 
-        get 'catego' , to: 'categories#categories_by_name'
-        
-        get 'home/mostsales', to: 'product#productsMostSales'      
-        get 'home/lastproducts', to: 'product#lastproducts'
+        get 'catego' , to: 'categories#catego'
+      
+        get 'home/mostsales', to: 'products#productsmostsales'      
+        get 'home/lastproducts', to: 'products#lastproducts'
         resources :products, only: [:index, :show] do
           get 'preview', on: :member # products/:ID/preview
+          get 'categoproduct', to: 'category_products#categoproduct', on: :member
           resources :comment_products, only: [:index, :show]
           collection do 
               resources :categories, only: [:index, :show]
@@ -29,8 +34,8 @@ devise_for :users, :defaults => { :format => 'json' }
 
         scope '/admin' , defaults: {format: :json} do
           resources :users, only: [:edit, :show, :update, :destroy] do     
-            get 'home/mostsales', to: 'product#productsMostSales'      
-            get 'home/lastproducts', to: 'product#lastproducts'
+            get 'home/mostsales', to: 'products#productsmostsales'      
+            get 'home/lastproducts', to: 'products#lastproducts'
             resources :users, only: [:index, :show, :destroy]
             resources :products, only: [:index, :show] do
               resources :comment_products, only: [:index, :show]
@@ -72,9 +77,9 @@ devise_for :users, :defaults => { :format => 'json' }
       #costumer
         scope '/costum', defaults: {format: :json} do
           resources :users, only: [:show, :edit, :destroy] do
-            get 'home/mostsales', to: 'product#productsmostsales'      
-            get 'home/lastproducts', to: 'product#lastproducts'
-            get 'productsbought' , to: 'product#productsbought'
+            get 'home/mostsales', to: 'products#productsmostsales'      
+            get 'home/lastproducts', to: 'products#lastproducts'
+            get 'productsbought' , to: 'products#productsbought'
             #change
             
             resources :publications do

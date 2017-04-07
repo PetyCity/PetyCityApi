@@ -15,6 +15,7 @@ class Api::V1::ImagesController < ApplicationController
     render json: @image, :include => [:product]
   end
 
+
   # POST /images
   def create
     @image = Image.new(image_params)

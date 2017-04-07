@@ -15,10 +15,10 @@ class CategoryProduct < ApplicationRecord
   end
 
   def self.categories_by_product(pro)
-     includes(:category)  
+     includes(:category,:product)
 	   .where(category_products: {
         product_id: pro
-      })  
+      }) 
   end
 
 

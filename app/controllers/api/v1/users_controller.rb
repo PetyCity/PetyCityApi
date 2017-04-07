@@ -63,7 +63,9 @@ class Api::V1::UsersController < ApplicationController
      @user = User.find_by_id(params[:id])
      
     if params.has_key?(:user_id)
-      if   @user.admin?
+
+      if  @user.admin?
+
             @user = User.user_by_id_admin(params[:id])
             render json: @user, :include => [], status: :ok
 
@@ -75,11 +77,11 @@ class Api::V1::UsersController < ApplicationController
             @user = User.user_custommer_by_id(params[:id])
             render json: @user, :include => [], status: :ok
 
-        else 
+      else 
            @user = User.user_custommer_by_id(params[:id])
            render json: @user, :include => [], status: :ok
 
-        end
+      end
     
      else  
       # if current_user.id == params[:id])
