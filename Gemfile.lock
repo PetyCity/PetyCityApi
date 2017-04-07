@@ -119,11 +119,13 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    will_paginate (3.1.5)
 
 PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  bcrypt
   byebug
   devise (~> 4.1, >= 4.1.1)
   pg (~> 0.18)
@@ -131,6 +133,7 @@ DEPENDENCIES
   rails (~> 5.0.2)
   simple_token_authentication (~> 1.0)
   tzinfo-data
+  will_paginate
 
 BUNDLED WITH
-   1.14.5
+   1.14.6

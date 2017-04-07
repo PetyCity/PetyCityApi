@@ -20,7 +20,7 @@ gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0'
 
 
-gem 'simple_token_authentication', '~> 1.0' 
+gem 'simple_token_authentication', '~> 1.0'
 
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -28,7 +28,10 @@ gem 'simple_token_authentication', '~> 1.0'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+#gem 'bcrypt', '~> 3.1.7'
+
+gem 'bcrypt', platforms: :ruby
+gem 'will_paginate'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

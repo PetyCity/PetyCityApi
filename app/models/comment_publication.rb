@@ -3,29 +3,29 @@ class CommentPublication < ApplicationRecord
   belongs_to :user
   validates :body_comment_Publication, presence: true ,allow_blank: false
   validates :user , presence: true
-  
-  
-  
+
+
+
   #Queries
-  
+
   #ver comentarios en especifico
-  def self.comment_publication(id)
+  def self.comment_publication(id, page = 1, per_page = 10)
     where(comment_publications: {
        id:  id
-      })
+      }).paginate(:page => page,:per_page => per_page)
   end
-  
+
   #ver comentarios  por cada usuario
-  def self.comment_publication_by_user(user)
+  def self.comment_publication_by_user(user, page = 1, per_page = 10)
     where(comment_publications: {
         user_id:  user
-      })
+      }).paginate(:page => page,:per_page => per_page)
   end
    #ver comentarios  por cada publicacion
-  def self.comment_publication_by_publication(pu)
+  def self.comment_publication_by_publication(pu, page = 1, per_page = 10)
     where(comment_publications: {
         publication_id:  pu
-      })
-  end  
-  
+      }).paginate(:page => page,:per_page => per_page)
+  end
+
 end

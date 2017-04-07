@@ -15,8 +15,8 @@ class Image < ApplicationRecord
 
 	#QUERIES
 
-	def self.load_images()
-    	self.all
+	def self.load_images(page = 1, per_page = 10)
+    	self.all.paginate(:page => page,:per_page => per_page)
 	end
 
 	def self.image_by_id(id)
@@ -24,30 +24,35 @@ class Image < ApplicationRecord
 		.find_by_id(id)
 	end
 
-	def self.images_by_ids(ids)
-		load_images()
+	def self.images_by_ids(ids, page = 1, per_page = 10)
+		load_images(page, per_page)
 		  .where({id: ids })
 	end
 
-	def self.images_by_not_ids(ids)
-		load_images()
+	def self.images_by_not_ids(ids, page = 1, per_page = 10)
+		load_images(page, per_page)
 		  .where.not({id: ids })
+			.paginate(:page => page,:per_page => per_page)
 	end
 
-	def self.images_by_name(name_image)
+	def self.images_by_name(name_image, page = 1, per_page = 10)
 		where({name_image: name_image})
+		.paginate(:page => page,:per_page => per_page)
 	end
 
-	def self.images_by_products(products_id)
+	def self.images_by_products(products_id, page = 1, per_page = 10)
 		where({product_id: products_id})
+		.paginate(:page => page,:per_page => per_page)
 	end
 
-	def self.images_by_not_products(products_id)
+	def self.images_by_not_products(products_id, page = 1, per_page = 10)
 		where.not({product_id: products_id})
+		.paginate(:page => page,:per_page => per_page)
 	end
 
-	def self.product(product_id)
+	def self.product(product_id, page = 1, per_page = 10)
 		includes(:product)
+		.paginate(:page => page,:per_page => per_page)
 	end
 
 end

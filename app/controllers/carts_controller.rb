@@ -4,7 +4,7 @@ class CartsController < ApplicationController
   # GET /carts
   def index
     #@carts = Cart.all
-    @carts = Cart.transactions(3)
+    @carts = Cart.transaction(3)
     render json: @carts#, :include => [:product, :cart]
   end
 
