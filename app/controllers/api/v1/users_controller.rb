@@ -1,95 +1,95 @@
 class Api::V1::UsersController < ApplicationController
   #before_action :set_user, only: [:show, :edit, :update, :destroy]
   #before_filter :authenticate_user!
-  # GET /users
-  # GET /users.json
+  
+
+  #GET /api/v1/users/user_id/users/
   def index 
-   
-    @user = User.only_users    
-    render json: @user, :include => []  , status: :ok
-    
-    
-    #Usuario by id, toda la informacion completa para admin
-    #@user = User.user_by_id_admin(1)
-    #render json: @user, :include => [:company,:products]  , status: :ok
-    #render json: @user, :include => [:company => {:only => :name_comp}}  , status: :ok
-    
-    #Usuario by id custumer and company    
-    #@user = User.user_by_id(2)
-    #render json: @user, status: :ok
-    
-    #Compañias  ---  ver usuario_compañias  
-    #@user = User.company_by_user()
-    #render json: @user, status: :ok
-    ########################################
-    #Compañia  ---  ver usuario_compañia  
-    #@user = User.company_prodruct_by_user
-    #render json: @user , status: :ok
-    
-
-    #@user = User.prueba("eDnwC")
-    #render json: @user, :include => [:sales, :products,:categories]  , status: :ok
-    
-
-
-   # @user = User.Product_Sale_by_user_byID(1)
-    #render json: @user, :include => [:sales, :products]  , status: :ok
-    
-
-
-
-    #PRODUCTOS en carrito
-#    @user = User.cart_by_user
- #   render json: @user , status: :ok
-    
-    #PRODUCTOS ventas,  falta cambiar modleodddddddddddddddddddddd
-
-    
-    #publicaciones
-    #@user = User.users_by_publications
-    #render json: @user , status: :ok
-            
-    
-    
-   #buscar por rol
-   #render json: User.users_by_rol("company"), status: :ok
-   #render json: User.users_by_rol(1), status: :ok
-       
+    @user = User.find_by_id(params[:user_id])    
+    if @user.rol == 'admin'   
+      @users = User.only_users  
+      render json: @users, :include => []  , status: :ok 
+    else 
+     render status: :forbidden
+    end  
   end
-
-  # GET /users/1
-  # GET /users/1.json
-  def show
-     @user = User.find_by_id(params[:id])
-     
-    if params.has_key?(:user_id)
-
-      if  @user.admin?
-
-            @user = User.user_by_id_admin(params[:id])
-            render json: @user, :include => [], status: :ok
-
-        elsif @user.company?
-            @user = User.user_company_by_id(params[:id])
-            render json: @user, :include => [], status: :ok
-
-        elsif @user.company_customer?
-            @user = User.user_custommer_by_id(params[:id])
-            render json: @user, :include => [], status: :ok
-
-      else 
-           @user = User.user_custommer_by_id(params[:id])
-           render json: @user, :include => [], status: :ok
-
+  #GET /api/v1/users/user_id/users/(admin-company-custumeer)
+  #GET /api/v1/users/user_id/users/rol/:rol
+   def users_by_rol 
+    @user = User.find_by_id(params[:user_id])
+    if @user.rol == 'admin'   
+      if params[:rol] == 'admin' || params[:rol] == 'company' || params[:rol] == 'customer' || params[:rol] == 'company_customer'      
+        @users = User.users_by_rol( params[:rol] )    
+        render json: @users, :include => []  , status: :ok 
+      else
+        render status: :bad_request
       end
-    
-     else  
-      # if current_user.id == params[:id])
-          
-          render json: @user, :include => []
-      #end
+    else 
+     render status: :forbidden
+    end  
   end
-        
+  
+
+  
+#GET /api/v1/admin/users/:id
+#GET /api/v1/admin/users/user_id/users/:id
+  def show   
+    if params.has_key?(:user_id)
+      #  if current_user.id == params[:user_id])
+           @user = User.find_by_id(params[:user_id])
+           if     @user.admin?
+                @user = User.find_by_id(params[:id])  
+                if     @user.admin?                                 
+                       @user = User.user_by_id_admin(params[:id])
+                       render json: @user, :include => [], status: :ok
+                elsif  @user.company?
+                       @user = User.user_company_by_id(params[:id])
+                       render json: @user, :include => [ :company, :products], status: :ok
+                elsif  @user.company_customer?
+                       @user = User.user_custommer_by_id(params[:id])
+                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications, :cart, :sales,:company, :products], status: :ok
+                else 
+                       @user = User.user_custommer_by_id(params[:id])                   
+                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications,:cart, :sales], status: :ok 
+                end
+                                        
+                              
+            else 
+                @user = User.find_by_id(params[:id])  
+                if     @user.admin?                                 
+                       render status: :forbidden
+                elsif  @user.company?
+                       @user = User.user_company_by_id(params[:id])
+                       render json: @user, :include => [ :company, :products], status: :ok
+                elsif  @user.company_customer?
+                       @user = User.user_custommer_by_id(params[:id])
+                       render json: @user, :include => [:publications, :company, :products], status: :ok
+                else 
+                       @user = User.user_custommer_by_id(params[:id])  
+                       render json: @user, :include => [:publications], status: :ok
+                end              
+            end
+         # else
+          #  render status:  :unauthorized 
+          #end
+    else  
+       @user = User.find_by_id(params[:id])
+          # if current_user.id == params[:id])                  
+               if     @user.admin?                                 
+                       @user = User.user_by_id_admin(params[:id])
+                       render json: @user, :include => [], status: :ok
+                elsif  @user.company?
+                       @user = User.user_company_by_id(params[:id])
+                       render json: @user, :include => [ :company, :products], status: :ok
+                elsif  @user.company_customer?
+                       @user = User.user_custommer_by_id(params[:id])
+                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications, :cart, :sales,:company, :products], status: :ok
+                else 
+                       @user = User.user_custommer_by_id(params[:id])                   
+                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications,:cart, :sales], status: :ok 
+                end
+           #end
+     end  
     
   end
   

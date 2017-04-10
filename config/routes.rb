@@ -6,9 +6,10 @@ Rails.application.routes.draw do
 
   namespace :api do     
     namespace :v1 do 
-       resources :images
+       #resources :carts
+       resources :sales
        resources :category_products
-       devise_for :users, :defaults => { :format => 'json' }
+       #devise_for :users, :defaults => { :format => 'json' }
          #get '/catego' => "categories#show_by_name"
        # resources :users
 
@@ -20,14 +21,14 @@ Rails.application.routes.draw do
         get 'productbycompany/:id',to: 'products#productbycompany'
         resources :products, only: [:index, :show] do
           get 'preview', on: :member # products/:ID/preview
-          get 'categoproduct', to: 'category_products#categoproduct', on: :member
+          get 'catego_product', to: 'category_products#catego_product', on: :member
           resources :comment_products, only: [:index, :show]
           collection do 
               resources :categories, only: [:index, :show]
           end
         end
         resources :publications, only: [:index, :show]
-        get 'publicationbyid/:id', to: 'publications#publicationbyid'
+       
         resources :companies, only: [:index, :show]
         get 'supplier/:id', to: 'users#supplier'
 
@@ -43,7 +44,16 @@ Rails.application.routes.draw do
            
             get 'home/mostsales', to: 'products#productsmostsales'      
             get 'home/lastproducts', to: 'products#lastproducts'
-            resources :users, only: [:index, :show, :destroy]
+            resources :users, only: [:index, :show, :destroy] do 
+            
+               collection do 
+                  get 'rol/:rol', to: 'users#users_by_rol'
+               #  get 'companies', to: 'users#users_companies'
+                #  get 'costummer', to: 'users#users_costummer'
+                 # get 'company_customer', to: 'users#users_company_customer'            
+                end
+            
+            end
             resources :products, only: [:index, :show] do
               resources :comment_products, only: [:index, :show]
               get 'preview', on: :member
@@ -55,8 +65,9 @@ Rails.application.routes.draw do
               resources :comment_publications
             end
             resources :companies, only: [:index, :show, :destroy] do 
-                 # /users/user_id/companies/:id/product_bycompany
-                  get 'product_bycompany', on: :member
+                 # /users/user_id/companies/company_id/products
+                 resources :products, only: [:index, :show] , on: :member
+                 # get 'product_bycompany', on: :member
             end
          
             get 'supplier/:id', to: 'users#suplier' #retornar los usuarios que tenga compañia
@@ -72,10 +83,20 @@ Rails.application.routes.draw do
             get 'home/mostsales', to: 'product#productsmostsales'      
             get 'home/lastproducts', to: 'product#lastproducts'
             get 'shopsales' , to: 'product#productssales'
-          
+            resources :users, only: [ :show] 
             resources :companies 
+            resources :companies  do 
+                 # /users/user_id/companies/company_id/products/id/comentproduct/id
+                #/users/user_id//products/id/comentproduct/id
+                
+                 resources :products, only: [:index] , on: :member                    
+                 
+                 # get 'product_bycompany', on: :member
+            end
+         
+ 
             resources :products do
-              resources :comment_products, only: [:index, :show]
+              resources :comment_products, only: [ :show]
               get 'preview', on: :member    
               collection do          
                 resources :categories, only: [:index, :show]
@@ -91,7 +112,7 @@ Rails.application.routes.draw do
             get 'home/lastproducts', to: 'products#lastproducts'
             get 'productsbought' , to: 'products#productsbought'
             #change
-            
+            resources :users, only: [ :show] 
             resources :publications do
               resources :comment_publications ##
             end

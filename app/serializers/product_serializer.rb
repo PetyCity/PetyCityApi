@@ -7,5 +7,6 @@ class ProductSerializer < ActiveModel::Serializer
 	has_many :category_products 
 	has_many :categories, through: :category_products
 	has_many :users, through: :comment_products
+	has_many :images
 	  
 end

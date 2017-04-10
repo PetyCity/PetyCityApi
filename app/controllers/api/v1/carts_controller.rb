@@ -3,9 +3,9 @@ class Api::V1::CartsController < ApplicationController
 
   # GET /carts
   def index
-    #@carts = Cart.all
-    @carts = Cart.transaction(3)
-    render json: @carts#, :include => [:product, :cart]
+   @carts = Cart.all
+
+    render json: @carts, :include => []
   end
 
   # GET /carts/1

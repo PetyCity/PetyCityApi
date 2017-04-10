@@ -4,8 +4,14 @@ class Api::V1::ProductsController < ApplicationController
   # GET /products
   def index
    
-    @products = Product.rand
-
+    if params.has_key?(:company_id)
+      
+      @products= Product.products_by_company(params[:company_id])
+      render json: @products, :include => [:images]
+     else
+      @products= Product.rand
+      render json: @products, :include => [:images]
+    end
     #@products = Product.all_products
     #render json: @products
     
@@ -41,7 +47,7 @@ class Api::V1::ProductsController < ApplicationController
    
     
     
-    #render json: @products, :include => [:images]
+
    
   end
 
@@ -49,7 +55,7 @@ class Api::V1::ProductsController < ApplicationController
   def show
     @products = Product.image_by_product(params[:id])
 
-    render json: @products, :include => [:images]
+    render json: @products, :include => [:images, :comment_products]
 
   end
 
@@ -60,11 +66,13 @@ class Api::V1::ProductsController < ApplicationController
   end 
 
 
-
+  
   def productsmostsales
 
    @products = Product.products_most_sales
-    render json: @products, :include => [:sales]
+   @products = Product.products_by_id(@products)
+   
+    render json: @products, :include => []
 
   end
 

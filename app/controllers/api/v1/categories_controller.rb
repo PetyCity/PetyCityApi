@@ -4,7 +4,7 @@ class Api::V1::CategoriesController < ApplicationController
   # GET /categories
   def index
     @categories = Category.all_categories
-    render json: @categories
+    render json: @categories,:include => []
    
     #@categories = Category.categories_by_ids(2)
     #render json: @categories
@@ -17,11 +17,9 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   # GET /categories/1
-  def show
-
-    
-   
-    render json: @category
+  def show    
+   @categories = Category.categories_by_id( params[:id] )
+    render json: @categories, :include =>[]
   end
   
 

@@ -1,7 +1,8 @@
 class Publication < ApplicationRecord
   belongs_to :user
   has_many :comment_Publications, dependent: :destroy
-
+  has_many :c_user, through: :comment_Publications,source: :user
+  
   validates :title, length: { minimum: 10 }, presence: true ,allow_blank: false
   validates :body_publication, presence: true ,allow_blank: true
   validates :user , presence: true
@@ -20,9 +21,11 @@ class Publication < ApplicationRecord
         user_id:  user.paginate(:page => page,:per_page => per_page)
       })
   end
+  
+  
   #publicacion  en especifico con sus comentarios
   def self.publication_by_id(id)
-    includes(comment_Publications: :user)
+    includes(:user, :c_user)
     .find_by_id(id)    
   end
 

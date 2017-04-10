@@ -8,7 +8,7 @@ class CategoryProduct < ApplicationRecord
   #ver categorias en especifico no esta sirviendo
 
   def self.products_by_category(cat, page = 1, per_page = 10)
-     includes(:product)
+     includes(  :category,product: :images)
      .where(category_products: {
         category_id: cat
       })
@@ -17,11 +17,11 @@ class CategoryProduct < ApplicationRecord
 
 
   def self.categories_by_product(pro, page = 1, per_page = 10)
-     includes(:category, :product)
+     includes(:category)
 	   .where(category_products: {
         product_id: pro
-      })
-      .paginate(:page => page,:per_page => per_page)
+      }).pluck(:category_id)
+
 
   end
 

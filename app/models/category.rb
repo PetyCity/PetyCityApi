@@ -29,7 +29,7 @@ class Category < ApplicationRecord
 
 
     #categoria por id
-    def self.categories_by_ids(ids, page = 1, per_page = 10)
+    def self.categories_by_id(ids, page = 1, per_page = 10)
       where(categories:{
         id: ids
       })

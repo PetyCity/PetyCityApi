@@ -4,7 +4,7 @@ class Api::V1::PublicationsController < ApplicationController
   # GET /publications
   def index
     @publications = Publication.only_publications
-    render json: @publications
+    render json: @publications, :include => []
   
     
     #@publications = Publication.publications_by_user(2)
@@ -20,6 +20,7 @@ class Api::V1::PublicationsController < ApplicationController
 
   # GET /publications/1
   def show
+    @publicactions = Publication.publication_by_id(params[:id])
     render json: @publication
   end
 

@@ -44,28 +44,37 @@ def self.prueba(name)
 
   default_scope {order("users.name_user ASC")}
 
-
-
   #Para ver todos los usuarios
-  def self.only_users(page = 1, per_page = 10)
+  def self.only_users(page = 1, per_page = 100)
     select("users.*").paginate(:page => page,:per_page => per_page)
   end
+  
+  #Para ver todos los usuarios segun un rol especifico
+  def self.users_by_rol(type)
+    where(users: {
+        rol: type
+      })
+  end 
+  
   def self.user_by_id_admin(id)
-    includes(:comment_Products,:comment_Publications,:publications,
-    company: :products,cart: :transactions)
-     .find_by_id(id)
-  end
+    find_by_id(id)
+  end 
+  
   #Para company
   def self.user_company_by_id(id)
     includes( company: :products)
      .find_by_id(id)
   end
+  
+  
    #Para  costummer
   def self.user_custommer_by_id(id)
     includes(:comment_Products,:comment_Publications,:publications,
-    cart: :transactions)
+    cart: :sales)
      .find_by_id(id)
   end
+  
+  
 
  #Para company  ver usuarios compañia
   def self.company_by_user_id(id)
@@ -107,13 +116,7 @@ def self.prueba(name)
  def self.users_by_publications()
     includes(:publications)
  end
- #Para ver todos los usuarios segun un rol especifico
-  def self.users_by_rol(type)
-    where(users: {
-        rol: type
-      })
-  end
-
+ 
 #
 def self.prueba(name)
     joins(sales: [{product: :categories}]).select("users.id").
