@@ -5,13 +5,15 @@ class Api::V1::UsersController < ApplicationController
 
   #GET /api/v1/users/user_id/users/
   def index 
-    @user = User.find_by_id(params[:user_id])    
-    if @user.rol == 'admin'   
-      @users = User.only_users  
-      render json: @users, :include => []  , status: :ok 
-    else 
-     render status: :forbidden
-    end  
+   if params.has_key?(:user_id)
+      @user = User.find_by_id(params[:user_id])    
+      if @user.rol == 'admin'   
+        @users = User.only_users  
+        render json: @users, :include => []  , status: :ok 
+      else 
+       render status: :forbidden
+      end  
+    end
   end
   #GET /api/v1/users/user_id/users/(admin-company-custumeer)
   #GET /api/v1/users/user_id/users/rol/:rol
@@ -93,13 +95,6 @@ class Api::V1::UsersController < ApplicationController
     
   end
   
-
-  def supplier
-
-    @user = User.company_by_user_id(params[:id])
-    render json: @user, :include => [:company]
-  end 
-
 
 
 """
