@@ -6,15 +6,18 @@ Rails.application.routes.draw do
 
   namespace :api do     
     namespace :v1 do 
-      resources :category_products
+       resources :images
+       resources :category_products
        devise_for :users, :defaults => { :format => 'json' }
          #get '/catego' => "categories#show_by_name"
-        resources :users
+       # resources :users
 
         get 'catego' , to: 'categories#catego'
       
         get 'home/mostsales', to: 'products#productsmostsales'      
         get 'home/lastproducts', to: 'products#lastproducts'
+        get 'productrandom', to: 'products#productrandom'
+        get 'productbycompany/:id',to: 'products#productbycompany'
         resources :products, only: [:index, :show] do
           get 'preview', on: :member # products/:ID/preview
           get 'categoproduct', to: 'category_products#categoproduct', on: :member
@@ -24,6 +27,7 @@ Rails.application.routes.draw do
           end
         end
         resources :publications, only: [:index, :show]
+        get 'publicationbyid/:id', to: 'publications#publicationbyid'
         resources :companies, only: [:index, :show]
         get 'supplier/:id', to: 'users#supplier'
 
@@ -33,7 +37,10 @@ Rails.application.routes.draw do
       #Administrator 
 
         scope '/admin' , defaults: {format: :json} do
+          
           resources :users, only: [:edit, :show, :update, :destroy] do     
+
+           
             get 'home/mostsales', to: 'products#productsmostsales'      
             get 'home/lastproducts', to: 'products#lastproducts'
             resources :users, only: [:index, :show, :destroy]
@@ -47,7 +54,10 @@ Rails.application.routes.draw do
             resources :publications do 
               resources :comment_publications
             end
-            resources :companies, only: [:index, :show, :destroy]
+            resources :companies, only: [:index, :show, :destroy] do 
+                 # /users/user_id/companies/:id/product_bycompany
+                  get 'product_bycompany', on: :member
+            end
          
             get 'supplier/:id', to: 'users#suplier' #retornar los usuarios que tenga compañia
             resources :categories

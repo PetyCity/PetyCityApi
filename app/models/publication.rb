@@ -21,10 +21,9 @@ class Publication < ApplicationRecord
       })
   end
   #publicacion  en especifico con sus comentarios
-  def self.publicacion_by_id(id, page = 1, per_page = 10)
+  def self.publication_by_id(id)
     includes(comment_Publications: :user)
-    .find_by_id(id)
-    .paginate(:page => page,:per_page => per_page)
+    .find_by_id(id)    
   end
 
 end

@@ -5,6 +5,7 @@ class Api::V1::ProductsController < ApplicationController
   def index
    
     @products = Product.rand
+
     #@products = Product.all_products
     #render json: @products
     
@@ -34,19 +35,20 @@ class Api::V1::ProductsController < ApplicationController
     #@products = Product.products_by_category(3)
     #render json: @products
     #@products = Product.cheaper_than(10003)
-    #render json: @products
+   # render json: @products
    
     
    
     
     
-    render json: @products , :include => [:images]
+    #render json: @products, :include => [:images]
    
   end
 
   # GET /products/1
   def show
     @products = Product.image_by_product(params[:id])
+
     render json: @products, :include => [:images]
 
   end
@@ -67,14 +69,17 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def productrandom
-   @products = Product.random
-  render json: @products, :include => []
+   @products = Product.rand
+  render json: @products, :include => [:images]
 
   end
 
-
+  ##/users/user_id/companies/company_id/product_bycompany
+  def product_bycompany
+    @products = Product.products_by_company(params[:id])
+    render json: @products, :include => []
   
-
+  end 
 
   # POST /products
   def create

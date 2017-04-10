@@ -12,13 +12,24 @@ class Api::V1::PublicationsController < ApplicationController
   
     #@publications = Publication.publicacion_by_id(1)
     #render json: @publications, :include => [:comment_Publications]  , status: :ok
-    
-    
+       
   end
+
+
+
 
   # GET /publications/1
   def show
     render json: @publication
+  end
+
+
+
+  def publicationbyid
+   
+    @publications = Publication.publication_by_id(params[:id])
+    render json: @publications, :include => [:comment_Publications, :user]  
+
   end
 
   # POST /publications
