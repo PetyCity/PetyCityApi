@@ -70,6 +70,7 @@ class Api::V1::ProductsController < ApplicationController
   def productsmostsales
 
    @products = Product.products_most_sales
+   
    @products = Product.products_by_id(@products)
    
     render json: @products, :include => []

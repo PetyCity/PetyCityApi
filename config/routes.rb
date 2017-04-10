@@ -6,9 +6,9 @@ Rails.application.routes.draw do
 
   namespace :api do     
     namespace :v1 do 
-       #resources :carts
-       resources :sales
-       resources :category_products
+       #resources :images
+       #resources :sales
+       #resources :category_products
        #devise_for :users, :defaults => { :format => 'json' }
          #get '/catego' => "categories#show_by_name"
        # resources :users
@@ -96,6 +96,7 @@ Rails.application.routes.draw do
          
  
             resources :products do
+              resources :images
               resources :comment_products, only: [ :show]
               get 'preview', on: :member    
               collection do          
