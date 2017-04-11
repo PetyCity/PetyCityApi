@@ -2,6 +2,7 @@ class Company < ApplicationRecord
   has_many :products, dependent: :destroy
   belongs_to :user
   has_many :transactions, through: :products
+  has_many :sales, through: :products
   has_many :category_products , through: :products, dependent: :destroy
 
 
@@ -29,7 +30,7 @@ class Company < ApplicationRecord
   default_scope {order("companies.name_comp ASC")}
 
   #Para ver todos los usuarios
-  def self.only_companies(page = 1, per_page = 10)
+  def self.only_companies(page = 1, per_page = 102)
     select("companies.*").paginate(:page => page,:per_page => per_page)
   end
   #ver productos y su categoria

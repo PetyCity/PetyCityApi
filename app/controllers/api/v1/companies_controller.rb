@@ -4,8 +4,8 @@ class Api::V1::CompaniesController < ApplicationController
   # GET /companies
   def index
     #todos 
-    #@companies = Company.only_companies
-    #render json: @companies
+    @companies = Company.only_companies
+    render json: @companies
     
     #toda la informacion de compañia en especifico
     #@companies = Company.company_by_id_adminComp(1)
@@ -24,7 +24,9 @@ class Api::V1::CompaniesController < ApplicationController
 
   # GET /companies/1
   def show
-    render json: @company
+    
+      render json: @company
+     
   end
 
   # POST /companies
@@ -32,7 +34,7 @@ class Api::V1::CompaniesController < ApplicationController
     @company = Company.new(company_params)
 
     if @company.save
-      render json: @company, status: :created, location: @company
+      render  status: :created
     else
       render json: @company.errors, status: :unprocessable_entity
     end
@@ -49,7 +51,16 @@ class Api::V1::CompaniesController < ApplicationController
 
   # DELETE /companies/1
   def destroy
-    @company.destroy
+    if @company.sales.count == 0
+          
+          if @company.destroy                            
+              render status: :ok
+          else
+             render status: :unprocessable_entity 
+          end
+    else
+      #PONERLE EL ATRIBUTO ACTIVO EN GALSE
+    end
   end
 
   private

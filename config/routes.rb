@@ -1,15 +1,11 @@
-Rails.application.routes.draw do
-
-
-
-    
-
+Rails.application.routes.draw do    
+devise_for :users, :defaults => { :format => 'json' }
   namespace :api do     
     namespace :v1 do 
-       #resources :images
-       #resources :sales
-       #resources :category_products
-       #devise_for :users, :defaults => { :format => 'json' }
+       resources :users
+       resources :companies
+       resources :category_products
+        
          #get '/catego' => "categories#show_by_name"
        # resources :users
 

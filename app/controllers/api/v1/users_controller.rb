@@ -1,46 +1,39 @@
 class Api::V1::UsersController < ApplicationController
-  #before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [ :update,:index, :show,:destroy,:users_by_rol]
   #before_filter :authenticate_user!
   
 
   #GET /api/v1/users/user_id/users/
-  def index 
-   if params.has_key?(:user_id)
-      @user = User.find_by_id(params[:user_id])    
-      if @user.rol == 'admin'   
-        @users = User.only_users  
-        render json: @users, :include => []  , status: :ok 
-      else 
-       render status: :forbidden
-      end  
-    end
+  def index
+
+       if params.has_key?(:user_id)
+           if @user_admin.rol == 'admin'   
+            @users = User.only_users  
+            render json: @users, :include => []  , status: :ok 
+          else 
+           render status: :forbidden
+          end  
+        end
   end
   #GET /api/v1/users/user_id/users/(admin-company-custumeer)
   #GET /api/v1/users/user_id/users/rol/:rol
-   def users_by_rol 
-    @user = User.find_by_id(params[:user_id])
-    if @user.rol == 'admin'   
-      if params[:rol] == 'admin' || params[:rol] == 'company' || params[:rol] == 'customer' || params[:rol] == 'company_customer'      
-        @users = User.users_by_rol( params[:rol] )    
-        render json: @users, :include => []  , status: :ok 
-      else
-        render status: :bad_request
-      end
+  def users_by_rol    
+    if @user_admin.rol == 'admin'   
+        if params[:rol] == 'admin' || params[:rol] == 'company' || params[:rol] == 'customer' || params[:rol] == 'company_customer'      
+            @users = User.users_by_rol( params[:rol] )    
+            render json: @users, :include => []  , status: :ok 
+        else
+            render status: :not_found
+        end
     else 
-     render status: :forbidden
+        render status: :forbidden
     end  
-  end
-  
-
-  
+  end  
 #GET /api/v1/admin/users/:id
 #GET /api/v1/admin/users/user_id/users/:id
   def show   
-    if params.has_key?(:user_id)
-      #  if current_user.id == params[:user_id])
-           @user = User.find_by_id(params[:user_id])
-           if     @user.admin?
-                @user = User.find_by_id(params[:id])  
+    if params.has_key?(:user_id)     
+           if   @user_admin.admin?                
                 if     @user.admin?                                 
                        @user = User.user_by_id_admin(params[:id])
                        render json: @user, :include => [], status: :ok
@@ -53,65 +46,44 @@ class Api::V1::UsersController < ApplicationController
                 else 
                        @user = User.user_custommer_by_id(params[:id])                   
                        render json: @user, :include => [:comment_Products,:comment_Publications,:publications,:cart, :sales], status: :ok 
-                end
-                                        
+                end                         
                               
-            else 
-                @user = User.find_by_id(params[:id])  
+            else                  
                 if     @user.admin?                                 
                        render status: :forbidden
                 elsif  @user.company?
                        @user = User.user_company_by_id(params[:id])
                        render json: @user, :include => [ :company, :products], status: :ok
                 elsif  @user.company_customer?
-                       @user = User.user_custommer_by_id(params[:id])
+                       @user = User.user_comp_custommer_by_id(params[:id])
                        render json: @user, :include => [:publications, :company, :products], status: :ok
                 else 
                        @user = User.user_custommer_by_id(params[:id])  
                        render json: @user, :include => [:publications], status: :ok
                 end              
-            end
-         # else
-          #  render status:  :unauthorized 
-          #end
-    else  
-       @user = User.find_by_id(params[:id])
-          # if current_user.id == params[:id])                  
-               if     @user.admin?                                 
+            end         
+    else                         
+                if     @user.admin?                                 
                        @user = User.user_by_id_admin(params[:id])
                        render json: @user, :include => [], status: :ok
                 elsif  @user.company?
                        @user = User.user_company_by_id(params[:id])
-                       render json: @user, :include => [ :company, :products], status: :ok
+                       render json: @user, :include => [ :company,c_products: :sales], status: :ok  
                 elsif  @user.company_customer?
-                       @user = User.user_custommer_by_id(params[:id])
-                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications, :cart, :sales,:company, :products], status: :ok
+                       @user = User.user_comp_custommer_by_id(params[:id])
+                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications, :cart, :sales,:company,c_products: :sales], status: :ok
+       
                 else 
                        @user = User.user_custommer_by_id(params[:id])                   
                        render json: @user, :include => [:comment_Products,:comment_Publications,:publications,:cart, :sales], status: :ok 
-                end
-           #end
-     end  
-    
+                end         
+         end   
   end
   
-
-
-"""
-  # GET /users/new
-  def new
-    @user = User.new
-  end
-"""
-  # GET /users/1/edit
-  def edit
-   
-    render json: @user, status: :ok
-  end
-
-  # POST /users
+  #TODO MUNDO PODRA USAR 
+  # POST /users 
   # POST /users.json
-  """
+#Creacion Pendiente, sera con devise 
   def create
     @user = User.new(user_params)
 
@@ -125,9 +97,11 @@ class Api::V1::UsersController < ApplicationController
       end
     end
   end
-"""
+
+
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
+  #Creacion Pendiente, sera con devise 
   def update
     
       if @user.update(user_params)
@@ -144,32 +118,122 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /users/1
   # DELETE /users/1.json
+  #Cada usuario borra su perfil, y el administrador borra el de todos
   def destroy
+    if params.has_key?(:user_id) #ADMINISTRADOR
+           if   @user_admin.admin?                 
+                if     @user.admin?                                 
+                       render status: :forbidden  
+                elsif  @user.company?
+                       @user = User.user_company_by_id(params[:id])
+                       if @user.co_sales.count == 0 
+                          if @user.destroy                            
+                              render status: :ok
+                          else
+                              render status: :unprocessable_entity 
+                          end                            
+                       else
+                         #ESCONDERLO
+                       end
+                     
+                elsif  @user.company_customer?
+                      
+                       @user = User.user_comp_custommer_by_id(params[:id])
+                       if @user.co_sales.count == 0 && @user.sales.count == 0
+                          if @user.destroy                            
+                              render status: :ok
+                          else
+                              render status: :unprocessable_entity 
+                          end                            
+                       else
+                         #ESCONDERLO
+                       end
+                else 
+                     @user = User.user_custommer_by_id(params[:id])
+                       if @user.sales.count == 0
+                          if @user.destroy                            
+                              render status: :ok
+                          else
+                              render status: :unprocessable_entity 
+                          end                            
+                       else
+                         #ESCONDERLO
+                       end         
+                end                             
+                              
+            else 
+                render status: :forbidden                            
+            end
+    else  
+            if     @user.admin?                                 
+                   render status: :forbidden  
+            elsif  @user.company?
+                   @user = User.user_company_by_id(params[:id])
+                   if @user.co_sales.count == 0 
+                       if @user.destroy                            
+                          render status: :ok
+                       else
+                          render status: :unprocessable_entity 
+                       end                            
+                   else
+                       #ESCONDERLO
+                   end                     
+             elsif  @user.company_customer?                      
+                    @user = User.user_comp_custommer_by_id(params[:id])
+                    if @user.co_sales.count == 0 && @user.sales.count == 0
+                       if @user.destroy                            
+                          render status: :ok
+                       else
+                          render status: :unprocessable_entity 
+                       end                            
+                    else
+                         #ESCONDERLO
+                    end
+             else 
+                    @user = User.user_custommer_by_id(params[:id])
+                    if @user.sales.count == 0
+                       if @user.destroy                            
+                          render status: :ok
+                       else
+                          render status: :unprocessable_entity 
+                       end                            
+                       else
+                         #ESCONDERLO
+                       end         
+             end            
+     end  
     
-    @user.destroy
-    respond_to do |format|
-      #format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
-    
-    render json: @user, status: :ok
-    """
-    if @user.destroy
-      respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-        format.json { head :ok }
-      else
-        respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-        format.json { head :unprocessable_entity }
-      end
-      """
-    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])  
+      if params.has_key?(:user_id)         
+          @user_admin = User.find_by_id(params[:user_id]) 
+          if  @user_admin.nil?#|| current_user.id != params[:user_id]) 
+                render status:  :forbidden
+          end
+        #  if  current_user.id != params[:user_id]) 
+         #       render status:  :forbidden
+         # end    
+          if params.has_key?(:id)
+              @user = User.find_by_id(params[:id])          
+              if  @user.nil?  
+                     render status:   :not_found
+              end          
+          end
+             #if 
+           
+      else
+          @user = User.find_by_id(params[:id]) 
+          if  @user.nil?#|| current_user.id != params[:id])
+                 render status: :not_found
+          end
+         # if  current_user.id != params[:id])
+          #       render status: :forbidden
+          #end
+      end
+      
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

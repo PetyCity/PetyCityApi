@@ -2,7 +2,7 @@ class Transaction < ApplicationRecord
  	#RELATIONSHIPS
     belongs_to :product
     belongs_to :cart
-
+    
     #VALIDATIONS
 	validates :amount, presence: true, numericality: true
 	validates :cart, presence: true

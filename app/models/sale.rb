@@ -2,6 +2,7 @@ class Sale < ApplicationRecord
   #RELATIONSHIPS
 	belongs_to :product
 	belongs_to :cart
+	
 	#VALIDATES
 	validates :amount, presence: true, numericality: true
 	validates :product, presence: true
