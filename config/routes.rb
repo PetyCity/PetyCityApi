@@ -2,14 +2,14 @@ Rails.application.routes.draw do
 devise_for :users, :defaults => { :format => 'json' }
   namespace :api do     
     namespace :v1 do 
-       resources :users
-       resources :companies
-       resources :category_products
+       #resources :users
+       #resources :companies
+       #resources :category_products
         
          #get '/catego' => "categories#show_by_name"
        # resources :users
 
-        get 'catego' , to: 'categories#catego'
+     
       
         get 'home/mostsales', to: 'products#productsmostsales'      
         get 'home/lastproducts', to: 'products#lastproducts'
@@ -25,9 +25,7 @@ devise_for :users, :defaults => { :format => 'json' }
         end
         resources :publications, only: [:index, :show]
        
-        resources :companies, only: [:index, :show]
-        get 'supplier/:id', to: 'users#supplier'
-
+        resources :companies, only: [:index, :show]  
         #change
         resources :categories, only: [:index, :show]
 
@@ -35,7 +33,7 @@ devise_for :users, :defaults => { :format => 'json' }
 
         scope '/admin' , defaults: {format: :json} do
           
-          resources :users, only: [:edit, :show, :update, :destroy] do     
+          resources :users, only: [ :show, :update, :destroy] do     
 
            
             get 'home/mostsales', to: 'products#productsmostsales'      
@@ -44,10 +42,7 @@ devise_for :users, :defaults => { :format => 'json' }
             
                collection do 
                   get 'rol/:rol', to: 'users#users_by_rol'
-               #  get 'companies', to: 'users#users_companies'
-                #  get 'costummer', to: 'users#users_costummer'
-                 # get 'company_customer', to: 'users#users_company_customer'            
-                end
+               end
             
             end
             resources :products, only: [:index, :show] do
@@ -62,12 +57,11 @@ devise_for :users, :defaults => { :format => 'json' }
             end
             resources :companies, only: [:index, :show, :destroy] do 
                  # /users/user_id/companies/company_id/products
-                 resources :products, only: [:index, :show] , on: :member
+                 resources :products, only: [:index ] , on: :member
                  # get 'product_bycompany', on: :member
             end
          
-            get 'supplier/:id', to: 'users#suplier' #retornar los usuarios que tenga compañia
-            resources :categories
+           resources :categories
           end
 
         end
@@ -75,12 +69,12 @@ devise_for :users, :defaults => { :format => 'json' }
       #Company
 
         scope '/company' , defaults: {format: :json} do 
-          resources :users, only: [:show, :edit, :destroy] do
+          resources :users, only: [:show, :update, :destroy] do
             get 'home/mostsales', to: 'product#productsmostsales'      
             get 'home/lastproducts', to: 'product#lastproducts'
             get 'shopsales' , to: 'product#productssales'
             resources :users, only: [ :show] 
-            resources :companies 
+            
             resources :companies  do 
                  # /users/user_id/companies/company_id/products/id/comentproduct/id
                 #/users/user_id//products/id/comentproduct/id
@@ -119,6 +113,11 @@ devise_for :users, :defaults => { :format => 'json' }
               collection do 
                 resources :categories, only: [:index, :show]
               end
+            resources :companies, only: [:index, :show] do 
+                 # /users/user_id/companies/company_id/products
+                 resources :products, only: [:index] , on: :member
+                 # get 'product_bycompany', on: :member
+            end 
             resources :categories, only: [:index]
             end
           end

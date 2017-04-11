@@ -1,11 +1,9 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [ :update,:index, :show,:destroy,:users_by_rol]
-  #before_filter :authenticate_user!
-  
+  #before_filter :authenticate_user!  
 
-  #GET /api/v1/users/user_id/users/
+  #GET /api/v1/admin/users/user_id/users/
   def index
-
        if params.has_key?(:user_id)
            if @user_admin.rol == 'admin'   
             @users = User.only_users  
@@ -15,6 +13,8 @@ class Api::V1::UsersController < ApplicationController
           end  
         end
   end
+  
+  
   #GET /api/v1/users/user_id/users/(admin-company-custumeer)
   #GET /api/v1/users/user_id/users/rol/:rol
   def users_by_rol    
@@ -29,6 +29,8 @@ class Api::V1::UsersController < ApplicationController
         render status: :forbidden
     end  
   end  
+  
+  
 #GET /api/v1/admin/users/:id
 #GET /api/v1/admin/users/user_id/users/:id
   def show   
@@ -208,31 +210,29 @@ class Api::V1::UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      if params.has_key?(:user_id)         
-          @user_admin = User.find_by_id(params[:user_id]) 
-          if  @user_admin.nil?#|| current_user.id != params[:user_id]) 
-                render status:  :forbidden
-          end
-        #  if  current_user.id != params[:user_id]) 
-         #       render status:  :forbidden
-         # end    
-          if params.has_key?(:id)
-              @user = User.find_by_id(params[:id])          
-              if  @user.nil?  
-                     render status:   :not_found
-              end          
-          end
-             #if 
-           
-      else
-          @user = User.find_by_id(params[:id]) 
-          if  @user.nil?#|| current_user.id != params[:id])
-                 render status: :not_found
-          end
-         # if  current_user.id != params[:id])
-          #       render status: :forbidden
-          #end
-      end
+        if params.has_key?(:user_id)         
+            @user_admin = User.find_by_id(params[:user_id]) 
+            if  @user_admin.nil?#|| current_user.id != params[:user_id]) 
+                  render status:  :forbidden
+            end
+          #  if  current_user.id != params[:user_id]) 
+           #       render status:  :forbidden
+           # end    
+            if params.has_key?(:id)
+                @user = User.find_by_id(params[:id])          
+                if  @user.nil?  
+                       render status:   :not_found
+                end          
+            end          
+        else
+            @user = User.find_by_id(params[:id]) 
+            if  @user.nil?#|| current_user.id != params[:id])
+                   render status: :not_found
+            end
+           # if  current_user.id != params[:id])
+            #       render status: :forbidden
+            #end
+        end
       
     end
 
