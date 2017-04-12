@@ -10,6 +10,7 @@ class Api::V1::CompaniesController < ApplicationController
 
    #/api/v1/companies/:id
   #/api/v1/admin/users/:user_id/companies/:id
+ def show
     if params.has_key?(:user_id)
        if  @user.customer?     
            render json: @company , :include => [:user,:products], status: :ok 
@@ -39,7 +40,7 @@ class Api::V1::CompaniesController < ApplicationController
               render json: @company.errors, status: :unprocessable_entity
             end
       end   
-   end
+  end
 
   # PATCH/PUT /companies/1
   def update
@@ -85,10 +86,7 @@ class Api::V1::CompaniesController < ApplicationController
           else
             render status: :forbidden #no la pede borrar
           end 
-    end
-    
-    
-    
+    end    
   end
 
   private

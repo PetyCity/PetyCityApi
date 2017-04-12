@@ -39,7 +39,7 @@ devise_for :users, :defaults => { :format => 'json' }
             get 'home/mostsales', to: 'products#productsmostsales'      
             get 'home/lastproducts', to: 'products#lastproducts'
             resources :users, only: [:index, :show, :destroy] do 
-            
+               get 'my_publications', to: 'publications#my_publications', on: :member                
                collection do 
                   get 'rol/:rol', to: 'users#users_by_rol'
                end
@@ -52,7 +52,7 @@ devise_for :users, :defaults => { :format => 'json' }
                 resources :categories, only: [:index, :show]
               end
             end
-            resources :publications do 
+            resources :publications, only: [:index, :show, :destroy]  do 
               resources :comment_publications
             end
             resources :companies, only: [:index, :show, :destroy] do 
@@ -84,7 +84,7 @@ devise_for :users, :defaults => { :format => 'json' }
                  # get 'product_bycompany', on: :member
             end
          
- 
+            resources :publications, only: [:index, :show]
             resources :products do
               resources :images
               resources :comment_products, only: [ :show]
@@ -99,11 +99,13 @@ devise_for :users, :defaults => { :format => 'json' }
       #costumer
         scope '/costum', defaults: {format: :json} do
           resources :users, only: [:show, :edit, :destroy] do
+            get 'my_publications' , to: 'publications#my_publications', on: :member
             get 'home/mostsales', to: 'products#productsmostsales'      
             get 'home/lastproducts', to: 'products#lastproducts'
             get 'productsbought' , to: 'products#productsbought'
             #change
             resources :users, only: [ :show] 
+            
             resources :publications do
               resources :comment_publications ##
             end
