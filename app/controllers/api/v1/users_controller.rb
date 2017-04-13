@@ -168,7 +168,11 @@ class Api::V1::UsersController < ApplicationController
             end
     else  
             if     @user.admin?                                 
-                   render status: :forbidden  
+                       if @user.destroy                            
+                          render status: :ok
+                       else
+                          render status: :unprocessable_entity 
+                       end   
             elsif  @user.company?
                    @user = User.user_company_by_id(params[:id])
                    if @user.co_sales.count == 0 

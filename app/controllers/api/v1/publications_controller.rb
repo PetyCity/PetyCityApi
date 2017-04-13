@@ -10,7 +10,8 @@ class Api::V1::PublicationsController < ApplicationController
         render json: @publications, :include => [:user]
     end     
   end
-  # GET /publications/1
+  # /api/v1/admin/users/:user_id/publications/id
+  # /api/v1/publications/id
   def show
     if params.has_key?(:user_id)
         render json: @publication, :include => [:user,comment_Publications: :user]
@@ -21,9 +22,8 @@ class Api::V1::PublicationsController < ApplicationController
 
 
 #/api/v1/admin/users/:user_id/users/:id/my_publications
-#/api/v1/costum/users/:id/my_publications
-  def my_publications  
-  
+# 
+  def my_publications   
    if params.has_key?(:user_id) #ADMIN 
         @user = User.find_by_id(params[:user_id]) 
        if  @user.admin?
@@ -74,7 +74,6 @@ class Api::V1::PublicationsController < ApplicationController
 
   # DELETE /publications/1
   def destroy
-    @publication.destroy
     if  @user.company? #La compañia  no puede borrar nada
           render status: :forbidden  
     elsif  @user.admin?#Administrador puede borar todas                    
@@ -84,7 +83,7 @@ class Api::V1::PublicationsController < ApplicationController
                render status: :unprocessable_entity 
            end          
     else#el usuario borra las publicaciones de el
-          if @publication.user.id ==  params[:user_id]  #El usuario de la publicacion es el mismo usuario logueado
+          if @publication.user_id == Integer(params[:user_id])  #El usuario de la publicacion es el mismo usuario logueado
               if @publication.destroy                            
                  render status: :ok
               else
@@ -102,7 +101,7 @@ class Api::V1::PublicationsController < ApplicationController
       if params.has_key?(:user_id)         
             @user = User.find_by_id(params[:user_id]) 
             if  @user.nil?
-                  render status:  :forbidden
+                  render status:  :not_found
             end
           #  if  current_user.id != params[:user_id]) 
            #       render status:  :forbidden
@@ -116,8 +115,15 @@ class Api::V1::PublicationsController < ApplicationController
             else
               @publications = Publication.only_publications                               
             end          
-        else
-            if params.has_key?(:id)                   
+        else            
+            if params.has_key?(:id)
+                  @user = User.find_by_id(params[:id]) 
+                  if  @user.nil?
+                        render status:  :not_found
+                  end
+                 #if  current_user.id != params[:id]) 
+                 #       render status:  :forbidden
+                 # end  |                   
                  @publication = Publication.publication_by_id(params[:id])   
                  if  @publication.nil?
                        render status: :not_found
