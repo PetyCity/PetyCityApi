@@ -27,7 +27,7 @@ devise_for :users, :defaults => { :format => 'json' }
        
         resources :companies, only: [:index, :show] do 
                  # /users/user_id/companies/:id/product_bycompany
-                  get 'product_bycompany', on: :member
+                  get 'product_bycompany', to: 'products#index'
             end 
         #change
         resources :categories, only: [:index, :show]
@@ -60,7 +60,7 @@ devise_for :users, :defaults => { :format => 'json' }
             end
             resources :companies, only: [:index, :show, :destroy] do 
                  # /users/user_id/companies/:id/product_bycompany
-                  get 'product_bycompany', on: :member
+                  get 'product_bycompany', to: 'products#index'
             end
          
            resources :categories
@@ -79,7 +79,7 @@ devise_for :users, :defaults => { :format => 'json' }
             
             resources :companies do 
                  # /users/user_id/companies/:id/product_bycompany
-                  get 'product_bycompany', on: :member
+                  get 'product_bycompany', to: 'products#index'
             end
          
             resources :publications, only: [:index, :show]
@@ -115,7 +115,7 @@ devise_for :users, :defaults => { :format => 'json' }
               end
             resources :companies, only: [:index, :show] do 
                  # /users/user_id/companies/:id/product_bycompany
-                  get 'product_bycompany', on: :member
+                  get 'product_bycompany', to: 'products#index'
             end
             resources :categories, only: [:index]
             end
