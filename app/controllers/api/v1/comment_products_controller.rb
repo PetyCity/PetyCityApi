@@ -36,9 +36,10 @@ class Api::V1::CommentProductsController < ApplicationController
      render status: :forbidden
     end
   end
-  
+
   # POST /comment_products
   def create
+
     @comment_product = CommentProduct.new(comment_product_params)
 
     if @comment_product.save
