@@ -20,7 +20,7 @@ devise_for :users, :defaults => { :format => 'json' }
           get 'catego_product', to: 'category_products#catego_product', on: :member
           resources :comment_products, only: [:index, :show]
           collection do 
-              resources :categories, only: [:index, :show]
+              resources :categories, only: [:index]
           end
         end
         resources :publications, only: [:index, :show]
@@ -51,8 +51,10 @@ devise_for :users, :defaults => { :format => 'json' }
             resources :products, only: [:index, :show] do
               resources :comment_products
               get 'preview', on: :member
+              get 'catego_product', to: 'category_products#catego_product', on: :member
               collection do 
-                resources :categories, only: [:index, :show]
+
+                resources :categories, only: [:index]
               end
             end
             resources :publications, only: [:index, :show, :destroy]  do 
@@ -82,7 +84,7 @@ devise_for :users, :defaults => { :format => 'json' }
                   get 'product_bycompany', to: 'products#index'
             end
          
-            
+            resources :categories, only: [:show, :index]
             resources :publications, only: [:index, :show]  do 
                 resources :comment_publications,only: [ :show,:create,:update,:destroy] 
             end
@@ -90,9 +92,10 @@ devise_for :users, :defaults => { :format => 'json' }
               
               resources :images
               resources :comment_products
-              get 'preview', on: :member    
+              get 'preview', on: :member
+              get 'catego_product', to: 'category_products#catego_product', on: :member    
               collection do          
-                resources :categories, only: [:index, :show]
+                resources :categories, only: [:index]
               end
             end
           end
@@ -113,14 +116,15 @@ devise_for :users, :defaults => { :format => 'json' }
             resources :products, only: [:index, :show] do
               resources :comment_products
               get 'preview', on: :member
+              get 'catego_product', to: 'category_products#catego_product', on: :member
               collection do 
-                resources :categories, only: [:index, :show]
+                resources :categories, only: [:index]
               end
             resources :companies, only: [:index, :show] do 
                  # /users/user_id/companies/:id/product_bycompany
                   get 'product_bycompany', to: 'products#index'
             end
-            resources :categories, only: [:index]
+            resources :categories, only: [:show, :index]
             end
           end
         end

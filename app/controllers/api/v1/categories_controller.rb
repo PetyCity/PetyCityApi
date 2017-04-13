@@ -34,38 +34,46 @@ class Api::V1::CategoriesController < ApplicationController
   end
   
 
-  def catego
 
-      @categories = Category.categories_by_name("qDAJM")
-      render json: @categories, :include => [:category]
-  end
-
-
- 
-  
   # POST /categories
-  def create
-    @category = Category.new(category_params)
 
-    if @category.save
-      render json: @category, status: :created, location: @category
-    else
-      render json: @category.errors, status: :unprocessable_entity
-    end
-  end
+  #/api/v1/admin/users/:user_id/categories(.:format)
+
+  def create
+
+    if !user.admin?
+
+      render: :forbidden
+    else 
+        @category = Category.new(category_params)
+
+        if @category.save
+          render json: @category, status: :created
+        else
+          render json: @category.errors, status: :unprocessable_entity
+        end
+     end
 
   # PATCH/PUT /categories/1
   def update
-    if @category.update(category_params)
-      render json: @category
+    if !user.admin?
+      render: :forbidden
     else
-      render json: @category.errors, status: :unprocessable_entity
-    end
+
+      if @category.update(category_params)
+        render json: @category
+      else
+        render json: @category.errors, status: :unprocessable_entity
+      end
   end
 
   # DELETE /categories/1
   def destroy
-    @category.destroy
+    if !user.admin?
+      render: :forbidden
+    else
+
+     @category.destroy
   end
 
   private
