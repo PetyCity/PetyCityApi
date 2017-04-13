@@ -10,16 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329174343) do
+ActiveRecord::Schema.define(version: 20170413210851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "carts", force: :cascade do |t|
-    t.integer  "user_id",     null: false
-    t.float    "total_price", null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "user_id",                    null: false
+    t.float    "total_price",                null: false
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.index ["user_id"], name: "index_carts_on_user_id", using: :btree
   end
 
@@ -63,13 +64,15 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   create_table "companies", force: :cascade do |t|
     t.bigint   "nit"
     t.string   "name_comp"
-    t.string   "address",    limit: 30
-    t.string   "city",       limit: 20
+    t.string   "address",       limit: 30
+    t.string   "city",          limit: 20
     t.bigint   "phone"
-    t.boolean  "permission",            default: false
+    t.boolean  "permission",               default: false
     t.integer  "user_id"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.boolean  "active",                   default: true
+    t.string   "image_company"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.index ["user_id"], name: "index_companies_on_user_id", using: :btree
   end
 
@@ -88,6 +91,7 @@ ActiveRecord::Schema.define(version: 20170329174343) do
     t.integer  "value",                        null: false
     t.integer  "amount",                       null: false
     t.integer  "company_id",                   null: false
+    t.boolean  "active",       default: true
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
@@ -95,11 +99,12 @@ ActiveRecord::Schema.define(version: 20170329174343) do
   end
 
   create_table "publications", force: :cascade do |t|
-    t.string   "title",                         null: false
-    t.text     "body_publication", default: "", null: false
-    t.integer  "user_id",                       null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.string   "title",                          null: false
+    t.text     "body_publication",  default: "", null: false
+    t.integer  "user_id",                        null: false
+    t.string   "image_publication"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.index ["user_id"], name: "index_publications_on_user_id", using: :btree
   end
 
@@ -109,7 +114,6 @@ ActiveRecord::Schema.define(version: 20170329174343) do
     t.bigint   "amount",     null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["cart_id", "product_id"], name: "index_sales_on_cart_id_and_product_id", unique: true, using: :btree
     t.index ["cart_id"], name: "index_sales_on_cart_id", using: :btree
     t.index ["product_id"], name: "index_sales_on_product_id", using: :btree
   end
@@ -120,34 +124,41 @@ ActiveRecord::Schema.define(version: 20170329174343) do
     t.bigint   "amount",     null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["cart_id", "product_id"], name: "index_transactions_on_cart_id_and_product_id", unique: true, using: :btree
     t.index ["cart_id"], name: "index_transactions_on_cart_id", using: :btree
     t.index ["product_id"], name: "index_transactions_on_product_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                             default: "",    null: false
-    t.string   "encrypted_password",                default: "",    null: false
+    t.string   "provider",               default: "email", null: false
+    t.string   "uid",                    default: "",      null: false
+    t.string   "encrypted_password",     default: "",      null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                     default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,       null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.integer  "cedula"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
     t.string   "name_user"
-    t.boolean  "block",                             default: false
-    t.boolean  "sendEmail",                         default: false
-    t.integer  "rol"
     t.integer  "image"
-    t.string   "authentication_token",   limit: 30
-    t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
+    t.string   "email"
+    t.integer  "rol"
+    t.boolean  "block",                  default: false
+    t.boolean  "sendEmail",              default: false
+    t.integer  "document"
+    t.boolean  "active",                 default: true
+    t.json     "tokens"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
   end
 
   add_foreign_key "carts", "users"

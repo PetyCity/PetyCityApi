@@ -7,7 +7,7 @@ end
 
 
 
-gem 'devise', '~> 4.1', '>= 4.1.1'
+
 
 
 gem 'carrierwave', '~> 1.0'
@@ -20,7 +20,7 @@ gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0'
 
 
-gem 'simple_token_authentication', '~> 1.0'
+
 
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -33,6 +33,8 @@ gem 'simple_token_authentication', '~> 1.0'
 gem 'bcrypt', platforms: :ruby
 gem 'will_paginate'
 
+gem 'devise_token_auth'
+gem 'omniauth'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
