@@ -49,7 +49,7 @@ devise_for :users, :defaults => { :format => 'json' }
             
             end
             resources :products, only: [:index, :show] do
-              resources :comment_products, only: [:index, :show]
+              resources :comment_products
               get 'preview', on: :member
               collection do 
                 resources :categories, only: [:index, :show]
@@ -87,8 +87,9 @@ devise_for :users, :defaults => { :format => 'json' }
                 resources :comment_publications,only: [ :show,:create,:update,:destroy] 
             end
             resources :products do
+              
               resources :images
-              resources :comment_products, only: [ :show]
+              resources :comment_products
               get 'preview', on: :member    
               collection do          
                 resources :categories, only: [:index, :show]
