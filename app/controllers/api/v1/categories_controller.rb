@@ -1,10 +1,20 @@
 class Api::V1::CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :update, :destroy]
 
+  
   # GET /categories
+  #/api/v1/costum/users/:user_id/products/categories
+  #GET  /api/v1/costum/users/:user_id/products/:product_id/categories
   def index
-    @categories = Category.all_categories
-    render json: @categories,:include => []
+    if params.has_key?(:product_id)
+        @categoryProducts = CategoryProduct.categories_by_product(params[:product_id])
+        @categories = Category.categories_by_id(@categoryProducts)
+        render json: @categories,:include=>[] 
+    else
+        @categories = Category.all_categories
+        render json: @categories,:include => []
+
+    end
    
     #@categories = Category.categories_by_ids(2)
     #render json: @categories
@@ -15,6 +25,7 @@ class Api::V1::CategoriesController < ApplicationController
     #render json: @categories
 
   end
+
 
   # GET /categories/1
   def show    
