@@ -131,7 +131,7 @@ class Api::V1::ProductsController < ApplicationController
     @user = User.find_by_id(params[:user_id])
 
     if !@user.company? && !@user.company_customer?
-      render: :forbidden
+      render status: :forbidden
 
     else
 
@@ -151,7 +151,7 @@ class Api::V1::ProductsController < ApplicationController
     @user = User.find_by_id(params[:user_id])
 
     if !@user.company? && !@user.company_customer?
-      render: :forbidden
+      render status: :forbidden
     else 
       if @product.update(product_params)
         render json: @product

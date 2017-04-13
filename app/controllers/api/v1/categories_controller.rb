@@ -44,7 +44,7 @@ class Api::V1::CategoriesController < ApplicationController
 
     if !@user.admin?
 
-      render: :forbidden
+      render status: :forbidden
     else 
         @category = Category.new(category_params)
 
@@ -59,7 +59,7 @@ class Api::V1::CategoriesController < ApplicationController
   def update
     @user = User.find_by_id(params[:user_id])
     if !@user.admin?
-      render: :forbidden      
+      render status: :forbidden      
     else
 
         if @category.update(category_params)
@@ -73,7 +73,7 @@ class Api::V1::CategoriesController < ApplicationController
   def destroy
     @user = User.find_by_id(params[:user_id])
     if !@user.admin?
-      render: :forbidden
+      render status: :forbidden
     else
       @category.destroy
     end
