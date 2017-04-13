@@ -2,13 +2,30 @@ class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: [ :update, :destroy]
 
   # GET /products
+  #/api/v1/admin/users/:user_id/companies/:company_id/product_bycompany
+  #/api/v1/costum/users/:user_id/companies/:company_id/product_bycompany
+  #/api/v1/company/users/:user_id/companies/:company_id/product_bycompany(.:format)
+  #/api/v1/companies/:company_id/product_bycompany(.:format)
+  #/products
+  
   def index
    
     if params.has_key?(:company_id)
-      
-      @products= Product.products_by_company(params[:company_id])
-      render json: @products, :include => [:images]
-     else
+          @products= Product.products_by_company(params[:company_id])
+          if params.has_key?(:user_id)    
+                @company = Company.find_by_id(params[:company_id])  
+
+                if  @company.user_id == Integer(params[:user_id]  )          
+                      render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
+                else
+                     render json: @products, :include => [:images, :comment_products,:categories,:company, :users]
+                end
+          else
+                render json: @products, :include => [:images, :comment_products,:categories,:company]
+          
+
+          end
+    else
       @products= Product.rand
       render json: @products, :include => [:images]
     end
@@ -50,14 +67,34 @@ class Api::V1::ProductsController < ApplicationController
 
    
   end
-
   # GET /products/1
+  # GET /products/:id
+  # GET /api/v1/admin/users/user_id/products/:id
+  # GET /api/v1/company/users/user_id/products/:id
+  # GET /api/v1/customer/users/user_id/products/:id
   def show
-    @products = Product.image_by_product(params[:id])
+    if params.has_key?(:user_id)
+      #  if current_user.id == params[:user_id])
+      @user = User.find_by_id(params[:user_id])
+      @products = Product.product_by_id_total(params[:id])
+      if !@user.customer?  
+       # if @products.user_id == @user.id
+          render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
+        #else
+         # render status: :forbidden  
+       # end
+      else
+        
+        render json: @products, :include => [:images, :comment_products,:categories,:company, :users]
 
-    render json: @products, :include => [:images, :comment_products]
+      end
+    else
+      @products = Product.product_by_id_total(params[:id])
+      render json: @products, :include => [:images, :comment_products,:categories,:company]
+    end
 
   end
+
 
 
   def lastproducts

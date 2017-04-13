@@ -26,4 +26,19 @@ class CommentProduct < ApplicationRecord
    	 select("comment_products.*").paginate(:page => page,:per_page => per_page)
   end
 
+
+  def self.comments_product_by_products(pro)
+    where( comment_products:{
+        product_id: pro
+    })
+  end
+
+  def self.comment_product_by_product(pro,id)
+    where(comment_products:{
+      id: id, product_id: pro 
+
+      })
+
+  end
+
 end
