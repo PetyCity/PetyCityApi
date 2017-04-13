@@ -60,12 +60,6 @@ class Api::V1::ProductsController < ApplicationController
     #@products = Product.cheaper_than(10003)
    # render json: @products
    
-    
-   
-    
-    
-
-   
   end
   # GET /products/1
   # GET /products/:id
@@ -128,28 +122,56 @@ class Api::V1::ProductsController < ApplicationController
   end 
 
   # POST /products
-  def create
-    @product = Product.new(product_params)
 
-    if @product.save
-      render json: @product, status: :created, location: @product
+
+#/api/v1/company/users/:user_id/companies
+
+
+  def create
+    @user = User.find_by_id(params[:user_id])
+
+    if !@user.company? && !@user.company_customer?
+      render: :forbidden
+
     else
-      render json: @product.errors, status: :unprocessable_entity
+
+      @product = Product.new(product_params)
+
+      if @product.save
+        render json: @product, status: :created, location: @product
+      else
+        render json: @product.errors, status: :unprocessable_entity
+      end
     end
   end
 
   # PATCH/PUT /products/1
+  #/api/v1/company/users/:user_id/companies/:id(.:format)
   def update
-    if @product.update(product_params)
-      render json: @product
-    else
-      render json: @product.errors, status: :unprocessable_entity
+    @user = User.find_by_id(params[:user_id])
+
+    if !@user.company? && !@user.company_customer?
+      render: :forbidden
+    else 
+      if @product.update(product_params)
+        render json: @product
+      else
+        render json: @product.errors, status: :unprocessable_entity
+      end
     end
   end
 
+
+  #/api/v1/company/users/:user_id/companies/:id(.:format)
   # DELETE /products/1
   def destroy
-    @product.destroy
+    @user = User.find_by_id(params[:user_id])
+
+    if !@user.company?
+      render status: :forbidden
+    else
+      @product.destroy
+    end
   end
 
   private

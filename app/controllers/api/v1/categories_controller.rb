@@ -40,8 +40,9 @@ class Api::V1::CategoriesController < ApplicationController
   #/api/v1/admin/users/:user_id/categories(.:format)
 
   def create
+   @user = User.find_by_id(params[:user_id])
 
-    if !user.admin?
+    if !@user.admin?
 
       render: :forbidden
     else 
@@ -53,27 +54,29 @@ class Api::V1::CategoriesController < ApplicationController
           render json: @category.errors, status: :unprocessable_entity
         end
      end
-
+  end
   # PATCH/PUT /categories/1
   def update
-    if !user.admin?
-      render: :forbidden
+    @user = User.find_by_id(params[:user_id])
+    if !@user.admin?
+      render: :forbidden      
     else
 
-      if @category.update(category_params)
-        render json: @category
-      else
-        render json: @category.errors, status: :unprocessable_entity
-      end
+        if @category.update(category_params)
+            render json: @category
+        else
+           render json: @category.errors, status: :unprocessable_entity
+        end
+    end
   end
-
   # DELETE /categories/1
   def destroy
-    if !user.admin?
+    @user = User.find_by_id(params[:user_id])
+    if !@user.admin?
       render: :forbidden
     else
-
-     @category.destroy
+      @category.destroy
+    end
   end
 
   private

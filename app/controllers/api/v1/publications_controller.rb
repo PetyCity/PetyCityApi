@@ -1,4 +1,4 @@
-class Api::V1::PublicationsController < ApplicationController
+ class Api::V1::PublicationsController < ApplicationController
   before_action :set_publication, only: [:index,:show, :create,:update, :destroy,:my_publications]
 
   # /api/v1/admin/users/:user_id/publications/
