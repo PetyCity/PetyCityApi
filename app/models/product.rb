@@ -69,11 +69,15 @@ class Product < ApplicationRecord
       .find_by_id(id)
   end
 
+   def self.product_by_id_total(id, page = 1, per_page = 5)
+      includes( :images, :comment_products,:categories,:company, :sales, :users)
+      .find_by_id(id)
+  end
 
-  def self.products_sales(id, page = 1, per_page = 10)
+
+  def self.products_sales(id)
       includes( :sales)
       .find_by_id(id)
-      .paginate(:page => page,:per_page => per_page)
      end
 
  

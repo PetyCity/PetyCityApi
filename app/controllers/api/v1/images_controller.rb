@@ -11,6 +11,8 @@ class Api::V1::ImagesController < ApplicationController
 
   # GET /images/1
   def show
+
+    
     @image = Image.image_by_id(params[:id])
     render json: @image, :include => [:product]
   end

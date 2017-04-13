@@ -73,7 +73,9 @@ class Api::V1::ProductsController < ApplicationController
       @products = Product.product_by_id_total(params[:id])
       if !@user.customer?  
        # if @products.user_id == @user.id
+         
           render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
+
         #else
          # render status: :forbidden  
        # end
@@ -166,11 +168,17 @@ class Api::V1::ProductsController < ApplicationController
   # DELETE /products/1
   def destroy
     @user = User.find_by_id(params[:user_id])
-
+    @product = Product.products_sales(params[:id])
     if !@user.company?
       render status: :forbidden
     else
-      @product.destroy
+       @product = Product.products_sales(params[:id])
+      if @product.sales.count == 0
+         @product.destroy
+      else 
+        #esconderlo
+      end 
+      
     end
   end
 
