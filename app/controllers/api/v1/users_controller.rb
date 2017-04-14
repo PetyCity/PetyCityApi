@@ -118,8 +118,8 @@ class Api::V1::UsersController < ApplicationController
     
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.json
+  # /api/v1/admin/users/:id
+  # /api/v1/admin/users/:user_id/users/:id
   #Cada usuario borra su perfil, y el administrador borra el de todos
   def destroy
     if params.has_key?(:user_id) #ADMINISTRADOR
@@ -242,6 +242,6 @@ class Api::V1::UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:cedula,:name_user,:block,:sendEmail,:rol)
+      params.require(:user).permit(:document,:name_user,:block,:sendEmail,:rol,:password,:password_confirmation,:confirm_success_url,:email,:active,:image)
     end
 end

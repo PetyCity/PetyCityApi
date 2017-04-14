@@ -102,7 +102,7 @@ devise_for :users, :defaults => { :format => 'json' }
         end
       #costumer
         scope '/costum', defaults: {format: :json} do
-          resources :users, only: [:show, :edit, :destroy] do
+          resources :users, only: [:show, :update, :destroy] do
             get 'my_publications' , to: 'publications#my_publications', on: :member
             get 'home/mostsales', to: 'products#productsmostsales'      
             get 'home/lastproducts', to: 'products#lastproducts'
