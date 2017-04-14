@@ -1,5 +1,6 @@
 class CompanySerializer < ActiveModel::Serializer
-    attributes :id, :nit, :name_comp, :address, :city, :phone, :permission, :user_id, :updated_at
+    attributes :id, :nit, :name_comp, :address, :city, :phone, :permission, :user_id,
+    :updated_at,:active,:image_company
     has_many :products, dependent: :destroy  
 	belongs_to :user
   	has_many :transactions, through: :products
