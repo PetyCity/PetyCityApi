@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-<<<<<<< HEAD
+
   attributes :id,:email, :document,:name_user,:block,:sendEmail,:rol,:active
    has_one :cart, dependent: :destroy
   has_one :company, dependent: :destroy   
