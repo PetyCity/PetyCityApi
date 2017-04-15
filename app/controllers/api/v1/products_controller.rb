@@ -126,7 +126,7 @@ class Api::V1::ProductsController < ApplicationController
   # POST /products
 
 
-#/api/v1/company/users/:user_id/companies
+#/api/v1/company/users/:user_id/companies/products
 
 
   def create
@@ -140,7 +140,7 @@ class Api::V1::ProductsController < ApplicationController
       @product = Product.new(product_params)
 
       if @product.save
-        render json: @product, status: :created, location: @product
+        render json: @product, status: :created
       else
         render json: @product.errors, status: :unprocessable_entity
       end

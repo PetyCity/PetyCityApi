@@ -16,7 +16,7 @@ class Api::V1::CommentPublicationsController < ApplicationController
       @comment_publication = CommentPublication.new(comment_publication_params)
   
       if @comment_publication.save
-        render json: @comment_publication, status: :created, location: @comment_publication
+        render json: @comment_publication, status: :created
       else
         render json: @comment_publication.errors, status: :unprocessable_entity
       end

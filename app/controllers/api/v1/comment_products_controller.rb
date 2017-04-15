@@ -32,7 +32,7 @@ class Api::V1::CommentProductsController < ApplicationController
 
     @comment_product = CommentProduct.new(comment_product_params)
     if @comment_product.save
-      render json: @comment_product, status: :created, location: @comment_product
+      render json: @comment_product, status: :created
     else
       render json: @comment_product.errors, status: :unprocessable_entity
     end
