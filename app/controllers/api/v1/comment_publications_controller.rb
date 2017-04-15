@@ -1,35 +1,26 @@
 class Api::V1::CommentPublicationsController < ApplicationController
   before_action :set_comment_publication, only: [:show, :update, :destroy]
 
-  # GET /comment_publications
-  def index
-
-    @comment_publications = CommentPublication.comment_publication_by_user(1)
-    render json: @comment_publications
-
-   #@comment_publications = CommentPublication.comment_publication_by_publication(2)
-    #render json: @comment_publications
-   
-   
-   #@comment_publications = CommentPublication.comment_publication(2)
-  # render json: @comment_publications
-
-  end
-
+  
   # GET /comment_publications/1
   def show
-    render json: @comment_publication
+    if params.has_key?(:user_id)
+       @comment_publication = CommentPublication.find(params[:id])
+       render json: @comment_publication
+    end
   end
 
-  # POST /comment_publications
+  # POST /api/v1/admin/users/:user_id/publications/:publication_id/comment_publications/:id
   def create
-    @comment_publication = CommentPublication.new(comment_publication_params)
-
-    if @comment_publication.save
-      render json: @comment_publication, status: :created, location: @comment_publication
-    else
-      render json: @comment_publication.errors, status: :unprocessable_entity
-    end
+   if params.has_key?(:user_id)
+      @comment_publication = CommentPublication.new(comment_publication_params)
+  
+      if @comment_publication.save
+        render json: @comment_publication, status: :created, location: @comment_publication
+      else
+        render json: @comment_publication.errors, status: :unprocessable_entity
+      end
+   end
   end
 
   # PATCH/PUT /comment_publications/1
@@ -50,6 +41,9 @@ class Api::V1::CommentPublicationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_comment_publication
       @comment_publication = CommentPublication.find(params[:id])
+       #  if  current_user.id != params[:user_id]) 
+           #       render status:  :forbidden
+           # end   
     end
 
     # Only allow a trusted parameter "white list" through.

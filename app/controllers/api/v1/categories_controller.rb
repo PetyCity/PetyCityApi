@@ -1,10 +1,20 @@
 class Api::V1::CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :update, :destroy]
 
+  
   # GET /categories
+  #/api/v1/costum/users/:user_id/products/categories
+  #GET  /api/v1/costum/users/:user_id/products/:product_id/categories
   def index
-    @categories = Category.all_categories
-    render json: @categories,:include => []
+    if params.has_key?(:product_id)
+        @categoryProducts = CategoryProduct.categories_by_product(params[:product_id])
+        @categories = Category.categories_by_id(@categoryProducts)
+        render json: @categories,:include=>[] 
+    else
+        @categories = Category.all_categories
+        render json: @categories,:include => []
+
+    end
    
     #@categories = Category.categories_by_ids(2)
     #render json: @categories
@@ -16,6 +26,7 @@ class Api::V1::CategoriesController < ApplicationController
 
   end
 
+
   # GET /categories/1
   def show    
    @categories = Category.categories_by_id( params[:id] )
@@ -23,38 +34,49 @@ class Api::V1::CategoriesController < ApplicationController
   end
   
 
-  def catego
 
-      @categories = Category.categories_by_name("qDAJM")
-      render json: @categories, :include => [:category]
-  end
-
-
- 
-  
   # POST /categories
+
+  #/api/v1/admin/users/:user_id/categories(.:format)
+
   def create
-    @category = Category.new(category_params)
+   @user = User.find_by_id(params[:user_id])
 
-    if @category.save
-      render json: @category, status: :created, location: @category
-    else
-      render json: @category.errors, status: :unprocessable_entity
-    end
+    if !@user.admin?
+
+      render status: :forbidden
+    else 
+        @category = Category.new(category_params)
+
+        if @category.save
+          render json: @category, status: :created
+        else
+          render json: @category.errors, status: :unprocessable_entity
+        end
+     end
   end
-
   # PATCH/PUT /categories/1
   def update
-    if @category.update(category_params)
-      render json: @category
+    @user = User.find_by_id(params[:user_id])
+    if !@user.admin?
+      render status: :forbidden      
     else
-      render json: @category.errors, status: :unprocessable_entity
+
+        if @category.update(category_params)
+            render json: @category
+        else
+           render json: @category.errors, status: :unprocessable_entity
+        end
     end
   end
-
   # DELETE /categories/1
   def destroy
-    @category.destroy
+    @user = User.find_by_id(params[:user_id])
+    if !@user.admin?
+      render status: :forbidden
+    else
+      @category.destroy
+    end
   end
 
   private

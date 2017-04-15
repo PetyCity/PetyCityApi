@@ -2,13 +2,30 @@ class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: [ :update, :destroy]
 
   # GET /products
+  #/api/v1/admin/users/:user_id/companies/:company_id/product_bycompany
+  #/api/v1/costum/users/:user_id/companies/:company_id/product_bycompany
+  #/api/v1/company/users/:user_id/companies/:company_id/product_bycompany(.:format)
+  #/api/v1/companies/:company_id/product_bycompany(.:format)
+  #/products
+  
   def index
    
     if params.has_key?(:company_id)
-      
-      @products= Product.products_by_company(params[:company_id])
-      render json: @products, :include => [:images]
-     else
+          @products= Product.products_by_company(params[:company_id])
+          if params.has_key?(:user_id)    
+                @company = Company.find_by_id(params[:company_id])  
+
+                if  @company.user_id == Integer(params[:user_id]  )          
+                      render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
+                else
+                     render json: @products, :include => [:images, :comment_products,:categories,:company, :users]
+                end
+          else
+                render json: @products, :include => [:images, :comment_products,:categories,:company]
+          
+
+          end
+    else
       @products= Product.rand
       render json: @products, :include => [:images]
     end
@@ -43,21 +60,37 @@ class Api::V1::ProductsController < ApplicationController
     #@products = Product.cheaper_than(10003)
    # render json: @products
    
-    
-   
-    
-    
-
-   
   end
-
   # GET /products/1
+  # GET /products/:id
+  # GET /api/v1/admin/users/user_id/products/:id
+  # GET /api/v1/company/users/user_id/products/:id
+  # GET /api/v1/customer/users/user_id/products/:id
   def show
-    @products = Product.image_by_product(params[:id])
+    if params.has_key?(:user_id)
+      #  if current_user.id == params[:user_id])
+      @user = User.find_by_id(params[:user_id])
+      @products = Product.product_by_id_total(params[:id])
+      if !@user.customer?  
+       # if @products.user_id == @user.id
+         
+          render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
 
-    render json: @products, :include => [:images, :comment_products]
+        #else
+         # render status: :forbidden  
+       # end
+      else
+        
+        render json: @products, :include => [:images, :comment_products,:categories,:company, :users]
+
+      end
+    else
+      @products = Product.product_by_id_total(params[:id])
+      render json: @products, :include => [:images, :comment_products,:categories,:company]
+    end
 
   end
+
 
 
   def lastproducts
@@ -91,28 +124,62 @@ class Api::V1::ProductsController < ApplicationController
   end 
 
   # POST /products
-  def create
-    @product = Product.new(product_params)
 
-    if @product.save
-      render json: @product, status: :created, location: @product
+
+#/api/v1/company/users/:user_id/companies
+
+
+  def create
+    @user = User.find_by_id(params[:user_id])
+
+    if !@user.company? && !@user.company_customer?
+      render status: :forbidden
+
     else
-      render json: @product.errors, status: :unprocessable_entity
+
+      @product = Product.new(product_params)
+
+      if @product.save
+        render json: @product, status: :created, location: @product
+      else
+        render json: @product.errors, status: :unprocessable_entity
+      end
     end
   end
 
   # PATCH/PUT /products/1
+  #/api/v1/company/users/:user_id/companies/:id(.:format)
   def update
-    if @product.update(product_params)
-      render json: @product
-    else
-      render json: @product.errors, status: :unprocessable_entity
+    @user = User.find_by_id(params[:user_id])
+
+    if !@user.company? && !@user.company_customer?
+      render status: :forbidden
+    else 
+      if @product.update(product_params)
+        render json: @product
+      else
+        render json: @product.errors, status: :unprocessable_entity
+      end
     end
   end
 
+
+  #/api/v1/company/users/:user_id/companies/:id(.:format)
   # DELETE /products/1
   def destroy
-    @product.destroy
+    @user = User.find_by_id(params[:user_id])
+    @product = Product.products_sales(params[:id])
+    if !@user.company?
+      render status: :forbidden
+    else
+       @product = Product.products_sales(params[:id])
+      if @product.sales.count == 0
+         @product.destroy
+      else 
+        #esconderlo
+      end 
+      
+    end
   end
 
   private

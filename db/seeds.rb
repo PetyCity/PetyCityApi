@@ -32,7 +32,9 @@ end
 #for num in 1..100    
  #  CommentPublication.create( body_comment_Publication: generate_code(11), publication_id: num, user_id: num+1 )
  #end
-for num in 10..100   
-   numm= rand 10..100
- Sale.create( product_id: num , cart_id: num, amount: numm )
- end
+#for num in 10..100   
+  # numm= rand 10..100
+ #Sale.create( product_id: num , cart_id: num, amount: numm )
+ #end
+ 
+ 

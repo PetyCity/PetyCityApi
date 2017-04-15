@@ -9,10 +9,10 @@ class CommentPublication < ApplicationRecord
   #Queries
 
   #ver comentarios en especifico
-  def self.comment_publication(id, page = 1, per_page = 10)
+  def self.comment_publication(id)
     where(comment_publications: {
        id:  id
-      }).paginate(:page => page,:per_page => per_page)
+      })
   end
 
   #ver comentarios  por cada usuario

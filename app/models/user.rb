@@ -2,17 +2,18 @@ class User < ApplicationRecord
   mount_uploader :image, ImageUploader
   
   #Asociasiones
-  has_one :cart, dependent: :destroy
+  has_one :cart
   has_one :company, dependent: :destroy
   has_many :publications, dependent: :destroy
   has_many :comment_Publications, dependent: :destroy
   has_many :comment_Products, dependent: :destroy
-  has_many :products, through: :company,source: :product
+  has_many :c_products, through: :company,source: :products
   has_many :transactions, through: :cart
-  has_many :sales, through: :cart
-  has_many :products , through: :sales, source: :prodcut
-  has_many :products , through: :transactions, source: :product
-
+   has_many :sales, through: :cart
+  has_many :s_products , through: :sales, source: :product
+  has_many :t_products , through: :transactions, source: :product
+  
+  has_many :co_sales, through: :c_products, source: :sales
 
 
 #
@@ -40,6 +41,7 @@ def self.prueba(name)
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
 
+
   #Queries
 
   default_scope {order("users.name_user ASC")}
@@ -62,7 +64,7 @@ def self.prueba(name)
   
   #Para company
   def self.user_company_by_id(id)
-    includes( company: :products)
+    includes( :company, c_products: :sales)
      .find_by_id(id)
   end
   
@@ -74,7 +76,12 @@ def self.prueba(name)
      .find_by_id(id)
   end
   
-  
+   #Para company-costummer
+  def self.user_comp_custommer_by_id(id)
+    includes(:company,:comment_Products,:comment_Publications,:publications,
+    cart: :sales, c_products: :sales)
+     .find_by_id(id)
+  end 
 
  #Para company  ver usuarios compañia
   def self.company_by_user_id(id)
