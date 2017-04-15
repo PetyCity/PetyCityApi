@@ -8,7 +8,8 @@ class CreateCompanies < ActiveRecord::Migration[5.0]
       t.integer :phone, limit: 8
       t.boolean :permission, default: false
       t.references :user, foreign_key: true
-
+      t.boolean :active,default:true
+      t.string :image_company
       t.timestamps
     end
   end

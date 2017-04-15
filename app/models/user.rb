@@ -26,19 +26,19 @@ def self.prueba(name)
   #VALIDACIONES
 
   validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
-     }, length: { minimum: 5 }, presence: true, on: :update
+     }, length: { minimum: 5 }, presence: true
 
-  validates :cedula, numericality: { only_integer: true ,
+  validates :document, numericality: { only_integer: true ,
               message: "only allows numbers " }, length: { minimum: 5
-             }, uniqueness: { case_sensitive: false }, presence: true, on: :update
+             }, uniqueness: { case_sensitive: false }, presence: true
 
   enum rol: [ :admin, :company, :customer, :company_customer ]
 
-     devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+     devise :database_authenticatable, :registerable, :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+         include DeviseTokenAuth::Concerns::User
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  acts_as_token_authenticatable
 
   #Queries
 

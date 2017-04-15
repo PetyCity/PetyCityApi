@@ -1,5 +1,5 @@
 class ProductSerializer < ActiveModel::Serializer
-    attributes :id, :name_product, :description, :status , :value, :amount, :company_id
+    attributes :id, :name_product, :description, :status , :value, :amount, :company_id,:active
     belongs_to :company
 	has_many :comment_products
 	has_many :transactions
