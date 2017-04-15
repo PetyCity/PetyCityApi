@@ -15,8 +15,8 @@ class Api::V1::UsersController < ApplicationController
   end
   
   
-  #GET /api/v1/users/user_id/users/(admin-company-custumeer)
-  #GET /api/v1/users/user_id/users/rol/:rol
+  
+  #/api/v1/admin/users/user_id/users/rol/:rol
   def users_by_rol    
     if @user_admin.rol == 'admin'   
         if params[:rol] == 'admin' || params[:rol] == 'company' || params[:rol] == 'customer' || params[:rol] == 'company_customer'      

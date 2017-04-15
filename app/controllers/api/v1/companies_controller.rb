@@ -42,7 +42,7 @@ class Api::V1::CompaniesController < ApplicationController
       end   
   end
 
-  # PATCH/PUT /companies/1
+  # /api/v1/company/users/:user_id/companies/:id
   def update
     if  @user.customer? || @user.admin?#cliente y administradores no pueden crear
             render status: :forbidden     

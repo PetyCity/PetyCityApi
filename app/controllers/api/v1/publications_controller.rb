@@ -43,7 +43,7 @@
    end
   end
 
-  # POST /publications
+  #/api/v1/costum/users/:user_id/publications
   def create
     if  !@user.customer?#solo el cliente puede crear
             render status: :forbidden     
@@ -58,7 +58,8 @@
    
   end
 
-  # PATCH/PUT /publications/1
+  # PATCH/PUT /api/v1/costum/users/:user_id/publications/:id
+  # /api/v1/costum/users/:user_id/publications/:id
   def update
     if  !@user.customer?#solo el cliente puede crear
             render status: :forbidden     

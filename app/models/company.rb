@@ -1,4 +1,6 @@
 class Company < ApplicationRecord
+   mount_uploader :image_company, ImageCompanyUploader
+
   has_many :products, dependent: :destroy
   belongs_to :user
   has_many :transactions, through: :products
@@ -17,6 +19,8 @@ class Company < ApplicationRecord
           message: "only allows numbers " }, length: { is: 10
      }, uniqueness: { case_sensitive: false }, presence: true
   validates :user , uniqueness: { case_sensitive: false }, presence: true
+
+
 
   #Queries
 

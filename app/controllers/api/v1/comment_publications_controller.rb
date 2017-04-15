@@ -10,7 +10,7 @@ class Api::V1::CommentPublicationsController < ApplicationController
     end
   end
 
-  # POST /api/v1/admin/users/:user_id/publications/:publication_id/comment_publications/:id
+  # /api/v1/admin/users/:user_id/publications/:publication_id/comment_publications
   def create
    if params.has_key?(:user_id)
       @comment_publication = CommentPublication.new(comment_publication_params)

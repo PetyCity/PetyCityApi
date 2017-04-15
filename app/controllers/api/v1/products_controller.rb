@@ -6,7 +6,7 @@ class Api::V1::ProductsController < ApplicationController
   #/api/v1/costum/users/:user_id/companies/:company_id/product_bycompany
   #/api/v1/company/users/:user_id/companies/:company_id/product_bycompany(.:format)
   #/api/v1/companies/:company_id/product_bycompany(.:format)
-  #/products
+  #/api/v1/products
   
   def index
    
@@ -126,7 +126,7 @@ class Api::V1::ProductsController < ApplicationController
   # POST /products
 
 
-#/api/v1/company/users/:user_id/companies/products
+#/api/v1/company/users/:user_id/products
 
 
   def create
@@ -148,7 +148,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   # PATCH/PUT /products/1
-  #/api/v1/company/users/:user_id/companies/:id(.:format)
+#/api/v1/company/users/:user_id/products/:id
   def update
     @user = User.find_by_id(params[:user_id])
 
