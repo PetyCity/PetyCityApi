@@ -118,5 +118,15 @@ class Product < ApplicationRecord
       .paginate(:page => page,:per_page => per_page)
    end
 
+  def self.products_by_category(cat,pro)
+     includes( :categories,:images)
+     .where(categories: {
+        id: cat
+      })
+     .where.not(products: {
+        id: pro
+      })
+  end
+
 
 end

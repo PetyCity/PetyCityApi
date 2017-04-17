@@ -11,7 +11,7 @@ Rails.application.routes.draw do
        resources :images
        #resources :sales
 
-       #resources :category_products
+       resources :category_products
         
          #get '/catego' => "categories#show_by_name"
        # resources :users

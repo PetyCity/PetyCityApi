@@ -24,9 +24,9 @@ class Api::V1::CategoryProductsController < ApplicationController
   def catego_product
        # if params.has_key?(:user_id)
       @category_products = CategoryProduct.categories_by_product( params[:id] )
-      @category_products = CategoryProduct.products_by_category( @category_products )
+      @category_products = Product.products_by_category( @category_products ,params[:id])
       
-      render json: @category_products, :include => [:category,product: :images]     
+      render json: @category_products, :include => [:categories]     
       
   end
 

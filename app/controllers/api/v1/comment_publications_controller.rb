@@ -2,7 +2,6 @@ class Api::V1::CommentPublicationsController < ApplicationController
   before_action :set_comment_publication, only: [:show, :update, :destroy]
 
   
-  # GET /comment_publications/1
   def show
     if params.has_key?(:user_id)
        @comment_publication = CommentPublication.find(params[:id])
