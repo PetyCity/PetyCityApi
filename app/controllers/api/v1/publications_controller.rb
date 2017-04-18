@@ -119,10 +119,7 @@
             end          
         else            
             if params.has_key?(:id)
-                  @user = User.find_by_id(params[:id]) 
-                  if  @user.nil?
-                        render status:  :not_found
-                  end
+                  
                  #if  current_user.id != params[:id]) 
                  #       render status:  :forbidden
                  # end  |                   

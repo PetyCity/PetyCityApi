@@ -20,7 +20,7 @@ class Api::V1::CategoryProductsController < ApplicationController
   def show
     render json: @category_product
   end
-
+#http://localhost:3000/api/v1/products/10/catego_product
   def catego_product
        # if params.has_key?(:user_id)
       @category_products = CategoryProduct.categories_by_product( params[:id] )

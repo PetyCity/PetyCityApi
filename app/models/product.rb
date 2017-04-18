@@ -20,12 +20,8 @@ class Product < ApplicationRecord
 
  # default_scope {order("products.name_product ASC")}
   
-  scope :ultimos, ->{ order("created_at DESC").limit(5) }
+  scope :ultimos, ->{ order("created_at DESC").limit(4) }
   
-  #scope :random, ->{ order('random()') }
-
-  #scope :descen, ->{order(sum("amount").limit())}
- 
  def self.rand(page = 1, per_page = 10)
      includes( :images).
     order('random()')
@@ -94,9 +90,8 @@ class Product < ApplicationRecord
   def self.products_most_sales
       joins( :sales)
      .group("products.id")
-     .order("SUM(sales.amount) DESC").limit(5)
-     .pluck("products.id")
-     
+     .order("SUM(sales.amount) DESC").limit(4)
+     .pluck("products.id")     
     end
 
    #producto con su comentario especifico
@@ -126,6 +121,8 @@ class Product < ApplicationRecord
      .where.not(products: {
         id: pro
       })
+      .order('random()')
+      .limit(4)
   end
 
 
