@@ -148,6 +148,7 @@ class Api::V1::UsersController < ApplicationController
                               render status: :unprocessable_entity 
                           end                            
                        else
+                         @user.active = false
                          #ESCONDERLO
                        end
                 else 

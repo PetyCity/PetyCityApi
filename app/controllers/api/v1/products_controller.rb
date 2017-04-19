@@ -176,6 +176,7 @@ class Api::V1::ProductsController < ApplicationController
       if @product.sales.count == 0
          @product.destroy
       else 
+        @product.active = false
         #esconderlo
       end 
       

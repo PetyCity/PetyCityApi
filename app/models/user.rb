@@ -48,13 +48,18 @@ def self.prueba(name)
 
   #Para ver todos los usuarios
   def self.only_users(page = 1, per_page = 100)
-    select("users.*").paginate(:page => page,:per_page => per_page)
+    select("users.*")
+    .where(users: {
+        active: true
+     })
+    .paginate(:page => page,:per_page => per_page)
   end
   
   #Para ver todos los usuarios segun un rol especifico
   def self.users_by_rol(type)
     where(users: {
-        rol: type
+        rol: type,
+        active: true
       })
   end 
   

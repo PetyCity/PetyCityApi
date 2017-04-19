@@ -70,7 +70,8 @@ class Api::V1::CompaniesController < ApplicationController
                    render status: :unprocessable_entity 
                 end
           else
-                  #PONERLE EL ATRIBUTO ACTIVO EN GALSE
+            @company.active = false
+                  #PONERLE EL ATRIBUTO ACTIVO EN FALSE
           end
     else#que tenga compañia
           if @company.user.id ==  params[:user_id]  #El usuario de la compañia es el mismo usuario logueado
@@ -81,7 +82,8 @@ class Api::V1::CompaniesController < ApplicationController
                        render status: :unprocessable_entity 
                     end
               else
-                      #PONERLE EL ATRIBUTO ACTIVO EN GALSE
+                @company.active = false
+                      #PONERLE EL ATRIBUTO ACTIVO EN FALSE
               end
           else
             render status: :forbidden #no la pede borrar

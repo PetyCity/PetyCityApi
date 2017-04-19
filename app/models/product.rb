@@ -23,14 +23,21 @@ class Product < ApplicationRecord
   scope :ultimos, ->{ order("created_at DESC").limit(4) }
   
  def self.rand(page = 1, per_page = 10)
-     includes( :images).
-    order('random()')
+     includes( :images)
+     .where(products: {
+        active: true
+     })
+     .order('random()')
   end
 
   #ver todos los productos
 
   def self.all_products(page = 1, per_page = 10)
-    select("products.*").paginate(:page => page,:per_page => per_page)
+    select("products.*")
+    .where(products: {
+        active: true
+     })
+    .paginate(:page => page,:per_page => per_page)
   end
   #ver productos por id
   def self.products_by_id(id, page = 1, per_page = 10)
@@ -44,13 +51,18 @@ class Product < ApplicationRecord
   #ver productos por compañia
   def self.products_by_company(comp, page = 1, per_page = 10)
       where(products:{
-        company_id: comp
+        company_id: comp,
+        active: true
       })
       .paginate(:page => page,:per_page => per_page)
   end
   #para administrador observar los productos que ya estan publicados
   def self.published(page = 1, per_page = 10)
-  	Product.where(status:"true").paginate(:page => page,:per_page => per_page)
+  	Product.where(status:"true")
+  	.where(products: {
+        active: true
+     })
+     .paginate(:page => page,:per_page => per_page)
   end
 
 

@@ -28,8 +28,11 @@ class Company < ApplicationRecord
 
   #Para ver todos los usuarios
   def self.only_companies(page = 1, per_page = 102)
-    includes(:user,:products).
-    paginate(:page => page,:per_page => per_page)
+    includes(:user,:products)
+     .where(companies: {
+        active: true
+     })
+    .paginate(:page => page,:per_page => per_page)
   end
   #ver productos y su categoria
   def self.company_by_id_adminComp(id)
