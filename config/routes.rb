@@ -3,15 +3,15 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/v1/auth'
 
 
-
+  
     
 
   namespace :api do     
     namespace :v1 do 
-       resources :images
+       #resources :images
        #resources :sales
-
-       resources :category_products
+       root to: "products#index"
+       #resources :category_products
         
          #get '/catego' => "categories#show_by_name"
        # resources :users
@@ -21,7 +21,7 @@ Rails.application.routes.draw do
         get 'home/mostsales', to: 'products#productsmostsales'      
         get 'home/lastproducts', to: 'products#lastproducts'
         #get 'productrandom', to: 'products#productrandom'
-        get 'productbycompany/:id',to: 'products#productbycompany'
+       # get 'productbycompany/:id',to: 'products#productbycompany'
         resources :products, only: [:index, :show] do
           get 'preview', on: :member # products/:ID/preview
           get 'catego_product', to: 'category_products#catego_product', on: :member
