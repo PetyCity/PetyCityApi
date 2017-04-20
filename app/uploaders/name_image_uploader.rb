@@ -2,19 +2,29 @@ class NameImageUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
-  # include CarrierWave::MiniMagick
+    include CarrierWave::MiniMagick
 
   # Choose what kind of storage to use for this uploader:
   storage :fog
-  
- 
-  # storage :fog
+  process resize_to_fit: [1000, 1000]
 
-  # Override the directory where uploaded files will be stored.
-  # This is a sensible default for uploaders that are meant to be mounted:
-  def store_dir
+  version :thumb do
+    process resize_to_fill: [400,400]
+  end
+  def extension_whitelist
+    %w(jpg jpeg gif png)
+  end
+  
+  def content_type_whitelist
+    /image\//
+  end
+  def content_type_blacklist
+    ['application/text', 'application/json', 'application/pdf']
+  end
+   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
+  
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url

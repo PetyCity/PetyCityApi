@@ -33,12 +33,12 @@ class Api::V1::CategoryProductsController < ApplicationController
   # POST /category_products
   def create
     @category_product = CategoryProduct.new(category_product_params)
-    @category_product.save
-  #  if @category_product.save
-     # render json: @category_product, status: :created, location: @category_product
-   # else
-      #render json: @category_product.errors, status: :unprocessable_entity
-    #end
+    #@category_product.save
+   if @category_product.save
+      render json: @category_product, status: :created
+   else
+      render json: @category_product, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /category_products/1
