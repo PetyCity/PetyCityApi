@@ -8,10 +8,10 @@ Rails.application.routes.draw do
 
   namespace :api do     
     namespace :v1 do 
-       #resources :images
+       
        #resources :sales
        root to: "products#index"
-       #resources :category_products
+       
         
          #get '/catego' => "categories#show_by_name"
        # resources :users
@@ -22,7 +22,7 @@ Rails.application.routes.draw do
         get 'home/lastproducts', to: 'products#lastproducts'
         #get 'productrandom', to: 'products#productrandom'
        # get 'productbycompany/:id',to: 'products#productbycompany'
-        resources :products, only: [:index, :show] do
+        resources :products, only: [:index, :show] do          
           get 'preview', on: :member # products/:ID/preview
           get 'catego_product', to: 'category_products#catego_product', on: :member
           resources :comment_products, only: [:index, :show]
@@ -95,8 +95,8 @@ Rails.application.routes.draw do
             resources :publications, only: [:index, :show]  do 
                 resources :comment_publications,only: [ :show,:create,:update,:destroy] 
             end
-            resources :products do
-              
+            resources :products do             
+             resources :category_products
               resources :images
               resources :comment_products
               get 'preview', on: :member
