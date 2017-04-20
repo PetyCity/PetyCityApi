@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
 
-  attributes :id,:email, :document,:name_user,:block,:sendEmail,:rol,:active
+  attributes :id,:email, :document,:name_user,:block,:sendEmail,:rol,:active, :image
    has_one :cart, dependent: :destroy
   has_one :company, dependent: :destroy   
 
