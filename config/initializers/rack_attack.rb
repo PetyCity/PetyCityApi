@@ -1,7 +1,7 @@
 class Rack::Attack
 
-	throttle('api_ip', limit:3, period:10) do |req|
-		req.ip if req.subdomain == 'api'
+	throttle('http://localhost:3000/api/v1_ip', limit:2, period:10) do |req|
+		req.ip if req.subdomain == 'http://localhost:3000/api/v1'
 	end
 
 	throttle('logins_ip', limit:5, period:20.seconds) do |req|
