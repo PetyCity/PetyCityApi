@@ -138,4 +138,10 @@ class Product < ApplicationRecord
   end
 
 
+  def self.products_by_name(word)
+     
+      Product.where("products.name_product LIKE ?",word)
+  end
+
+
 end
