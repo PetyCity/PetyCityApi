@@ -123,6 +123,43 @@ class Api::V1::ProductsController < ApplicationController
   
   end 
 
+    def search    
+    
+    if params.has_key?(:q)
+        @products = Product.products_by_name("%#{params[:q]}%")
+#       render json: @products, :include => [:product]##un helado mayor
+    #          
+    else
+        @products = Product.all  # Ni mi helado
+    
+    end
+
+    
+    if params.has_key?(:sort)
+          str = params[:sort]
+          if params[:sort][0] == "-"
+              str= str[1,str.length]
+              puts "sebastian herrera"
+              puts str
+              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
+                @products =  @products.order("#{str}": :desc)
+                render json: @products, :include =>[:product]
+              else
+                  render status:  :bad_request
+              end
+          else               
+              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
+                  @products =  @products.order("#{str}": :asc)
+                  render json: @products, :include =>[:product]
+              else
+                  render status:  :bad_request
+              end  
+          end
+    else
+      render json: @products, :include =>[:product]
+    end
+  end
+
   # POST /products
 
 

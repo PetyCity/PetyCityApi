@@ -27,6 +27,7 @@ Rails.application.routes.draw do
           get 'catego_product', to: 'category_products#catego_product', on: :member
           resources :comment_products, only: [:index, :show]
           collection do 
+              get 'search' => "products#search"
               resources :categories, only: [:index]
           end
         end
@@ -61,6 +62,8 @@ Rails.application.routes.draw do
               get 'catego_product', to: 'category_products#catego_product', on: :member
               collection do 
 
+                get 'search' => "products#search"
+                
                 resources :categories, only: [:index]
               end
             end
@@ -101,7 +104,9 @@ Rails.application.routes.draw do
               resources :comment_products
               get 'preview', on: :member
               get 'catego_product', to: 'category_products#catego_product', on: :member    
-              collection do          
+              collection do 
+                get 'search' => "products#search"
+                 
                 resources :categories, only: [:index]
               end
             end
@@ -125,6 +130,7 @@ Rails.application.routes.draw do
               get 'preview', on: :member
               get 'catego_product', to: 'category_products#catego_product', on: :member
               collection do 
+                get 'search' => "products#search"
                 resources :categories, only: [:index]
               end
             resources :companies, only: [:index, :show] do 
