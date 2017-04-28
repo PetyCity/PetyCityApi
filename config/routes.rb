@@ -31,7 +31,11 @@ Rails.application.routes.draw do
               resources :categories, only: [:index]
           end
         end
-        resources :publications, only: [:index, :show]
+        resources :publications, only: [:index, :show] do
+            collection do
+                 get 'search' => "publications#search"
+            end
+        end 
        
         resources :companies, only: [:index, :show] do 
                  # /users/user_id/companies/:id/product_bycompany

@@ -32,4 +32,10 @@ class Publication < ApplicationRecord
     .find_by_id(id)    
   end
 
+   def self.publications_by_name(word)
+     
+      Publication.where("publications.name_publication LIKE ?",word)
+  end
+
+
 end

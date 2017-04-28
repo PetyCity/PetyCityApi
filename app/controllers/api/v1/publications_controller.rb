@@ -101,11 +101,11 @@
   def search    
     
     if params.has_key?(:q)
-        @publications = Publications.products_by_name("%#{params[:q]}%")
+        @publications = Publication.publications_by_name("%#{params[:q]}%")
 #       render json: @products, :include => [:product]##un helado mayor
     #          
     else
-        @products = Product.all  # Ni mi helado
+        @publications = Publication.all  
     
     end
 
@@ -115,22 +115,24 @@
           if params[:sort][0] == "-"
               str= str[1,str.length]
              
-              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
-                @products =  @products.order("#{str}": :desc)
-                render json: @products, :include =>[:product]
+              if str == "created_at"||str == "title"|| str == "user_id" 
+               
+                @publications =  @publications.order("#{str}": :desc)
+                render json: @publications, :include =>[:product]
               else
                   render status:  :bad_request
               end
           else               
-              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
-                  @products =  @products.order("#{str}": :asc)
-                  render json: @products, :include =>[:product]
+              if str == "created_at"||str == "title"|| str == "user_id" 
+               
+                 @publications =  @publications.order("#{str}": :asc)
+                  render json: @publications, :include =>[:publication]
               else
                   render status:  :bad_request
               end  
           end
     else
-      render json: @products, :include =>[:product]
+      render json: @publications, :include =>[:publication]
     end
   end
 

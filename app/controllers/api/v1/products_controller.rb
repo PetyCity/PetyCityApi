@@ -130,7 +130,7 @@ class Api::V1::ProductsController < ApplicationController
 #       render json: @products, :include => [:product]##un helado mayor
     #          
     else
-        @products = Product.all  # Ni mi helado
+        @products = Product.products_images
     
     end
 
@@ -143,20 +143,20 @@ class Api::V1::ProductsController < ApplicationController
               puts str
               if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
                 @products =  @products.order("#{str}": :desc)
-                render json: @products, :include =>[:product]
+                render json: @products, :include =>[:product,:images]
               else
                   render status:  :bad_request
               end
           else               
               if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
                   @products =  @products.order("#{str}": :asc)
-                  render json: @products, :include =>[:product]
+                  render json: @products, :include =>[:product,:images]
               else
                   render status:  :bad_request
               end  
           end
     else
-      render json: @products, :include =>[:product]
+      render json: @products, :include =>[:product,:images]
     end
   end
 
