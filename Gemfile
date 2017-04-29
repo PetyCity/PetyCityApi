@@ -7,10 +7,10 @@ end
 
 
 
+gem 'faker'
+gem 'rack-attack'
 
-
-
-gem 'carrierwave', '~> 1.0'
+gem 'carrierwave'#, '~> 1.0'
 gem 'fog'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.2'
@@ -21,6 +21,7 @@ gem 'puma', '~> 3.0'
 
 
 gem "mini_magick"
+
 
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -35,11 +36,13 @@ gem 'will_paginate'
 
 gem 'devise_token_auth'
 gem 'omniauth'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', :require => 'rack/cors'
+#gem 'rack-attack'
 gem 'active_model_serializers','~> 0.10.0' 
 
 group :development, :test do
