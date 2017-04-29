@@ -123,7 +123,7 @@ class Api::V1::ProductsController < ApplicationController
   
   end 
 
-    def search    
+ def search    
     
     if params.has_key?(:q)
         @products = Product.products_by_name("%#{params[:q]}%")
