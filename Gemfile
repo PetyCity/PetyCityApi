@@ -22,7 +22,7 @@ gem 'puma', '~> 3.0'
 
 gem "mini_magick"
 
-
+gem  'rack-test', require: 'rack/test'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
