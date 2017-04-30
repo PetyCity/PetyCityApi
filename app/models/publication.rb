@@ -34,7 +34,7 @@ class Publication < ApplicationRecord
 
    def self.publications_by_name(word)
      
-      Publication.where("publications.name_publication LIKE ?",word)
+      Publication.where("publications.name_publication ILIKE ?",word)
   end
 
 

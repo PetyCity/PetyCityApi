@@ -149,7 +149,7 @@ end
 
   def self.products_by_name(word)
      includes(:images)
-     .where("products.name_product LIKE ? ",word)
+     .where("products.name_product ILIKE ? ",word)
      .where(products: {
         active: true
      })
