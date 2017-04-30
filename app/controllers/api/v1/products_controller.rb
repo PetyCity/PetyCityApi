@@ -25,6 +25,9 @@ class Api::V1::ProductsController < ApplicationController
           
 
           end
+    elsif params.has_key?(:category_id)
+        @products= Product.products_by_categories(params[:category_id])
+        render json: @products, :include => [:images]
     else
       @products= Product.rand
       render json: @products, :include => [:images]

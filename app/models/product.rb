@@ -125,6 +125,14 @@ class Product < ApplicationRecord
       .paginate(:page => page,:per_page => per_page)
    end
 
+  def self.products_by_categories(cat)
+     includes( :categories,:images)
+     .where(categories: {
+        id: cat
+      })     
+      .order('random()')
+  end
+
   def self.products_by_category(cat,pro)
      includes( :categories,:images)
      .where(categories: {

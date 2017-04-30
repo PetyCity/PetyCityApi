@@ -37,7 +37,9 @@ Rails.application.routes.draw do
                   get 'product_bycompany', to: 'products#index'
             end 
         #change
-        resources :categories, only: [:index, :show]
+        resources :categories, only: [:index, :show] do
+          resources :products, only: [:index]
+        end
 
       #Administrator 
 
