@@ -39,10 +39,17 @@ Rails.application.routes.draw do
        
         resources :companies, only: [:index, :show] do 
                  # /users/user_id/companies/:id/product_bycompany
+                  collection do
+                    get 'search' => "companies#search"
+                  end
                   get 'product_bycompany', to: 'products#index'
             end 
         #change
-        resources :categories, only: [:index, :show]
+        resources :categories, only: [:index, :show] do 
+                  collection do
+                    get 'search' => "categories#search"
+                  end                 
+            end 
 
       #Administrator 
 
@@ -56,7 +63,9 @@ Rails.application.routes.draw do
             resources :users, only: [:index, :show, :destroy] do 
                get 'my_publications', to: 'publications#my_publications', on: :member                
                collection do 
-                  get 'rol/:rol', to: 'users#users_by_rol'
+                  get 'rol/:rol', to: 'users#users_by_rol' 
+                  get 'search' => "users#search"
+            
                end
             
             end
@@ -73,13 +82,23 @@ Rails.application.routes.draw do
             end
             resources :publications, only: [:index, :show, :destroy]  do 
               resources :comment_publications,only: [ :show,:create,:update,:destroy] 
+              collection do
+                 get 'search' => "publications#search"
+              end
             end
             resources :companies, only: [:index, :show, :destroy] do 
+                  collection do
+                    get 'search' => "companies#search"
+                  end
                  # /users/user_id/companies/:id/product_bycompany
                   get 'product_bycompany', to: 'products#index'
             end
          
-           resources :categories
+           resources :categories do 
+                  collection do
+                    get 'search' => "categories#search"
+                  end                 
+            end 
           end
 
         end
@@ -94,13 +113,23 @@ Rails.application.routes.draw do
             resources :users, only: [ :show] 
             
             resources :companies do 
+                  collection do
+                    get 'search' => "companies#search"
+                  end
                  # /users/user_id/companies/:id/product_bycompany
                   get 'product_bycompany', to: 'products#index'
             end
          
-            resources :categories, only: [:show, :index]
+            resources :categories, only: [:show, :index] do 
+                  collection do
+                    get 'search' => "categories#search"
+                  end                 
+            end 
             resources :publications, only: [:index, :show]  do 
                 resources :comment_publications,only: [ :show,:create,:update,:destroy] 
+                 collection do
+                 get 'search' => "publications#search"
+                 end
             end
             resources :products do             
              resources :category_products
@@ -128,6 +157,9 @@ Rails.application.routes.draw do
             
             resources :publications do
               resources :comment_publications , only: [ :show,:create,:update,:destroy] 
+               collection do
+                 get 'search' => "publications#search"
+              end
             end
             resources :products, only: [:index, :show] do
               resources :comment_products
@@ -138,10 +170,17 @@ Rails.application.routes.draw do
                 resources :categories, only: [:index]
               end
             resources :companies, only: [:index, :show] do 
+                  collection do
+                    get 'search' => "companies#search"
+                  end
                  # /users/user_id/companies/:id/product_bycompany
                   get 'product_bycompany', to: 'products#index'
             end
-            resources :categories, only: [:show, :index]
+            resources :categories, only: [:show, :index] do 
+                  collection do
+                    get 'search' => "categories#search"
+                  end                 
+            end 
             end
           end
         end

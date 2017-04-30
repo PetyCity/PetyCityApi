@@ -5,29 +5,67 @@ class Api::V1::CompaniesController < ApplicationController
   #/api/v1/admin/users/:user_id/companies
   def index     
       @companies = Company.only_companies    
-      render json: @companies , :include =>[:user,:products]   
+      render json: @companies , :include =>[:user,:products]  , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+    
   end
+
 
    #/api/v1/companies/:id
   #/api/v1/admin/users/:user_id/companies/:id
  def show
     if params.has_key?(:user_id)
        if  @user.customer?     
-           render json: @company , :include => [:user,:products], status: :ok 
+           render json: @company , :include => [:user,:products], status: :ok  , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
        else
-          render json: @company , :include => [:user,:products,:sales], status: :ok    
+          render json: @company , :include => [:user,:products,:sales], status: :ok     , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
        end
     else
-        render json: @company , :include => [:products], status: :ok 
+        render json: @company , :include => [:products], status: :ok  , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
     end
   end
 
 
     #@companies = Company.product_sales(1)
     #render json: @companies
+
+  def search    
     
+    if params.has_key?(:q)
+        @companies = Company.companies_by_name("%#{params[:q]}%")
+#       render json: @products, :include => [:product]##un helado mayor
+    #          
+    else
+        @companies = Company.only_companies 
     
-     
+    end
+
+    
+    if params.has_key?(:sort)
+          str = params[:sort]
+          if params[:sort][0] == "-"
+              str= str[1,str.length]
+             
+              if str == "created_at"||str == "title"|| str == "user_id" 
+               
+                @companies =  @companies.order("#{str}": :desc)
+                render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+              else
+                  render status:  :bad_request
+              end
+          else               
+              if str == "created_at"||str == "title"|| str == "user_id" 
+               
+                 @companies =  @companies.order("#{str}": :asc)
+                  render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+              else
+                  render status:  :bad_request
+              end  
+          end
+    else
+      render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+    end
+  end
+
   # POST /api/v1/company/users/:user_id/companies
   def create
       if  @user.customer? || @user.admin?#cliente y administradores no pueden crear

@@ -5,18 +5,18 @@
   # /api/v1/publications/
   def index
     if params.has_key?(:user_id)
-        render json: @publications, :include => [:user,comment_Publications: :user]
+        render json: @publications, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
     else
-        render json: @publications, :include => [:user]
+        render json: @publications, :include => [:user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
     end     
   end
   # /api/v1/admin/users/:user_id/publications/id
   # /api/v1/publications/id
   def show
     if params.has_key?(:user_id)
-        render json: @publication, :include => [:user,comment_Publications: :user]
+        render json: @publication, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
     else
-        render json: @publication, :include => [:user]
+        render json: @publication, :include => [:user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
     end
   end
 
@@ -28,7 +28,7 @@
         @user = User.find_by_id(params[:user_id]) 
        if  @user.admin?
            @publications = Publication.publications_by_user(params[:id])   
-           render json: @publications, :include => [:user,comment_Publications: :user]  
+           render json: @publications, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
        else
             render status: :forbidden             
        end
@@ -36,7 +36,7 @@
        @user = User.find_by_id(params[:id]) 
       if  @user.customer?
            @publications = Publication.publications_by_user(params[:id])   
-           render json: @publications, :include => [:user,comment_Publications: :user]  
+           render json: @publications, :include => [:user,comment_Publications: :user]  , each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
        else
             render status: :forbidden             
        end
@@ -53,7 +53,7 @@
             if @publication.save
               render  status: :created
             else
-              render json: @company.errors, status: :unprocessable_entity
+              render  status: :unprocessable_entity
             end
     end  
    
@@ -105,7 +105,7 @@
 #       render json: @products, :include => [:product]##un helado mayor
     #          
     else
-        @publications = Publication.all  
+        @publications = Publication.only_publications 
     
     end
 
@@ -118,7 +118,7 @@
               if str == "created_at"||str == "title"|| str == "user_id" 
                
                 @publications =  @publications.order("#{str}": :desc)
-                render json: @publications, :include =>[:product]
+                render json: @publications, :include =>[:product], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
               else
                   render status:  :bad_request
               end
@@ -126,13 +126,13 @@
               if str == "created_at"||str == "title"|| str == "user_id" 
                
                  @publications =  @publications.order("#{str}": :asc)
-                  render json: @publications, :include =>[:publication]
+                  render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
               else
                   render status:  :bad_request
               end  
           end
     else
-      render json: @publications, :include =>[:publication]
+      render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
     end
   end
 
