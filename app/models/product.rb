@@ -35,6 +35,15 @@ class Product < ApplicationRecord
      .order('random()')
   end
 
+def self.products_images(page = 1, per_page = 10)
+     includes( :images)
+     .where(products: {
+        active: true
+     })
+
+end
+
+
   #ver todos los productos
 
   def self.all_products(page = 1, per_page = 10)
@@ -148,6 +157,15 @@ class Product < ApplicationRecord
       })
       .order('random()')
       .limit(4)
+  end
+
+
+  def self.products_by_name(word)
+     includes(:images)
+     .where("products.name_product ILIKE ? ",word)
+     .where(products: {
+        active: true
+     })
   end
 
 

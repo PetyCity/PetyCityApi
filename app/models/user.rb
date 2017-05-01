@@ -136,4 +136,11 @@ def self.prueba(name)
         name_category: name
       })    
   end
+
+
+  def self.users_by_name(word)
+     
+      User.where("users.name_user ILIKE ?",word)
+  end
+
 end

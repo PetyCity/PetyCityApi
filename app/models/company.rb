@@ -25,6 +25,13 @@ class Company < ApplicationRecord
 
   default_scope {order("companies.name_comp ASC")}
 
+  def self.companies_by_name(word)
+     includes(:user,:products)
+     .where("companies.name_comp LIKE ? ",word)
+     .where(companies: {
+        active: true
+     })
+  end
   #Para ver todos los usuarios
   def self.only_companies(page = 1, per_page = 102)
     includes(:user,:products)

@@ -1,5 +1,7 @@
 class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: [ :update, :destroy]
+  before_action :select_product_params, only: [:index,:show, :lastproducts, :productsmostsales,
+    :productrandom,:product_bycompany,:create,:search]
 
   # GET /products
   #/api/v1/admin/users/:user_id/companies/:company_id/product_bycompany
@@ -16,13 +18,14 @@ class Api::V1::ProductsController < ApplicationController
                 @company = Company.find_by_id(params[:company_id])  
 
                 if  @company.user_id == Integer(params[:user_id]  )          
-                      render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
+                      render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users] , each_serializer: ProductSerializer,render_attribute:  @parametros
+
                 else
-                     render json: @products, :include => [:images, :comment_products,:categories,:company, :users]
+                     render json: @products, :include => [:images, :comment_products,:categories,:company, :users] , each_serializer: ProductSerializer,render_attribute:  @parametros
+
                 end
           else
-                render json: @products, :include => [:images, :comment_products,:categories,:company]
-          
+                render json: @products, :include => [:images, :comment_products,:categories,:company],  each_serializer: ProductSerializer,render_attribute:  @parametros          
 
           end
     elsif params.has_key?(:category_id)
@@ -30,39 +33,9 @@ class Api::V1::ProductsController < ApplicationController
         render json: @products, :include => [:images]
     else
       @products= Product.rand
-      render json: @products, :include => [:images]
+      render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+
     end
-    #@products = Product.all_products
-    #render json: @products
-    
-    #@products = Product.products_by_id(5)
-    #render json: @products
-    
-   # @products = Product.products_by_company(3)
-    #render json: @products
-   
-   
-        #render json: @products, root: "products"     
-    #@products = Product.products_by_id(1)
-    #render json: @products    
-    #@products = Product.products_by_company(1)
-    #render json: @products   
-    #@products = Product.published
-    #render json: @products  
-    #@products = Product.products_transactions(2)
-    #render json: @products
-        #.............................
-    #@products = Product.products_sales(2)
-   # render json: @products   
-   # @products = Product.comment_product_by_id(2)
-    #render json: @products , :include => [:comment_products,:users]  
-    #@products = Product.ultimos
-    #render json: @products
-    #@products = Product.products_by_category(3)
-    #render json: @products
-    #@products = Product.cheaper_than(10003)
-   # render json: @products
-   
   end
   # GET /products/1
   # GET /products/:id
@@ -77,19 +50,19 @@ class Api::V1::ProductsController < ApplicationController
       if !@user.customer?  
        # if @products.user_id == @user.id
          
-          render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users]
+          render json: @products, :include => [:images, :comment_products,:categories,:company, :sales, :users] , each_serializer: ProductSerializer,render_attribute:  @parametros
 
         #else
          # render status: :forbidden  
        # end
       else
         
-        render json: @products, :include => [:images, :comment_products,:categories,:company, :users]
+        render json: @products, :include => [:images, :comment_products,:categories,:company, :users] , each_serializer: ProductSerializer,render_attribute:  @parametros
 
       end
     else
       @products = Product.product_by_id_total(params[:id])
-      render json: @products, :include => [:images, :comment_products,:categories,:company]
+      render json: @products, :include => [:images, :comment_products,:categories,:company] , each_serializer: ProductSerializer,render_attribute:  @parametros
     end
 
   end
@@ -98,7 +71,7 @@ class Api::V1::ProductsController < ApplicationController
 
   def lastproducts
     @products = Product.ultimos
-    render json: @products,:include => []
+    render json: @products,:include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
   end 
 
 
@@ -109,22 +82,60 @@ class Api::V1::ProductsController < ApplicationController
    
    @products = Product.products_by_id(@products)
    
-    render json: @products, :include => []
+    render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
 
   end
 
   def productrandom
    @products = Product.rand
-  render json: @products, :include => [:images]
+  render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
 
   end
 
   ##/users/user_id/companies/company_id/product_bycompany
   def product_bycompany
     @products = Product.products_by_company(params[:id])
-    render json: @products, :include => []
+    render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
   
   end 
+
+ def search    
+    
+    if params.has_key?(:q)
+        @products = Product.products_by_name("%#{params[:q]}%")
+#       render json: @products, :include => [:product]
+    #          
+    else
+        @products = Product.products_images
+    
+    end
+
+    
+    if params.has_key?(:sort)
+          str = params[:sort]
+          if params[:sort][0] == "-"
+              str= str[1,str.length]
+              puts "sebastian herrera"
+              puts str
+              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
+                @products =  @products.order("#{str}": :desc)
+                render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+              else
+                  render status:  :bad_request
+              end
+          else               
+              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
+                  @products =  @products.order("#{str}": :asc)
+                  render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute:  @parametros
+
+              else
+                  render status:  :bad_request
+              end  
+          end
+    else
+      render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute:  @parametros
+    end
+  end
 
   # POST /products
 
@@ -191,7 +202,9 @@ class Api::V1::ProductsController < ApplicationController
     def set_product
       @product = Product.find(params[:id])
     end
-
+    def select_product_params 
+        @parametros =  "product,"+params[:select_product].to_s  
+    end
     # Only allow a trusted parameter "white list" through.
     def product_params
       params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
