@@ -24,8 +24,10 @@ class Category < ApplicationRecord
     end
   	
     def self.categories_by_name(name)	
-      Category.where("categories.name_category LIKE ?", "#{name}")
+      Category.where("categories.name_category ILIKE ?", name)
   	end
+
+
 
 
     #categoria por id
