@@ -11,6 +11,7 @@ require "action_view/railtie"
 require "action_cable/engine"
 # require "sprockets/railtie"
 require "rails/test_unit/railtie"
+require "rack/throttle"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -29,7 +30,8 @@ module PetyCityApi
     
     config.api_only = true
 
-    config.middleware.use Rack::Attack
+    config.middleware.use Rack::Throttle::Minute, :max => 5
+    #config.middleware.use Rack::Attack
 
    
     # Rails 5

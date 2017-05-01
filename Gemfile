@@ -8,7 +8,8 @@ end
 
 
 gem 'faker'
-gem 'rack-attack'
+#gem 'rack-attack'
+gem 'rack-throttle', '~> 0.4.0'
 
 gem 'carrierwave'#, '~> 1.0'
 gem 'fog'
