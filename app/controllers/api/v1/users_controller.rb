@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
        if params.has_key?(:user_id)
            if @user_admin.rol == 'admin'   
             @users = User.only_users  
-            render json: @users, :include => [] , each_serializer: UserSerializer,render_attribute:  @parametros
+            render json: @users, :include => [:image] , each_serializer: UserSerializer,render_attribute:  @parametros
           else 
            render status: :forbidden
           end  

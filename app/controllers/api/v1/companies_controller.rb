@@ -46,7 +46,7 @@ class Api::V1::CompaniesController < ApplicationController
           if params[:sort][0] == "-"
               str= str[1,str.length]
              
-              if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
+              if str == "nit"||str == "name_comp"|| str == "address" || str == "phone" || str == "user_id"  
                
                 @companies =  @companies.order("#{str}": :desc)
                 render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
@@ -54,7 +54,7 @@ class Api::V1::CompaniesController < ApplicationController
                   render status:  :bad_request
               end
           else               
-              if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
+               if str == "nit"||str == "name_comp"|| str == "address" || str == "phone" || str == "user_id"
                
                  @companies =  @companies.order("#{str}": :asc)
                   render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
