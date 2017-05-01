@@ -112,14 +112,14 @@ class Api::V1::ProductsController < ApplicationController
               str= str[1,str.length]
               puts "sebastian herrera"
               puts str
-              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
+              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
                 @products =  @products.order("#{str}": :desc)
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute: params[:select_product] || "all"
               else
                   render status:  :bad_request
               end
           else               
-              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"
+              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
                   @products =  @products.order("#{str}": :asc)
                   render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute: params[:select_product] || "all"
 

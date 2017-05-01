@@ -54,8 +54,8 @@ class ProductSerializer < ActiveModel::Serializer
 
   def render?(values,name1,name2)
     values = values.map {|v| v.downcase}
-    puts "SEBASTIAN PROBANDO"
-    puts values
+   # puts "SEBASTIAN PROBANDO"
+    #puts values
     if instance_options[:render_attribute] == "all"
       true
     elsif values.include?(name1) || values.include?(name2)

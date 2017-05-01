@@ -30,11 +30,11 @@ rols = ["admin","company","customer","company_customer"]
  #end
 
 
-#for num in 1..100
- # valuee= rand 1..1100
-  #amountt= rand 1..1100
-  #Product.create( name_product:generate_code(3), description: generate_code(10), status:true, value: valuee , amount:  amountt, company_id: num )
- #end
+for num in 1..100
+  valuee= rand 1..1100
+  amountt= rand 1..1100
+  Product.create( name_product:generate_code(3), description: generate_code(10), status:true, value: valuee , amount:  amountt, company_id: 1 )
+end
 
 #for num in 1..100
 

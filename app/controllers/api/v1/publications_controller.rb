@@ -115,7 +115,7 @@
           if params[:sort][0] == "-"
               str= str[1,str.length]
              
-              if str == "created_at"||str == "title"|| str == "user_id" 
+              if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
                 @publications =  @publications.order("#{str}": :desc)
                 render json: @publications, :include =>[:product], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
@@ -123,7 +123,7 @@
                   render status:  :bad_request
               end
           else               
-              if str == "created_at"||str == "title"|| str == "user_id" 
+              if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
                  @publications =  @publications.order("#{str}": :asc)
                   render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
