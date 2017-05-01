@@ -37,7 +37,7 @@ class Api::V1::CompaniesController < ApplicationController
             if @company.save
               render  status: :created
             else
-              render json: @company.errors, status: :unprocessable_entity
+              render json: @company, status: :unprocessable_entity
             end
       end   
   end
@@ -50,7 +50,7 @@ class Api::V1::CompaniesController < ApplicationController
             if @company.update(company_params)
               render json: @company
             else
-              render json: @company.errors, status: :unprocessable_entity
+              render json: @company, status: :unprocessable_entity
             end
       end   
       

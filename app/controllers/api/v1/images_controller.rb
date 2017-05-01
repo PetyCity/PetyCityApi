@@ -21,12 +21,12 @@ class Api::V1::ImagesController < ApplicationController
   # POST /images
   def create
     @image = Image.new(image_params)
-     @image.save
-    #if @image.save
-     # render json: @image, status: :created, location: @image
-    #else
-    #  render json: @image.errors, status: :unprocessable_entity
-    #end
+     #@image.save
+    if @image.save
+      render json: @image, status: :created
+    else
+      render json: @image.errors, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /images/1

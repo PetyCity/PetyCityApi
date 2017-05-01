@@ -46,7 +46,6 @@
 
   #/api/v1/costum/users/:user_id/publications
   def create
-    if  !@user.customer?#solo el cliente puede crear
             render status: :forbidden     
     else#usuario cliente
             @publication = Publication.new(publication_params)

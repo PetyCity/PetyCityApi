@@ -2,13 +2,18 @@ class Product < ApplicationRecord
   belongs_to :company
   has_many :comment_products
   has_many :transactions
+  has_many :comment_products, dependent: :destroy
+  has_many :transactions, dependent: :destroy
   has_many :sales
   has_many :category_products
+  has_many :category_products, dependent: :destroy
   has_many :categories, through: :category_products
   has_many :users, through: :comment_products
   has_many :images
+  has_many :images, dependent: :destroy
   validates :name_product, presence: true
   validates :description, presence: true, length: { minimum: 10}
+  validates :description, presence: true, length: { minimum: 2}
 
   #validates :coment_products,presence: true
 

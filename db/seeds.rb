@@ -1,10 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
 
 
 def generate_code(number)
@@ -14,62 +7,161 @@ end
 
 rols = ["admin","company","customer","company_customer"]
 
-# for num in 1..100
- # emmail = generate_code(5) + "@" + generate_code(5)
-  #cedulla = rand 11111111..2111111111
-   #userr = User.create(email:emmail,password: 123456)
-   #userr.update(cedula: cedulla, name_user:generate_code(5),block:false,sendEmail:false,rol:rols[ rand 4])
-  #end
+
+# Company
+# 1.times do |index|
+ 
+#  Company.create(
+#    nit: Faker::Number.unique.number(10),
+#    name_comp: Faker::Company.name , 
+#    address: Faker::Address.street_address,
+#    city: Faker::Address.city,
+#    phone: Faker::Number.number(7)  ,
+#    permission: false,
+#    user_id: 1 ,
+#    image_company: File.open(File.join(Rails.root, '/test/img/park.png'))
+#   )
+  
+# end
+
+
+
+#49.times do |index|
+ # Product.create(
+ # name_product: Faker::Pokemon.unique.name,
+ # description: Faker::Pokemon.unique.location,
+ # status: true,
+ # value: Faker::Number.decimal(2, 3) ,
+ # amount: Faker::Number.between(1, 30),
+ # company_id: 5
+ #)
+  
+#end
 
   
-#nit =1000000000
-#for num in 1..100
- # nit = nit +num
-  #phonee= rand 11111111..111111111
-  #Company.create(nit: nit ,name_comp: generate_code(5) , address:generate_code(5),city:generate_code(5),phone:phonee , permission:0,user_id: num )
- #end
+# for index in 1..200
+  
+
+#   puts product_id: index%50
+#  if index % 6 == 0 
+#    Image.create( 
+#     name_image: File.open(File.join(Rails.root, '/test/img/producto1.png')),
+#     product_id: ( index % 50 ) +3
+#    )
+  
+#  elsif index % 6 ==1
+#    Image.create( 
+#     name_image: File.open(File.join(Rails.root, '/test/img/producto2.jpg')),
+#     product_id:  ( index % 50 ) +3
+#    )
+   
+#  elsif index % 6 == 2
+#    Image.create( 
+#    name_image: File.open(File.join(Rails.root, '/test/img/producto3.jpg')),
+#    product_id:  ( index % 50 ) +3
+#    )
+
+#  elsif index % 6 == 3
+#     Image.create( 
+#     name_image: File.open(File.join(Rails.root, '/test/img/producto4.jpg')),
+#     product_id:  ( index % 50 ) +3
+#     )
+
+#   elsif index % 6 == 4
+#     Image.create( 
+#     name_image: File.open(File.join(Rails.root, '/test/img/producto5.jpg')),
+#     product_id:  ( index % 50 ) +3
+#     )
+
+#   else
+
+#     Image.create( 
+#      name_image: File.open(File.join(Rails.root, '/test/img/producto6.png')),
+#      product_id:  ( index % 50 ) +3
+#     )
+
+#   end
+  
+
+# end
 
 
-#for num in 1..100
- # valuee= rand 1..1100
-  #amountt= rand 1..1100
-  #Product.create( name_product:generate_code(3), description: generate_code(10), status:true, value: valuee , amount:  amountt, company_id: num )
- #end
+#  for index in 2..12
 
-#for num in 1..100
+#   if index % 6 == 2
 
- # Publication.create( title: generate_code(11),body_publication: generate_code(11),user_id: num )
-#end
+#      Publication.create( 
 
+#        title: Faker::Lorem.sentence,
+#        body_publication: Faker::Lorem.paragraphs,
+#        user_id: 3,
+#        image_publication:File.open(File.join(Rails.root, '/test/img/producto6.png'))
+#      )
 
-#for num in 1..100
- # CommentPublication.create( body_comment_Publication: generate_code(11), publication_id: num, user_id: num )
- #end
+#     elsif index % 6 == 3
 
 
-#for num in 1..100
- # Image.create( name_image: generate_code(5) , product_id: num )
- #end
+#      Publication.create( 
+#        title: Faker::Lorem.sentence,
+#        body_publication: Faker::Lorem.paragraphs,
+#        user_id: 3,
+#        image_publication:File.open(File.join(Rails.root, '/test/img/producto2.jpg'))
+#       )
+
+#     elsif index % 6 == 4
+
+#       Publication.create( 
+#       title: Faker::Lorem.sentence,
+#        body_publication: Faker::Lorem.paragraphs,
+#        user_id: 3,
+#        image_publication:File.open(File.join(Rails.root, '/test/img/producto1.png'))
+#      )
+
+#   else
+
+#        Publication.create( 
+#        title: Faker::Lorem.sentence,
+#        body_publication: Faker::Lorem.paragraphs,
+#        user_id: 3,
+#        image_publication:File.open(File.join(Rails.root, '/test/img/producto4.jpg'))
+      
+#       )
+#    end
+# end
 
 
-#for num in 1..100
- # CommentProduct.create( body_comment_product: generate_code(11), product_id: num, user_id: num )
- #end
+ # 12.times do |index|
+ # CommentPublication.create( 
+ #   body_comment_Publication: Faker::Lorem.paragraph,
+ #   publication_id: index%12 , 
+ #   user_id: 2
+  
+ # )
+
+ # end
+
+# 200.times do |index|
+
+#     CommentProduct.create(
+#     body_comment_product: Faker::Lorem.paragraph,
+#     product_id: index%50,
+#     user_id: 3
+#   )
+
+# end
 
 
 
+ # 5.times do |indes|
+ #   Category.create( 
+ #     name_category: Faker::StarWars.character ,
+ #     details:Faker::StarWars.quote
+ #     )
+ # end
 
-#for num in 1..100
- # Cart.create( user_id:num, total_price: 0)
-#end
-
-#for num in 1..100
- # Category.create( name_category: generate_code(5) , details:generate_code(7))
-#end
-
-#for num in 1..100
- # CategoryProduct.create( product_id:num, category_id:num)
-#end
+# for num in 1..50
+#   CategoryProduct.create( product_id:(num%50)+1, category_id:(num%5)+1)
+# end
 
 #for num in 1..100
  # Transaction.create( product_id: num , cart_id: num, amount: 10)
@@ -79,3 +171,8 @@ rols = ["admin","company","customer","company_customer"]
 #for num in 1..100
  #  Sale.create( product_id: num , cart_id: num, amount: 10)
 #end
+# 1.times do |index|
+#   Cart.create( user_id:num, 
+#   total_price: 0)
+# end
+

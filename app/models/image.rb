@@ -6,9 +6,12 @@ class Image < ApplicationRecord
 	#validates :name_image, presence: true, length: { in: 3..20 }, uniqueness: true
   validates :product, presence: true
   mount_uploader :name_image, NameImageUploader
+    validates :product, presence: true
+    mount_uploader :name_image, NameImageUploader
 	#SCOPES
 
 	default_scope {order(name_image: :asc)}
+	#default_scope {order(name_image: :asc)}
 	scope :order_by_amount_desc, -> {order(name_image: :desc)}
 	scope :order_by_id_asc, -> {order(id: :asc)}
   	scope :order_by_id_desc, -> {order(id: :desc)}

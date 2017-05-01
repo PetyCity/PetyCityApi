@@ -17,7 +17,7 @@ class Api::V1::CommentPublicationsController < ApplicationController
       if @comment_publication.save
         render json: @comment_publication, status: :created
       else
-        render json: @comment_publication.errors, status: :unprocessable_entity
+        render json: @comment_publication, status: :unprocessable_entity
       end
    end
   end
