@@ -52,16 +52,16 @@ class ProductSerializer < ActiveModel::Serializer
     render?(instance_options[:render_attribute].split(","),"products.active","active")
   end
 
-  def render?(values,name1,name2)
-    values = values.map {|v| v.downcase}
-   # puts "SEBASTIAN PROBANDO"
-    #puts values
-    if instance_options[:render_attribute] == "all"
-      true
-    elsif values.include?(name1) || values.include?(name2)
-      true
-    else
-      false
-    end
-  end
+   def render?(values,name1,name2)
+      values = values.map {|v| v.downcase}   
+      if values[0] != "product"
+        true
+      elsif values.length == 1
+        true
+      elsif values.include?(name1) || values.include?(name2)
+        true
+      else
+        false
+      end
+   end
 end

@@ -1,11 +1,12 @@
 class Api::V1::CompaniesController < ApplicationController
   before_action :set_company, only: [:index,:show, :update, :destroy,:create]
+  before_action :select_company_params, only: [:index,:show, :update, :destroy,:create,:search]
 
   #/api/v1/companies
   #/api/v1/admin/users/:user_id/companies
   def index     
-      @companies = Company.only_companies    
-      render json: @companies , :include =>[:user,:products]  , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+      @companies = Company.only_companies          
+      render json: @companies , :include =>[:user,:products], each_serializer: CompanySerializer,render_attribute: @parametros  
     
   end
 
@@ -15,12 +16,12 @@ class Api::V1::CompaniesController < ApplicationController
  def show
     if params.has_key?(:user_id)
        if  @user.customer?     
-           render json: @company , :include => [:user,:products], status: :ok  , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+           render json: @company , :include => [:user,:products], status: :ok  , each_serializer: CompanySerializer,render_attribute: @parametros  
        else
-          render json: @company , :include => [:user,:products,:sales], status: :ok     , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+          render json: @company , :include => [:user,:products,:sales], status: :ok    , each_serializer: CompanySerializer,render_attribute: @parametros  
        end
     else
-        render json: @company , :include => [:products], status: :ok  , each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+        render json: @company , :include => [:products], status: :ok  , each_serializer: CompanySerializer,render_attribute: @parametros  
     end
   end
 
@@ -48,7 +49,7 @@ class Api::V1::CompaniesController < ApplicationController
               if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
                 @companies =  @companies.order("#{str}": :desc)
-                render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+                render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
               else
                   render status:  :bad_request
               end
@@ -56,13 +57,13 @@ class Api::V1::CompaniesController < ApplicationController
               if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
                  @companies =  @companies.order("#{str}": :asc)
-                  render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+                  render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
               else
                   render status:  :bad_request
               end  
           end
     else
-      render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: params[:select_company] || "all"
+      render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
     end
   end
 
@@ -155,7 +156,9 @@ class Api::V1::CompaniesController < ApplicationController
              end
          end
     end
-
+    def select_company_params 
+        @parametros =  "Company,"+params[:select_company].to_s  
+    end
     # Only allow a trusted parameter "white list" through.
     def company_params
       params.require(:company).permit(:nit, :name_comp, :address, :city, :phone, :permission, :user_id,:image_company)

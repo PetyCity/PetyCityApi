@@ -1,22 +1,23 @@
  class Api::V1::PublicationsController < ApplicationController
   before_action :set_publication, only: [:index,:show, :create,:update, :destroy,:my_publications]
+  before_action :select_publication_params, only: [:index,:show, :my_publications, :create,:search]
 
   # /api/v1/admin/users/:user_id/publications/
   # /api/v1/publications/
   def index
     if params.has_key?(:user_id)
-        render json: @publications, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+        render json: @publications, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute:  @parametros
     else
-        render json: @publications, :include => [:user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+        render json: @publications, :include => [:user], each_serializer: PublicationSerializer,render_attribute:  @parametros
     end     
   end
   # /api/v1/admin/users/:user_id/publications/id
   # /api/v1/publications/id
   def show
     if params.has_key?(:user_id)
-        render json: @publication, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+        render json: @publication, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute:  @parametros
     else
-        render json: @publication, :include => [:user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+        render json: @publication, :include => [:user], each_serializer: PublicationSerializer,render_attribute:  @parametros
     end
   end
 
@@ -28,7 +29,7 @@
         @user = User.find_by_id(params[:user_id]) 
        if  @user.admin?
            @publications = Publication.publications_by_user(params[:id])   
-           render json: @publications, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+           render json: @publications, :include => [:user,comment_Publications: :user], each_serializer: PublicationSerializer,render_attribute:  @parametros
        else
             render status: :forbidden             
        end
@@ -36,7 +37,7 @@
        @user = User.find_by_id(params[:id]) 
       if  @user.customer?
            @publications = Publication.publications_by_user(params[:id])   
-           render json: @publications, :include => [:user,comment_Publications: :user]  , each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+           render json: @publications, :include => [:user,comment_Publications: :user]  , each_serializer: PublicationSerializer,render_attribute:  @parametros
        else
             render status: :forbidden             
        end
@@ -118,7 +119,7 @@
               if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
                 @publications =  @publications.order("#{str}": :desc)
-                render json: @publications, :include =>[:product], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+                render json: @publications, :include =>[:product], each_serializer: PublicationSerializer,render_attribute:  @parametros
               else
                   render status:  :bad_request
               end
@@ -126,13 +127,13 @@
               if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
                  @publications =  @publications.order("#{str}": :asc)
-                  render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+                  render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute:  @parametros
               else
                   render status:  :bad_request
               end  
           end
     else
-      render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute: params[:select_publication] || "all"
+      render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute:  @parametros
     end
   end
 
@@ -172,7 +173,9 @@
              end
          end
     end
-
+    def select_publication_params 
+        @parametros =  "publication,"+params[:select_publication].to_s  
+    end
     # Only allow a trusted parameter "white list" through.
     def publication_params
       params.require(:publication).permit(:title, :body_publication, :user_id,:image_company)

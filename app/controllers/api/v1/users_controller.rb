@@ -135,7 +135,7 @@ class Api::V1::UsersController < ApplicationController
                               render status: :unprocessable_entity 
                           end                            
                        else
-                         #ESCONDERLO
+                         @user.active = false
                        end
                      
                 elsif  @user.company_customer?
@@ -160,7 +160,7 @@ class Api::V1::UsersController < ApplicationController
                               render status: :unprocessable_entity 
                           end                            
                        else
-                         #ESCONDERLO
+                         @user.active = false
                        end         
                 end                             
                               
@@ -183,7 +183,7 @@ class Api::V1::UsersController < ApplicationController
                           render status: :unprocessable_entity 
                        end                            
                    else
-                       #ESCONDERLO
+                       @user.active = false
                    end                     
              elsif  @user.company_customer?                      
                     @user = User.user_comp_custommer_by_id(params[:id])
@@ -194,7 +194,7 @@ class Api::V1::UsersController < ApplicationController
                           render status: :unprocessable_entity 
                        end                            
                     else
-                         #ESCONDERLO
+                         @user.active = false
                     end
              else 
                     @user = User.user_custommer_by_id(params[:id])
@@ -205,7 +205,7 @@ class Api::V1::UsersController < ApplicationController
                           render status: :unprocessable_entity 
                        end                            
                        else
-                         #ESCONDERLO
+                         @user.active = false
                        end         
              end            
      end  
