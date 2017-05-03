@@ -1,5 +1,6 @@
  class Api::V1::PublicationsController < ApplicationController
-  before_action :set_publication, only: [:index,:show, :create,:update, :destroy,:my_publications]
+  before_action :set_publication, only: [:index,:show, :create,:update, :destroy,:my_publications,
+                                          :votes_dislike,:votes_like,:user_vote]
   before_action :select_publication_params, only: [:index,:show, :my_publications, :create,:search]
 
   # /api/v1/admin/users/:user_id/publications/
@@ -44,9 +45,61 @@
    end
   end
 
-
+#/POST /api/v1/costum/users/:user_id/publications/:id/votes
+  # => para custummer 
+  def user_vote
+     if vote_params[:vote] == '0' || vote_params[:vote] == '1'       
+          if  @user.customer? || @user.company_customer?#cliente y cliente compañia pueden votar 
+                if vote_params[:vote] == '1'
+                  
+                    if !@user.voted_for? @publication
+                        @user.likes @publication
+                        render status: :ok 
+                    else
+                        if @user.voted_down_on? @publication
+                          @publication.unliked_by @user
+                          render status: :ok
+                        else
+                            render status: :forbidden #no puede votar dos veces   
+                        end                        
+                    end
+                else
+                    if !@user.voted_for? @publication
+                        @user.dislikes @publication
+                        render status: :ok
+                    else
+                        if @user.voted_up_on? @publication
+                          @publication.undisliked_by  @user
+                          render status: :ok                          
+                        else
+                            render status: :forbidden #no puede votar dos veces   
+                        end
+                    end
+                end 
+          else#usuario compalñia
+                render status: :forbidden    
+          end   
+     else
+        render status: :bad_request
+     end 
+  end
+   
+  #/api/v1/publications/:id/votes_like
+  def votes_like
+    @voteslike =@publication.get_likes
+     render json:  @voteslike.count ,  status: :ok
+  end
+  
+  #/api/v1/publications/:id/votes_dislike
+  def votes_dislike    
+    @votesunlike =@publication.get_dislikes
+     render json:  @votesunlike.count ,  status: :ok
+  end
+  
+  
   #/api/v1/costum/users/:user_id/publications
   def create
+    if  !@user.customer?#solo el cliente puede crear
             render status: :forbidden     
     else#usuario cliente
             @publication = Publication.new(publication_params)
@@ -177,6 +230,10 @@
     end
     # Only allow a trusted parameter "white list" through.
     def publication_params
-      params.require(:publication).permit(:title, :body_publication, :user_id,:image_company)
+      params.require(:publication).permit(:title, :body_publication, :user_id,:image_publication)
     end
+    def vote_params
+      params.permit(:vote)
+    end
+
 end

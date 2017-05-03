@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   mount_uploader :image, ImageUploader
-  
+  acts_as_voter
   #Asociasiones
   has_one :cart
   has_one :company, dependent: :destroy

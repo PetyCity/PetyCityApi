@@ -32,7 +32,10 @@ Rails.application.routes.draw do
           end
         end
         resources :publications, only: [:index, :show] do
+            get 'votes_like', to: 'publications#votes_like', on: :member 
+            get 'votes_dislike', to: 'publications#votes_dislike', on: :member 
             collection do
+                 
                  get 'search' => "publications#search"
             end
         end 
@@ -84,6 +87,8 @@ Rails.application.routes.draw do
               end
             end
             resources :publications, only: [:index, :show, :destroy]  do 
+              get 'votes_like', to: 'publications#votes_like', on: :member 
+              get 'votes_dislike', to: 'publications#votes_dislike', on: :member  
               resources :comment_publications,only: [ :show,:create,:update,:destroy] 
               collection do
                  get 'search' => "publications#search"
@@ -135,6 +140,8 @@ Rails.application.routes.draw do
 
 
             resources :publications, only: [:index, :show]  do 
+                get 'votes_like', to: 'publications#votes_like', on: :member 
+                get 'votes_dislike', to: 'publications#votes_dislike', on: :member 
                 resources :comment_publications,only: [ :show,:create,:update,:destroy] 
                  collection do
                  get 'search' => "publications#search"
@@ -165,6 +172,9 @@ Rails.application.routes.draw do
             resources :users, only: [ :show] 
             
             resources :publications do
+              get 'votes_like', to: 'publications#votes_like', on: :member 
+              get 'votes_dislike', to: 'publications#votes_dislike', on: :member           
+              post 'votes', to: 'publications#user_vote', on: :member
               resources :comment_publications , only: [ :show,:create,:update,:destroy] 
                collection do
                  get 'search' => "publications#search"

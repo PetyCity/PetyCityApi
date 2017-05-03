@@ -1,7 +1,9 @@
 class Publication < ApplicationRecord
 
   mount_uploader :image_publication, ImagePublicationUploader
-
+  acts_as_votable
+  
+  
   belongs_to :user
   has_many :comment_Publications, dependent: :destroy
   has_many :c_user, through: :comment_Publications,source: :user
