@@ -48,7 +48,7 @@
 #/POST /api/v1/costum/users/:user_id/publications/:id/votes
   # => para custummer 
   def user_vote
-     if vote_params[:vote] == '0' || vote_params[:vote] == '1'       
+     if vote_params[:vote] == '0' || vote_params[:vote] == '1'   || vote_params[:vote] == '-1'       
           if  @user.customer? || @user.company_customer?#cliente y cliente compañia pueden votar 
                 if vote_params[:vote] == '1'
                   
@@ -57,11 +57,26 @@
                         render status: :ok 
                     else
                         if @user.voted_down_on? @publication
-                          @publication.unliked_by @user
+                          @publication.undisliked_by  @user
+                          
+                          @user.likes @publication
                           render status: :ok
                         else
                             render status: :forbidden #no puede votar dos veces   
                         end                        
+                    end
+                elsif vote_params[:vote] == '-1'
+                    if @user.voted_for? @publication
+                        if @user.voted_down_on? @publication
+                           @publication.undisliked_by  @user                         
+                           render status: :ok
+                        else
+                          
+                          @publication.unliked_by @user
+                          render status: :ok       
+                        end   
+                    else
+                         render status: :forbidden                     
                     end
                 else
                     if !@user.voted_for? @publication
@@ -69,7 +84,8 @@
                         render status: :ok
                     else
                         if @user.voted_up_on? @publication
-                          @publication.undisliked_by  @user
+                          @publication.unliked_by @user
+                          @user.dislikes @publication
                           render status: :ok                          
                         else
                             render status: :forbidden #no puede votar dos veces   
