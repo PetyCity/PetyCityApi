@@ -147,6 +147,7 @@ end
       .order('random()')
   end
 
+
   def self.products_by_category(cat,pro)
      includes( :categories,:images)
      .where(categories: {
@@ -167,6 +168,14 @@ end
         active: true
      })
   end
-
+  def self.products_by_category_name(cat,word)
+     includes( :categories,:images)
+     .where(categories: {
+        id: cat
+      })
+     .where("products.name_product ILIKE ? ",word)
+     .where(products: {
+        active: true }) 
+  end
 
 end

@@ -98,13 +98,17 @@ class Api::V1::ProductsController < ApplicationController
     render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
   
   end 
-
+#http://localhost:3000/api/v1/products/search?q=W&sort=name_prodt
+#http://localhost:3000/api/v1/products/search?category_id=2&q=g
  def search    
     
-    if params.has_key?(:q)
+     if params.has_key?(:q) and  params.has_key?(:category_id)
+        @products = Product.products_by_category_name(params[:category_id],"%#{params[:q]}%")
+    
+    elsif params.has_key?(:category_id)
+        @products= Product.products_by_categories(params[:category_id])
+    elsif params.has_key?(:q)
         @products = Product.products_by_name("%#{params[:q]}%")
-#       render json: @products, :include => [:product]
-    #          
     else
         @products = Product.products_images
     

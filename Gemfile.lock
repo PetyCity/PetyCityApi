@@ -243,9 +243,6 @@ GEM
     rack-cors (0.4.1)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rack-throttle (0.4.2)
-      bundler (>= 1.0.0)
-      rack (>= 1.0.0)
     rails (5.0.2)
       actioncable (= 5.0.2)
       actionmailer (= 5.0.2)
@@ -319,7 +316,6 @@ DEPENDENCIES
   puma (~> 3.0)
   rack-cors
   rack-test
-  rack-throttle (~> 0.4.0)
   rails (~> 5.0.2)
   tzinfo-data
   will_paginate
