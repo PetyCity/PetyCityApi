@@ -44,7 +44,7 @@ def self.prueba(name)
 
   #Queries
 
-  default_scope {order("users.name_user ASC")}
+  #default_scope {order("users.name_user ASC")}
 
   #Para ver todos los usuarios
   def self.only_users(page = 1, per_page = 100)
