@@ -41,7 +41,9 @@ Rails.application.routes.draw do
         end 
        
         resources :companies, only: [:index, :show] do 
-                 # /users/user_id/companies/:id/product_bycompany
+                 # /users/user_id/companies/:id/product_bycompany                 
+                  get 'votes_like', to: 'companies#votes_like', on: :member 
+                  get 'votes_dislike', to: 'companies#votes_dislike', on: :member 
                   collection do
                     get 'search' => "companies#search"
                   end
@@ -94,7 +96,9 @@ Rails.application.routes.draw do
                  get 'search' => "publications#search"
               end
             end
-            resources :companies, only: [:index, :show, :destroy] do 
+            resources :companies, only: [:index, :show, :destroy] do                  
+                  get 'votes_like', to: 'companies#votes_like', on: :member 
+                  get 'votes_dislike', to: 'companies#votes_dislike', on: :member 
                   collection do
                     get 'search' => "companies#search"
                   end
@@ -123,7 +127,9 @@ Rails.application.routes.draw do
             get 'shopsales' , to: 'product#productssales'
             resources :users, only: [ :show] 
             
-            resources :companies do 
+            resources :companies do                  
+                  get 'votes_like', to: 'companies#votes_like', on: :member 
+                  get 'votes_dislike', to: 'companies#votes_dislike', on: :member 
                   collection do
                     get 'search' => "companies#search"
                   end
@@ -187,8 +193,14 @@ Rails.application.routes.draw do
               collection do 
                 get 'search' => "products#search"
                 resources :categories, only: [:index]
-              end
-            resources :companies, only: [:index, :show] do 
+              end      
+
+
+            end
+            resources :companies, only: [:index, :show] do                  
+                  get 'votes_like', to: 'companies#votes_like', on: :member 
+                  get 'votes_dislike', to: 'companies#votes_dislike', on: :member
+                  post 'votes', to: 'companies#user_vote', on: :member               
                   collection do
                     get 'search' => "companies#search"
                   end
@@ -200,10 +212,7 @@ Rails.application.routes.draw do
                   collection do
                     get 'search' => "categories#search"
                   end                 
-         end 
-
-
-            end
+             end 
           end
         end
 
