@@ -215,12 +215,8 @@ class Api::V1::ProductsController < ApplicationController
   def my_vote
      if !@user.voted_for? @product           
            render json:  false, status: :ok           
-     else
-           if @user.voted_up_on? @product                          
-               render json: 1,  status: :ok
-           else
-               render json:  0,status: :forbidden #no puede votar dos veces   
-           end
+     else           
+         render json:  (@product.get_likes.find_by voter_id:  @user.id).vote_weight ,status: :forbidden             
      end
   end
   
