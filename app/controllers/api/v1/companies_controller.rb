@@ -1,6 +1,6 @@
 class Api::V1::CompaniesController < ApplicationController
   before_action :set_company, only: [:index,:show, :update, :destroy,:create,
-                                     :votes_dislike,:votes_like,:user_vote]
+                                     :votes_dislike,:votes_like,:user_vote,:my_vote]
   before_action :select_company_params, only: [:index,:show, :update, :destroy,:create,:search]
 
   #/api/v1/companies
@@ -67,7 +67,7 @@ class Api::V1::CompaniesController < ApplicationController
       render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
     end
   end
-  #/POST /api/v1/costum/users/:user_id/publications/:id/votes
+  #/POST /api/v1/costum/users/:user_id/companies/:id/votes
   # => para custummer 
   
   def user_vote
@@ -123,16 +123,28 @@ class Api::V1::CompaniesController < ApplicationController
      end 
   end
    
-  #/api/v1/publications/:id/votes_like
+  #/api/v1/companies/:id/votes_like
   def votes_like
     @voteslike =@company.get_likes
      render json:  @voteslike.count ,  status: :ok
   end
   
-  #/api/v1/publications/:id/votes_dislike
+  #/api/v1/companies/:id/votes_dislike
   def votes_dislike    
     @votesunlike =@company.get_dislikes
      render json:  @votesunlike.count ,  status: :ok
+  end
+  #/api/v1/costum/users/10/companies/1/my_vote
+  def my_vote
+     if !@user.voted_for? @company           
+           render json:  false, status: :ok           
+     else
+           if @user.voted_up_on? @company                          
+               render json: 1,  status: :ok
+           else
+               render json:  0,status: :forbidden #no puede votar dos veces   
+           end
+     end
   end
   # POST /api/v1/company/users/:user_id/companies
   def create

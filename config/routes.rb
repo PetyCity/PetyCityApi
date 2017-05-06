@@ -90,7 +90,10 @@ Rails.application.routes.draw do
             end
             resources :publications, only: [:index, :show, :destroy]  do 
               get 'votes_like', to: 'publications#votes_like', on: :member 
-              get 'votes_dislike', to: 'publications#votes_dislike', on: :member  
+              get 'votes_dislike', to: 'publications#votes_dislike', on: :member 
+              get 'my_vote', to: 'publications#my_vote', on: :member 
+              
+               
               resources :comment_publications,only: [ :show,:create,:update,:destroy] 
               collection do
                  get 'search' => "publications#search"
@@ -98,7 +101,8 @@ Rails.application.routes.draw do
             end
             resources :companies, only: [:index, :show, :destroy] do                  
                   get 'votes_like', to: 'companies#votes_like', on: :member 
-                  get 'votes_dislike', to: 'companies#votes_dislike', on: :member 
+                  get 'votes_dislike', to: 'companies#votes_dislike', on: :member
+                  get 'my_vote', to: 'companies#my_vote', on: :member  
                   collection do
                     get 'search' => "companies#search"
                   end
@@ -130,6 +134,7 @@ Rails.application.routes.draw do
             resources :companies do                  
                   get 'votes_like', to: 'companies#votes_like', on: :member 
                   get 'votes_dislike', to: 'companies#votes_dislike', on: :member 
+                  get 'my_vote', to: 'companies#my_vote', on: :member  
                   collection do
                     get 'search' => "companies#search"
                   end
@@ -148,6 +153,7 @@ Rails.application.routes.draw do
             resources :publications, only: [:index, :show]  do 
                 get 'votes_like', to: 'publications#votes_like', on: :member 
                 get 'votes_dislike', to: 'publications#votes_dislike', on: :member 
+                get 'my_vote', to: 'publications#my_vote', on: :member  
                 resources :comment_publications,only: [ :show,:create,:update,:destroy] 
                  collection do
                  get 'search' => "publications#search"
@@ -179,7 +185,8 @@ Rails.application.routes.draw do
             
             resources :publications do
               get 'votes_like', to: 'publications#votes_like', on: :member 
-              get 'votes_dislike', to: 'publications#votes_dislike', on: :member           
+              get 'votes_dislike', to: 'publications#votes_dislike', on: :member 
+              get 'my_vote', to: 'publications#my_vote', on: :member            
               post 'votes', to: 'publications#user_vote', on: :member
               resources :comment_publications , only: [ :show,:create,:update,:destroy] 
                collection do
@@ -200,6 +207,7 @@ Rails.application.routes.draw do
             resources :companies, only: [:index, :show] do                  
                   get 'votes_like', to: 'companies#votes_like', on: :member 
                   get 'votes_dislike', to: 'companies#votes_dislike', on: :member
+                  get 'my_vote', to: 'companies#my_vote', on: :member  
                   post 'votes', to: 'companies#user_vote', on: :member               
                   collection do
                     get 'search' => "companies#search"

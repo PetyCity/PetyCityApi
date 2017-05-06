@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(version: 20170504213051) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "name_user"
-    t.string   "image"
+    t.integer  "image"
     t.string   "email"
     t.integer  "rol"
     t.boolean  "block",                  default: false

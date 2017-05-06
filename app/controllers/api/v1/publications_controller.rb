@@ -1,6 +1,6 @@
  class Api::V1::PublicationsController < ApplicationController
   before_action :set_publication, only: [:index,:show, :create,:update, :destroy,:my_publications,
-                                          :votes_dislike,:votes_like,:user_vote]
+                                          :votes_dislike,:votes_like,:user_vote,:my_vote]
   before_action :select_publication_params, only: [:index,:show, :my_publications, :create,:search]
 
   # /api/v1/admin/users/:user_id/publications/
@@ -111,7 +111,19 @@
     @votesunlike =@publication.get_dislikes
      render json:  @votesunlike.count ,  status: :ok
   end
-  
+  #/api/v1/costum/users/10/publications/1/my_vote
+  def my_vote
+     if !@user.voted_for? @publication           
+           render json:  false, status: :ok
+           
+     else
+           if @user.voted_up_on? @publication                          
+               render json: 1,  status: :ok
+           else
+               render json:  0,status: :forbidden #no puede votar dos veces   
+           end
+     end
+  end
   
   #/api/v1/costum/users/:user_id/publications
   def create
