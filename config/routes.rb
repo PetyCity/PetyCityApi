@@ -1,11 +1,6 @@
 
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/v1/auth'
-
-
-  
-    
-
   namespace :api do     
     namespace :v1 do 
        root to: "products#index"
@@ -100,13 +95,13 @@ Rails.application.routes.draw do
                  get 'search' => "publications#search"
               end
             end
-            resources :companies, only: [:index, :show, :destroy] do
-              get 'product_bycompany', to: 'products#index'
+            resources :companies, only: [:index, :show, :destroy] do              
               member do
-                get 'votes_like', to: 'companies#votes_like', on: :member 
-                get 'votes_dislike', to: 'companies#votes_dislike', on: :member
-                get 'my_vote', to: 'companies#my_vote', on: :member                
+                get 'votes_like', to: 'companies#votes_like' 
+                get 'votes_dislike', to: 'companies#votes_dislike'
+                get 'my_vote', to: 'companies#my_vote'               
               end 
+              get 'product_bycompany', to: 'products#index'
               collection do
                 get 'search' => "companies#search"
               end              
@@ -201,7 +196,7 @@ Rails.application.routes.draw do
                   get 'votes_like', to: 'comment_publications#votes_like'
                   get 'votes_dislike', to: 'comment_publications#votes_dislike' 
                   get 'my_vote', to: 'comment_publications#my_vote'
-                  post 'votes', to: 'comment_publications#user_vote', on: :member            
+                  post 'votes', to: 'comment_publications#user_vote'          
                 end
               end
               collection do
@@ -214,7 +209,7 @@ Rails.application.routes.draw do
                   get 'votes_like', to: 'comment_products#votes_like'
                   get 'votes_dislike', to: 'comment_products#votes_dislike' 
                   get 'my_vote', to: 'comment_products#my_vote'
-                  post 'votes', to: 'comment_products#user_vote', on: :member            
+                  post 'votes', to: 'comment_products#user_vote'            
                 end
               end
               get 'preview', on: :member
@@ -241,9 +236,10 @@ Rails.application.routes.draw do
               collection do
                 get 'search' => "categories#search"
               end                 
-            end 
-          end
+            end             
+          end          
         end
      end
+     
   end
 end
