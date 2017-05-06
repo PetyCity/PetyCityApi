@@ -202,8 +202,9 @@ class Api::V1::ProductsController < ApplicationController
   # /api/v1/costum/users/:user_id/products/:id/stars_prom
   def stars_prom
      @voteslike = @product.get_likes 
-     @voteslike = @voteslike.sum(:vote_weight) / @voteslike.count
-     render json:  @voteslike ,  status: :ok
+     @prom = Float(@voteslike.sum(:vote_weight)) / Float(@voteslike.count)
+      
+     render json:  @prom ,  status: :ok
   end  
   #/api/v1/costum/users/:user_id/products/:id/num_votes
   def num_votes   
