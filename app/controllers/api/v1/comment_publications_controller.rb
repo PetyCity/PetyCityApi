@@ -10,7 +10,7 @@ class Api::V1::CommentPublicationsController < ApplicationController
     end
   end
   
-  #/POST /api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/votes
+  #/POST  /api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/votes
   # => para custummer 
   def user_vote
      if vote_params[:vote] == '0' || vote_params[:vote] == '1'   || vote_params[:vote] == '-1'       
@@ -65,18 +65,18 @@ class Api::V1::CommentPublicationsController < ApplicationController
      end 
   end
    
-  #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/votes_like
+  #/api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/votes_like
   def votes_like
     @voteslike = @comment_publication.get_likes
     render json:  @voteslike.count ,  status: :ok
   end
   
-  #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/votes_dislike
+  #/api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/votes_dislike
   def votes_dislike    
     @votesunlike =@comment_publication.get_dislikes
      render json:  @votesunlike.count ,  status: :ok
   end
-  #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/my_vote
+  # /api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/my_vote
   def my_vote
      if !@user.voted_for? @comment_publication           
            render json:  false, status: :ok           

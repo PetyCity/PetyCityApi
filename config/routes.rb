@@ -13,7 +13,9 @@ Rails.application.routes.draw do
           end
           member do
             get 'preview'
-            get 'catego_product', to: 'category_products#catego_product'           
+            get 'catego_product', to: 'category_products#catego_product'
+            get 'stars_prom', to: 'products#stars_prom' 
+            get 'num_votes', to: 'products#num_votes'           
           end          
           resources :comment_products, only: [:index, :show] do
             member do
@@ -65,6 +67,8 @@ Rails.application.routes.draw do
               member do
                 get 'preview'
                 get 'catego_product', to: 'category_products#catego_product'
+                get 'stars_prom', to: 'products#stars_prom' 
+                get 'num_votes', to: 'products#num_votes'
               end
               collection do
                 get 'search' => "products#search"                
@@ -167,7 +171,9 @@ Rails.application.routes.draw do
               end
               member do
                 get 'preview'
-                get 'catego_product', to: 'category_products#catego_product'                 
+                get 'catego_product', to: 'category_products#catego_product' 
+                get 'stars_prom', to: 'products#stars_prom' 
+                get 'num_votes', to: 'products#num_votes'                
               end
               collection do 
                 get 'search' => "products#search"                 
@@ -212,8 +218,14 @@ Rails.application.routes.draw do
                   post 'votes', to: 'comment_products#user_vote'            
                 end
               end
-              get 'preview', on: :member
-              get 'catego_product', to: 'category_products#catego_product', on: :member
+              member do
+                get 'stars_prom', to: 'products#stars_prom' 
+                get 'num_votes', to: 'products#num_votes'
+                get 'my_vote', to: 'products#my_vote'
+                post 'votes', to: 'products#user_vote' 
+                get 'preview'
+                get 'catego_product', to: 'category_products#catego_product'              
+              end
               collection do 
                 get 'search' => "products#search"
                 resources :categories, only: [:index]
