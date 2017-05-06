@@ -1,9 +1,10 @@
 class CommentProduct < ApplicationRecord
+  acts_as_votable
   belongs_to :product
   belongs_to :user
   validates :user , presence: true
   validates :body_comment_product, presence: true ,allow_blank: false
-
+  
   #ver comentarios en especifico
   def self.comment_by_ids(id, page = 1, per_page = 10)
     where(comment_products: {
@@ -33,11 +34,10 @@ class CommentProduct < ApplicationRecord
     })
   end
 
-  def self.comment_product_by_product(pro,id)
+   def self.comment_product_by_product(pro,id)
     where(comment_products:{
-      id: id, product_id: pro 
-
-      })
+      product_id: pro 
+      }).find_by_id(id)
 
   end
 

@@ -3,7 +3,7 @@ class CommentPublication < ApplicationRecord
   belongs_to :user
   validates :body_comment_Publication, presence: true ,allow_blank: false
   validates :user , presence: true
-
+  acts_as_votable
 
 
   #Queries

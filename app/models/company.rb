@@ -1,6 +1,6 @@
 class Company < ApplicationRecord
    mount_uploader :image_company, ImageCompanyUploader
-
+  acts_as_votable
   has_many :products, dependent: :destroy
   belongs_to :user
   has_many :transactions, through: :products

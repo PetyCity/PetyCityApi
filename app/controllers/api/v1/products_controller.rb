@@ -1,5 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
-  before_action :set_product, only: [ :update, :destroy]
+  before_action :set_product, only: [:user_vote, :stars_prom, :num_votes,
+      :my_vote, :update, :destroy]
   before_action :select_product_params, only: [:index,:show, :lastproducts, :productsmostsales,
     :productrandom,:product_bycompany,:create,:search]
 
@@ -72,24 +73,15 @@ class Api::V1::ProductsController < ApplicationController
   def lastproducts
     @products = Product.ultimos
     render json: @products,:include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
-  end 
-
-
-  
+  end   
   def productsmostsales
-
-   @products = Product.products_most_sales
-   
-   @products = Product.products_by_id(@products)
-   
-    render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
-
-  end
+   @products = Product.products_most_sales   
+   @products = Product.products_by_id(@products)   
+    render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros  end
 
   def productrandom
    @products = Product.rand
-  render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
-
+   render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
   end
 
   ##/users/user_id/companies/company_id/product_bycompany
@@ -141,12 +133,99 @@ class Api::V1::ProductsController < ApplicationController
     end
   end
 
-  # POST /products
-
-
+#/POST  /api/v1/costum/users/:user_id/products/:id/vote
+  # => para custummer 
+  def user_vote        
+     if  vote_params[:vote] == '1'  || vote_params[:vote] == '2'|| vote_params[:vote] == '3'|| vote_params[:vote] == '4'|| vote_params[:vote] == '5' || vote_params[:vote] == '-1'       
+          if  @user.customer? || @user.company_customer?#cliente y cliente compañia pueden votar 
+                if vote_params[:vote] == '1'                  
+                    if !@user.voted_for? @product
+                        @product.liked_by @user, :vote_weight => 1
+                        render status: :ok 
+                    else
+                        @product.unliked_by  @user                         
+                        @product.liked_by @user, :vote_weight => 1
+                        render status: :ok      
+                    end
+                elsif vote_params[:vote] == '2'                  
+                    if !@user.voted_for? @product
+                        @product.liked_by @user, :vote_weight => 2
+                        render status: :ok 
+                    else
+                        @product.unliked_by  @user                         
+                        @product.liked_by @user, :vote_weight => 2
+                        render status: :ok      
+                    end
+                elsif vote_params[:vote] == '3'                  
+                    if !@user.voted_for? @product
+                        @product.liked_by @user, :vote_weight => 3
+                        render status: :ok 
+                    else
+                        @product.unliked_by  @user                         
+                        @product.liked_by @user, :vote_weight => 3
+                        render status: :ok      
+                    end
+                elsif vote_params[:vote] == '4'                  
+                    if !@user.voted_for? @product
+                        @product.liked_by @user, :vote_weight => 4
+                        render status: :ok 
+                    else
+                        @product.unliked_by  @user                         
+                        @product.liked_by @user, :vote_weight => 4
+                        render status: :ok      
+                    end
+                elsif vote_params[:vote] == '5'                  
+                    if !@user.voted_for? @product
+                        @product.liked_by @user, :vote_weight => 5
+                        render status: :ok 
+                    else
+                        @product.unliked_by  @user                         
+                        @product.liked_by @user, :vote_weight => 5
+                        render status: :ok      
+                    end
+                elsif vote_params[:vote] == '-1'
+                    if @user.voted_for? @product
+                        @product.unliked_by @user
+                        render status: :ok                           
+                    else
+                         render status: :forbidden                     
+                    end                
+                end 
+          else
+                render status: :forbidden    
+          end   
+     else
+        render status: :bad_request
+     end    
+  end
+   
+  # /api/v1/costum/users/:user_id/products/:id/stars_prom
+  def stars_prom
+     @voteslike = @product.get_likes 
+     @voteslike = @voteslike.sum(:vote_weight) / @voteslike.count
+     render json:  @voteslike ,  status: :ok
+  end  
+  #/api/v1/costum/users/:user_id/products/:id/num_votes
+  def num_votes   
+     @voteslike =@product.get_likes
+     render json:  @voteslike.count ,  status: :ok
+  end
+  
+  # /api/v1/costum/users/:user_id/products/:id/my_vote
+  def my_vote
+     if !@user.voted_for? @product           
+           render json:  false, status: :ok           
+     else
+           if @user.voted_up_on? @product                          
+               render json: 1,  status: :ok
+           else
+               render json:  0,status: :forbidden #no puede votar dos veces   
+           end
+     end
+  end
+  
+ # POST /products
 #/api/v1/company/users/:user_id/products
-
-
   def create
     @user = User.find_by_id(params[:user_id])
 
@@ -203,9 +282,39 @@ class Api::V1::ProductsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
+    def set_product   
+      if params.has_key?(:user_id)         
+            @user = User.find_by_id(params[:user_id]) 
+            if  @user.nil?
+                  render status:  :not_found
+            end
+          #  if  current_user.id != params[:user_id]) 
+           #       render status:  :forbidden
+           # end    
+            if params.has_key?(:id)
+                   
+                @product =  Product.product_by_id_total(params[:id])     
+                if  @product.nil?  
+                      render status:   :not_found
+                end
+            else
+              @products =  Product.all                              
+            end          
+        else            
+            if params.has_key?(:id)                  
+                 #if  current_user.id != params[:id] 
+                 #       render status:  :forbidden
+                 # end                     
+                 @product =  Product.product_by_id_total(params[:id]) 
+                 if  @product.nil?
+                       render status: :not_found
+                 end
+             else
+                  @products =  Product.all
+             end
+         end 
     end
+
     def select_product_params 
         @parametros =  "product,"+params[:select_product].to_s  
     end
@@ -213,6 +322,8 @@ class Api::V1::ProductsController < ApplicationController
     def product_params
       params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
     end
-
+    def vote_params
+      params.permit(:vote)
+    end
 
 end
