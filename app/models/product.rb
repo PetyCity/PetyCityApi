@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  acts_as_votable
   belongs_to :company
   has_many :comment_products
   has_many :transactions
