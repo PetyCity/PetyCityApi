@@ -30,7 +30,7 @@ module PetyCityApi
     
     config.api_only = true
 
- #   config.middleware.use Rack::Throttle::Minute, :max => 500
+    config.middleware.use Rack::Throttle::Minute, :max => 500
     #config.middleware.use Rack::Attack
 
    
@@ -38,7 +38,10 @@ module PetyCityApi
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
+        resource '*',
+          :headers => :any,
+          :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+          :methods => [:get, :post, :options]
       end
     end
 
