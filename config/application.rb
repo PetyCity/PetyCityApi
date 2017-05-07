@@ -30,7 +30,7 @@ module PetyCityApi
     
     config.api_only = true
 
-    config.middleware.use Rack::Throttle::Minute, :max => 500
+  #  config.middleware.use Rack::Throttle::Minute, :max => 500
     #config.middleware.use Rack::Attack
 
    

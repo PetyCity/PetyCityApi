@@ -17,8 +17,9 @@ class Company < ApplicationRecord
   validates :nit, numericality: { only_integer: true ,
           message: "only allows numbers " }, length: { is: 10
      }, uniqueness: { case_sensitive: false }, presence: true
-  validates :user , uniqueness: { case_sensitive: false }, presence: true
-
+  validates :user , uniqueness: { case_sensitive: false }, presence: true  
+  validates :type, presence: true
+  enum type: [ :veterinary ,:wholesaler,:hairdressing , :pethotel, :trainer ]
 
 
   #Queries
