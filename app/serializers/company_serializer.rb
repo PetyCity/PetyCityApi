@@ -9,19 +9,23 @@ class CompanySerializer < ActiveModel::Serializer
     attribute :phone, if: :render_phone?
     attribute :permission, if: :render_permission?
     attribute :user_id,if: :render_user_id?
-	attribute :active, if: :render_active?
+	  attribute :active, if: :render_active?
     attribute :image_company,if: :render_image_company?
-
-
+    attribute :longitude, if: :render_longitude?
+    attribute :latitude,if: :render_latitude?
+    attribute :type, if: :render_type?
+    
+    
+    
     has_many :products, dependent: :destroy  
-	belongs_to :user
+	  belongs_to :user
   	has_many :transactions, through: :products
   	has_many :sales, through: :products
   	has_many :category_products , through: :products, dependent: :destroy  
   
 	  def render_id?
     	render?(instance_options[:render_attribute].split(","),"companies.id","id")
-  	  end
+  	end
 
 	  def render_nit?
 	    render?(instance_options[:render_attribute].split(","),"companies.nit","nit")
@@ -61,7 +65,15 @@ class CompanySerializer < ActiveModel::Serializer
 	  def render_image_company?
 	    render?(instance_options[:render_attribute].split(","),"companies.image_company","image_company")
 	  end
-
+    def render_longitude?
+      render?(instance_options[:render_attribute].split(","),"companies.longitude","longitude")
+    end
+    def render_latitude?
+      render?(instance_options[:render_attribute].split(","),"companies.latitude","latitude")
+    end
+    def render_type?
+      render?(instance_options[:render_attribute].split(","),"companies.type","type")
+    end
 	  def render?(values,name1,name2)
       values = values.map {|v| v.downcase}   
       if values[0] != "company"
