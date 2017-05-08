@@ -1,6 +1,7 @@
 class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: [:user_vote, :stars_prom, :num_votes,
       :my_vote, :update, :destroy]
+  after_action :stars_prom, only: [:user_vote ]
   before_action :select_product_params, only: [:index,:show, :lastproducts, :productsmostsales,
     :productrandom,:product_bycompany,:create,:search]
 
@@ -133,19 +134,18 @@ class Api::V1::ProductsController < ApplicationController
           str = params[:sort]
           if params[:sort][0] == "-"
               str= str[1,str.length]              
-              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
-                @products =  @products.order("#{str}": :desc)
+              if str == "votes_number"||str == "votes_average"||str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
+                @products =  @products.reorder("#{str}": :desc)
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
               elsif str == "sales"
                 @products = Product.products_most_sales_unique( @products.pluck(:id)).reorder("SUM(sales.amount) ASC") 
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
-               
               else
                   render status:  :bad_request
               end
           else               
-              if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
-                  @products =  @products.order("#{str}": :asc)
+              if str == "votes_number"||str == "votes_average"||str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
+                  @products =  @products.reorder("#{str}":  :asc)
                   render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute:  @parametros
               elsif str == "sales"
                 @products = Product.products_most_sales_unique( @products.pluck(:id)) 
@@ -168,6 +168,7 @@ class Api::V1::ProductsController < ApplicationController
                 if vote_params[:vote] == '1'                  
                     if !@user.voted_for? @product
                         @product.liked_by @user, :vote_weight => 1
+                        @product.votes_number = @product.votes_number+1
                         render status: :ok 
                     else
                         @product.unliked_by  @user                         
@@ -177,6 +178,7 @@ class Api::V1::ProductsController < ApplicationController
                 elsif vote_params[:vote] == '2'                  
                     if !@user.voted_for? @product
                         @product.liked_by @user, :vote_weight => 2
+                        @product.votes_number = @product.votes_number+1
                         render status: :ok 
                     else
                         @product.unliked_by  @user                         
@@ -186,6 +188,7 @@ class Api::V1::ProductsController < ApplicationController
                 elsif vote_params[:vote] == '3'                  
                     if !@user.voted_for? @product
                         @product.liked_by @user, :vote_weight => 3
+                        @product.votes_number = @product.votes_number+1
                         render status: :ok 
                     else
                         @product.unliked_by  @user                         
@@ -195,6 +198,7 @@ class Api::V1::ProductsController < ApplicationController
                 elsif vote_params[:vote] == '4'                  
                     if !@user.voted_for? @product
                         @product.liked_by @user, :vote_weight => 4
+                        @product.votes_number = @product.votes_number+1
                         render status: :ok 
                     else
                         @product.unliked_by  @user                         
@@ -204,6 +208,7 @@ class Api::V1::ProductsController < ApplicationController
                 elsif vote_params[:vote] == '5'                  
                     if !@user.voted_for? @product
                         @product.liked_by @user, :vote_weight => 5
+                        @product.votes_number = @product.votes_number+1
                         render status: :ok 
                     else
                         @product.unliked_by  @user                         
@@ -213,6 +218,7 @@ class Api::V1::ProductsController < ApplicationController
                 elsif vote_params[:vote] == '-1'
                     if @user.voted_for? @product
                         @product.unliked_by @user
+                        @product.votes_number = @product.votes_number-1
                         render status: :ok                           
                     else
                          render status: :forbidden                     
@@ -226,18 +232,7 @@ class Api::V1::ProductsController < ApplicationController
      end    
   end
    
-  # /api/v1/costum/users/:user_id/products/:id/stars_prom
-  def stars_prom
-     @voteslike = @product.get_likes 
-     @prom = Float(@voteslike.sum(:vote_weight)) / Float(@voteslike.count)      
-     render json:  @prom ,  status: :ok
-  end  
-  #/api/v1/costum/users/:user_id/products/:id/num_votes
-  def num_votes   
-     @voteslike =@product.get_likes
-     render json:  @voteslike.count ,  status: :ok
-  end
-  
+ 
   # /api/v1/costum/users/:user_id/products/:id/my_vote
   def my_vote
      if !@user.voted_for? @product           
@@ -337,6 +332,12 @@ class Api::V1::ProductsController < ApplicationController
              end
          end 
     end
+    def stars_prom
+       @voteslike = @product.get_likes 
+       @prom = Float(@voteslike.sum(:vote_weight)) / Float(@voteslike.count)      
+       @product.votes_average = @prom 
+       @product.update_columns(votes_average: @product.votes_average,votes_number: @product.votes_number)      
+   end 
 
     def select_product_params 
         @parametros =  "product,"+params[:select_product].to_s  

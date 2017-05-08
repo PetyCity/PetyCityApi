@@ -1,17 +1,23 @@
 class Product < ApplicationRecord
   acts_as_votable
   belongs_to :company
-  has_many :comment_products
-  has_many :transactions
+
+
   has_many :comment_products, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :sales
-  has_many :category_products
+
   has_many :category_products, dependent: :destroy
   has_many :categories, through: :category_products
   has_many :users, through: :comment_products
-  has_many :images
+
   has_many :images, dependent: :destroy
+  
+  
+  has_many :votes , foreign_key: :votable_id
+
+  
+  
   validates :name_product, presence: true
   validates :description, presence: true, length: { minimum: 10}
   validates :description, presence: true, length: { minimum: 2}
@@ -22,12 +28,22 @@ class Product < ApplicationRecord
 
   #Scopes
 
- 
 
  # default_scope {order("products.name_product ASC")}
   
   scope :ultimos, ->{ order("created_at DESC").limit(4) }
-  
+ 
+   
+  def self.product_by_votes_pop()
+      includes( :votes,:images) 
+      .where(votes: {
+        votable_type: "Product"
+      }) 
+      #.group(:votes:votable_id) 
+      #.select('products.* ,votes.votable_id ,COUNT(votes.vote_weight) as num_votes')
+      
+      #.select('votable_id as id,COUNT(vote_weight) as num_votes')    
+  end 
  def self.rand(page = 1, per_page = 10)
      includes( :images)
      .where(products: {
@@ -62,14 +78,18 @@ end
     .where(products: {
         active: true
      })
-    .paginate(:page => page,:per_page => per_page)
+
   end
   #ver productos por id
-  def self.products_by_id(id, page = 1, per_page = 10)
-      where(products:{
+  def self.products_by_id(id, page = 1, per_page = 100)
+      includes( :images)
+      .where(products:{
         id: id
-      })
-      .paginate(:page => page,:per_page => per_page)
+      })      
+     .where(products: {
+        active: true
+     })
+
   end
 
  
@@ -87,14 +107,14 @@ end
   	.where(products: {
         active: true
      })
-     .paginate(:page => page,:per_page => per_page)
+
   end
 
 
   def self.products_transactions(id, page = 1, per_page = 10)
       includes( :transactions)
       .find_by_id(id)
-      .paginate(:page => page,:per_page => per_page)
+  
   end
   
   def self.image_by_product(id, page = 1, per_page = 5)
@@ -146,18 +166,18 @@ end
    def self.comment_product_by_id(id, page = 1, per_page = 10)
       includes(comment_products: :user)
       .find_by_id(id)
-      .paginate(:page => page,:per_page => per_page)
+    #  .paginate(:page => page,:per_page => per_page)
    end
 
    def self.cheaper_than(price, page = 1, per_page = 10)
       where("products.value <= ?", price)
-      .paginate(:page => page,:per_page => per_page)
+     # .paginate(:page => page,:per_page => per_page)
    end
 
 
    def self.major_than(price, page = 1, per_page = 10)
       where("products.value >= ?", price)
-      .paginate(:page => page,:per_page => per_page)
+      #.paginate(:page => page,:per_page => per_page)
    end
 
   def self.products_by_categories(cat)
