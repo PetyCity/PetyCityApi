@@ -13,7 +13,9 @@ class CompanySerializer < ActiveModel::Serializer
     attribute :image_company,if: :render_image_company?
     attribute :longitude, if: :render_longitude?
     attribute :latitude,if: :render_latitude?
-    attribute :type, if: :render_type?
+    attribute :type, if: :render_type?    
+    attribute :c_votes_like,if: :render_c_votes_like?
+    attribute :c_votes_dislike, if: :render_c_votes_dislike?
     
     
     
@@ -73,6 +75,12 @@ class CompanySerializer < ActiveModel::Serializer
     end
     def render_type?
       render?(instance_options[:render_attribute].split(","),"companies.type","type")
+    end
+    def render_c_votes_like?
+      render?(instance_options[:render_attribute].split(","),"companies.c_votes_like","c_votes_like")
+    end
+    def render_c_votes_dislike?
+      render?(instance_options[:render_attribute].split(","),"companies.c_votes_dislike","c_votes_dislike")
     end
 	  def render?(values,name1,name2)
       values = values.map {|v| v.downcase}   

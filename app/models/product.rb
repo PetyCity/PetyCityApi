@@ -237,4 +237,17 @@ end
       .order('random()')
   end
 
+
+  def self.products_most_comment(ids)
+     joins( :comment_products)
+     .includes( :images)
+     .where(products: {
+        id: ids,
+        active: true
+     }) 
+     .group("products.id")
+     .order("Count(products.id) DESC")          
+  end
+    
+    
 end

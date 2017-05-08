@@ -138,8 +138,12 @@ class Api::V1::ProductsController < ApplicationController
                 @products =  @products.reorder("#{str}": :desc)
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
               elsif str == "sales"
-                @products = Product.products_most_sales_unique( @products.pluck(:id)).reorder("SUM(sales.amount) ASC") 
+                @products = Product.products_most_sales_unique( @products.pluck(:id))
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+              elsif str == "comments"
+                @products = Product.products_most_comment(@products.pluck(:id) ) #@products.pluck(:id)).reorder("SUM(sales.amount) ASC") 
+                render json: @products, :include =>[:product,:images,:comment_products] , each_serializer: ProductSerializer,render_attribute:  @parametros
+              
               else
                   render status:  :bad_request
               end
@@ -148,9 +152,12 @@ class Api::V1::ProductsController < ApplicationController
                   @products =  @products.reorder("#{str}":  :asc)
                   render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute:  @parametros
               elsif str == "sales"
-                @products = Product.products_most_sales_unique( @products.pluck(:id)) 
+                @products = Product.products_most_sales_unique( @products.pluck(:id)).reorder("SUM(sales.amount) ASC") 
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
-          
+              elsif str == "comments"
+                @products = Product.products_most_comment(@products.pluck(:id) ).reorder("Count(products.id) ASC")
+                render json: @products, :include =>[:product,:images,:comment_products] , each_serializer: ProductSerializer,render_attribute:  @parametros
+              
               else
                   render status:  :bad_request
               end  
@@ -238,7 +245,7 @@ class Api::V1::ProductsController < ApplicationController
      if !@user.voted_for? @product           
            render json:  false, status: :ok           
      else           
-         render json:  (@product.get_likes.find_by voter_id:  @user.id).vote_weight ,status: :forbidden             
+         render json:  (@product.get_likes.find_by voter_id:  @user.id).vote_weight ,status: :ok             
      end
   end
   

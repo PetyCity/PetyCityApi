@@ -84,7 +84,7 @@ class Api::V1::CommentPublicationsController < ApplicationController
            if @user.voted_up_on? @comment_publication                          
                render json: 1,  status: :ok
            else
-               render json:  0,status: :forbidden #no puede votar dos veces   
+               render json:  0,status: :ok   
            end
      end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508194926) do
+ActiveRecord::Schema.define(version: 20170508212310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,18 +64,20 @@ ActiveRecord::Schema.define(version: 20170508194926) do
   create_table "companies", force: :cascade do |t|
     t.bigint   "nit"
     t.string   "name_comp"
-    t.string   "address",       limit: 30
-    t.string   "city",          limit: 20
+    t.string   "address",         limit: 30
+    t.string   "city",            limit: 20
     t.bigint   "phone"
-    t.boolean  "permission",               default: false
+    t.boolean  "permission",                 default: false
     t.integer  "user_id"
-    t.boolean  "active",                   default: true
+    t.boolean  "active",                     default: true
     t.string   "image_company"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.decimal  "longitude"
     t.decimal  "latitude"
     t.integer  "type"
+    t.integer  "c_votes_like",               default: 0
+    t.integer  "c_votes_dislike",            default: 0
     t.index ["user_id"], name: "index_companies_on_user_id", using: :btree
   end
 
@@ -110,6 +112,8 @@ ActiveRecord::Schema.define(version: 20170508194926) do
     t.string   "image_publication"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.integer  "p_votes_like",      default: 0
+    t.integer  "p_votes_dislike",   default: 0
     t.index ["user_id"], name: "index_publications_on_user_id", using: :btree
   end
 

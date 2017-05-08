@@ -4,8 +4,12 @@ class PublicationSerializer < ActiveModel::Serializer
   attribute :title, if: :render_title?
  
   attribute :body_publication , if: :render_body_publication?
+  attribute :p_votes_like,if: :render_p_votes_like?
+  attribute :p_votes_dislike, if: :render_p_votes_dislike? 
   attribute :user_id,  if: :render_user_id?
   attribute :image_publication, if: :render_image_publication?
+
+    
   belongs_to :user
   has_many :comment_Publications, dependent: :destroy  
   has_many :c_user, through: :comment_Publications,source: :user
@@ -32,7 +36,12 @@ class PublicationSerializer < ActiveModel::Serializer
   def render_image_publication?
     render?(instance_options[:render_attribute].split(","),"products.image_publication","image_publication")
   end
-
+  def render_p_votes_like?
+    render?(instance_options[:render_attribute].split(","),"companies.p_votes_like","p_votes_like")
+  end
+  def render_p_votes_dislike?
+    render?(instance_options[:render_attribute].split(","),"companies.p_votes_dislike","p_votes_dislike")
+  end
   
 
    def render?(values,name1,name2)
