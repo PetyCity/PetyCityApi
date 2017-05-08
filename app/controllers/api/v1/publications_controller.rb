@@ -189,12 +189,14 @@
     if params.has_key?(:sort)
           str = params[:sort]
           if params[:sort][0] == "-"
-              str= str[1,str.length]
-             
+              str= str[1,str.length]             
               if str == "p_votes_like"||str == "p_votes_dislike"||str == "created_at"||str == "title"|| str == "user_id" || str == "id"
-               
                 @publications =  @publications.reorder("#{str}": :desc)
-                render json: @publications, :include =>[:product], each_serializer: PublicationSerializer,render_attribute:  @parametros
+                render json: @publications, :include =>[], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              elsif str == "comments"
+                @publications = Publication.publications_most_comment(@publications.pluck(:id) )
+                render json: @publications, :include =>[:comment_Publications], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              
               else
                   render status:  :bad_request
               end
@@ -203,6 +205,10 @@
                
                  @publications =  @publications.reorder("#{str}": :asc)
                   render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              elsif str == "comments"
+                @publications = Publication.publications_most_comment(@publications.pluck(:id) ).reorder("Count(publications.id) ASC") 
+                render json: @publications, :include =>[:comment_Publications], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              
               else
                   render status:  :bad_request
               end  

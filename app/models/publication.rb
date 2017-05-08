@@ -5,6 +5,7 @@ class Publication < ApplicationRecord
   
   
   belongs_to :user
+
   has_many :comment_Publications, dependent: :destroy
   has_many :c_user, through: :comment_Publications,source: :user
   
@@ -14,7 +15,7 @@ class Publication < ApplicationRecord
 
   #Queries
 
-  default_scope {order("publications.title ASC")}
+  #default_scope {order("publications.title ASC")}
 
   #Para ver todas las publicaciones
   def self.only_publications(page = 1, per_page = 100)
@@ -39,5 +40,10 @@ class Publication < ApplicationRecord
       Publication.where("publications.name_publication ILIKE ?",word)
   end
 
-
+  def self.publications_most_comment(ids)
+     joins( :comment_Publications)     
+     .group("publications.id")
+     .order("Count(publications.id) DESC")          
+  end
+  
 end
