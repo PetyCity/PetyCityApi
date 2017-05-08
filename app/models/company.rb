@@ -18,13 +18,12 @@ class Company < ApplicationRecord
           message: "only allows numbers " }, length: { is: 10
      }, uniqueness: { case_sensitive: false }, presence: true
   validates :user , uniqueness: { case_sensitive: false }, presence: true  
-  validates :type, presence: true
-  enum type: [ :veterinary ,:wholesaler,:hairdressing , :pethotel, :trainer ]
-
-
+  validates :c_rol, presence: true
+  enum c_rol: [ :veterinary ,:wholesaler,:hairdressing , :pethotel, :trainer ]
+  
   #Queries
 
-  default_scope {order("companies.name_comp ASC")}
+  #default_scope {order("companies.name_comp ASC")}
 
   def self.companies_by_name(word)
      includes(:user,:products)
@@ -55,7 +54,10 @@ class Company < ApplicationRecord
   end
   #Productos vendidos
   def self.product_sales(page = 1, per_page = 10)
-    includes(products: :sales ).paginate(:page => page,:per_page => per_page)
+    joins(products:  :sales)
+    .group("companies.id")
+    .order("COUNT(companies.id) DESC")          
+ 
   end
   #Productos vendidos id
   def self.product_salesID(id, page = 1, per_page = 10)
@@ -64,6 +66,7 @@ class Company < ApplicationRecord
      .paginate(:page => page,:per_page => per_page)
   end
 
+  
 
 
 end

@@ -9,6 +9,10 @@ class ProductSerializer < ActiveModel::Serializer
     attribute :amount, if: :render_amount?
     attribute :company_id, if: :render_company_id?
     attribute :active,if: :render_active?
+    attribute :votes_number,if: :render_votes_number?
+    attribute :votes_average,if: :render_votes_average?
+    
+    
     belongs_to :company
 	has_many :comment_products
 	has_many :transactions
@@ -17,7 +21,7 @@ class ProductSerializer < ActiveModel::Serializer
 	has_many :categories, through: :category_products
 	has_many :users, through: :comment_products
 	has_many :images
-	
+	has_many :votes , foreign_key: :votable_id
   def render_id?
     render?(instance_options[:render_attribute].split(","),"products.id","id")
   end
@@ -51,7 +55,12 @@ class ProductSerializer < ActiveModel::Serializer
   def render_active?
     render?(instance_options[:render_attribute].split(","),"products.active","active")
   end
-
+  def render_votes_number?
+      render?(instance_options[:render_attribute].split(","),"products.votes_number","votes_number")
+  end
+  def render_votes_average?
+     render?(instance_options[:render_attribute].split(","),"products.votes_average","votes_average")
+  end
    def render?(values,name1,name2)
       values = values.map {|v| v.downcase}   
       if values[0] != "product"

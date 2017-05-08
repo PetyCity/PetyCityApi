@@ -2,6 +2,7 @@
   before_action :set_publication, only: [:index,:show, :create,:update, :destroy,:my_publications,
                                           :votes_dislike,:votes_like,:user_vote,:my_vote]
   before_action :select_publication_params, only: [:index,:show, :my_publications, :create,:search]
+  after_action :actualizate_votes, only: [:user_vote ]
 
   # /api/v1/admin/users/:user_id/publications/
   # /api/v1/publications/
@@ -50,16 +51,17 @@
   def user_vote
      if vote_params[:vote] == '0' || vote_params[:vote] == '1'   || vote_params[:vote] == '-1'       
           if  @user.customer? || @user.company_customer?#cliente y cliente compañia pueden votar 
-                if vote_params[:vote] == '1'
-                  
+                if vote_params[:vote] == '1'                  
                     if !@user.voted_for? @publication
                         @user.likes @publication
+                        @publication.p_votes_like = @publication.p_votes_like+1                        
                         render status: :ok 
                     else
                         if @user.voted_down_on? @publication
-                          @publication.undisliked_by  @user
-                          
-                          @user.likes @publication
+                          @publication.undisliked_by  @user                          
+                          @user.likes @publication                          
+                          @publication.p_votes_dislike = @publication.p_votes_dislike-1
+                          @publication.p_votes_like = @publication.p_votes_like+1
                           render status: :ok
                         else
                             render status: :forbidden #no puede votar dos veces   
@@ -68,49 +70,42 @@
                 elsif vote_params[:vote] == '-1'
                     if @user.voted_for? @publication
                         if @user.voted_down_on? @publication
-                           @publication.undisliked_by  @user                         
+                           @publication.undisliked_by  @user
+                           @publication.p_votes_dislike = @publication.p_votes_dislike-1                                                   
                            render status: :ok
-                        else
-                          
+                        else                          
                           @publication.unliked_by @user
+                          @publication.p_votes_like = @publication.p_votes_like-1
                           render status: :ok       
-                        end   
+                        end
                     else
                          render status: :forbidden                     
                     end
                 else
                     if !@user.voted_for? @publication
                         @user.dislikes @publication
+                        @publication.p_votes_dislike = @publication.p_votes_dislike+1
                         render status: :ok
                     else
                         if @user.voted_up_on? @publication
                           @publication.unliked_by @user
                           @user.dislikes @publication
+                          @publication.p_votes_dislike = @publication.p_votes_dislike+1
+                          @publication.p_votes_like = @publication.p_votes_like-1
                           render status: :ok                          
                         else
                             render status: :forbidden #no puede votar dos veces   
                         end
                     end
                 end 
-          else#usuario compalñia
+          else
                 render status: :forbidden    
           end   
      else
         render status: :bad_request
      end 
   end
-   
-  #/api/v1/publications/:id/votes_like
-  def votes_like
-    @voteslike =@publication.get_likes
-     render json:  @voteslike.count ,  status: :ok
-  end
   
-  #/api/v1/publications/:id/votes_dislike
-  def votes_dislike    
-    @votesunlike =@publication.get_dislikes
-     render json:  @votesunlike.count ,  status: :ok
-  end
   #/api/v1/costum/users/10/publications/1/my_vote
   def my_vote
      if !@user.voted_for? @publication           
@@ -120,7 +115,7 @@
            if @user.voted_up_on? @publication                          
                render json: 1,  status: :ok
            else
-               render json:  0,status: :forbidden #no puede votar dos veces   
+               render json:  0,status: :ok  
            end
      end
   end
@@ -194,20 +189,26 @@
     if params.has_key?(:sort)
           str = params[:sort]
           if params[:sort][0] == "-"
-              str= str[1,str.length]
-             
-              if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
-               
-                @publications =  @publications.order("#{str}": :desc)
-                render json: @publications, :include =>[:product], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              str= str[1,str.length]             
+              if str == "p_votes_like"||str == "p_votes_dislike"||str == "created_at"||str == "title"|| str == "user_id" || str == "id"
+                @publications =  @publications.reorder("#{str}": :desc)
+                render json: @publications, :include =>[], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              elsif str == "comments"
+                @publications = Publication.publications_most_comment(@publications.pluck(:id) )
+                render json: @publications, :include =>[:comment_Publications], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              
               else
                   render status:  :bad_request
               end
           else               
-              if str == "created_at"||str == "title"|| str == "user_id" || str == "id"
+              if str == "p_votes_like"||str == "p_votes_dislike"||str == "created_at"||str == "title"|| str == "user_id" || str == "id"
                
-                 @publications =  @publications.order("#{str}": :asc)
+                 @publications =  @publications.reorder("#{str}": :asc)
                   render json: @publications, :include =>[:publication], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              elsif str == "comments"
+                @publications = Publication.publications_most_comment(@publications.pluck(:id) ).reorder("Count(publications.id) ASC") 
+                render json: @publications, :include =>[:comment_Publications], each_serializer: PublicationSerializer,render_attribute:  @parametros
+              
               else
                   render status:  :bad_request
               end  
@@ -252,6 +253,10 @@
                   @publications = Publication.only_publications 
              end
          end
+    end
+    
+    def actualizate_votes    
+      @publication.update_columns(p_votes_like: @publication.p_votes_like,p_votes_dislike: @publication.p_votes_dislike)
     end
     def select_publication_params 
         @parametros =  "publication,"+params[:select_publication].to_s  

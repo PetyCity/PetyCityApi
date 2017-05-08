@@ -27,17 +27,17 @@ rols = ["admin","company","customer","company_customer"]
 
 
 
-#49.times do |index|
- # Product.create(
- # name_product: Faker::Pokemon.unique.name,
- # description: Faker::Pokemon.unique.location,
- # status: true,
- # value: Faker::Number.decimal(2, 3) ,
- # amount: Faker::Number.between(1, 30),
- # company_id: 5
- #)
+49.times do |index|
+   Product.create(
+   name_product: Faker::Pokemon.unique.name,
+   description: Faker::Pokemon.unique.location,
+   status: true,
+   value: Faker::Number.decimal(2, 3) ,
+   amount: Faker::Number.between(1, 30),
+   company_id: 2
+ )
   
-#end
+end
 #for num in 1..100
  # valuee= rand 1..1100
   #amountt= rand 1..1100
@@ -159,27 +159,26 @@ rols = ["admin","company","customer","company_customer"]
 
 
 
-  5.times do |indes|
-    Category.create( 
-      name_category: Faker::StarWars.character ,
-      details:Faker::StarWars.quote
-      )
-  end
+ # 5.times do |indes|
+  #  Category.create( 
+   #   name_category: Faker::StarWars.character ,
+   #   details:Faker::StarWars.quote
+    #  )
+ # end
 
- for num in 1..50
-   CategoryProduct.create( product_id:(num%50)+1, category_id:(num%5)+1)
- end
+ #for num in 1..50
+  # CategoryProduct.create( product_id:(num%50)+1, category_id:(num%5)+1)
+ #end
 
 #for num in 1..100
  # Transaction.create( product_id: num , cart_id: num, amount: 10)
 #end
 
 
-#for num in 1..100
- #  Sale.create( product_id: num , cart_id: num, amount: 10)
-#end
-# 1.times do |index|
-#   Cart.create( user_id:num, 
-#   total_price: 0)
+for num in 100..149
+   Sale.create( product_id: num , cart_id: (num%9)+1 , amount: (rand 1..550) )
+end
+ #15.times do |index|
+  # Cart.create( user_id:index, 
+   #total_price: 0)
 # end
-
