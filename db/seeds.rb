@@ -159,27 +159,28 @@ rols = ["admin","company","customer","company_customer"]
 
 
 
-  5.times do |indes|
-    Category.create( 
-      name_category: Faker::StarWars.character ,
-      details:Faker::StarWars.quote
-      )
-  end
+ # 5.times do |indes|
+  #  Category.create( 
+   #   name_category: Faker::StarWars.character ,
+   #   details:Faker::StarWars.quote
+    #  )
+ # end
 
- for num in 1..50
-   CategoryProduct.create( product_id:(num%50)+1, category_id:(num%5)+1)
- end
+ #for num in 1..50
+  # CategoryProduct.create( product_id:(num%50)+1, category_id:(num%5)+1)
+ #end
 
 #for num in 1..100
  # Transaction.create( product_id: num , cart_id: num, amount: 10)
 #end
 
 
-#for num in 1..100
- #  Sale.create( product_id: num , cart_id: num, amount: 10)
-#end
-# 1.times do |index|
-#   Cart.create( user_id:num, 
-#   total_price: 0)
+for num in 1..300
+   Sale.create( product_id: ((num%99)+1) , cart_id: (num%9)+1 , amount: (rand 1..550) )
+end
+ #15.times do |index|
+  # Cart.create( user_id:index, 
+   #total_price: 0)
 # end
+
 

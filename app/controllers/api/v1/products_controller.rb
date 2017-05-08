@@ -95,8 +95,9 @@ class Api::V1::ProductsController < ApplicationController
     @products = Product.ultimos
     render json: @products,:include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
   end   
+  
   def productsmostsales
-   @products = Product.products_most_sales   
+   @products = Product.products_most_sales.limit(4).pluck("products.id") 
    @products = Product.products_by_id(@products)   
     render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros  end
 
@@ -131,12 +132,14 @@ class Api::V1::ProductsController < ApplicationController
     if params.has_key?(:sort)
           str = params[:sort]
           if params[:sort][0] == "-"
-              str= str[1,str.length]
-              puts "sebastian herrera"
-              puts str
+              str= str[1,str.length]              
               if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
                 @products =  @products.order("#{str}": :desc)
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+              elsif str == "sales"
+                @products = Product.products_most_sales.reorder("SUM(sales.amount) ASC") 
+                render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+          
               else
                   render status:  :bad_request
               end
@@ -144,7 +147,10 @@ class Api::V1::ProductsController < ApplicationController
               if str == "created_at"||str == "name_product"|| str == "description" ||str == "status" ||str == "value" ||str == "amount" || str == "company_id"|| str == "id"
                   @products =  @products.order("#{str}": :asc)
                   render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute:  @parametros
-
+              elsif str == "sales"
+                @products = Product.products_most_sales 
+                render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+          
               else
                   render status:  :bad_request
               end  

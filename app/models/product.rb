@@ -126,9 +126,9 @@ end
 
   def self.products_most_sales
       joins( :sales)
+      .includes( :images)
      .group("products.id")
-     .order("SUM(sales.amount) DESC").limit(4)
-     .pluck("products.id")     
+     .order("SUM(sales.amount) DESC")          
     end
 
    #producto con su comentario especifico
