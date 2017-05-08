@@ -39,9 +39,16 @@ class Api::V1::ProductsController < ApplicationController
                 if  @user.customer?
                    @products_like = ((@user.votes.up).where(votable_type:  "Product" )).pluck(:votable_id)
                    @categories = CategoryProduct.categories_by_product(@products_like)
-                   @products_category= Product.products_by_categories(@categories) 
-                   @products= @products_category + Product.rand_custummer(@products_category.pluck(:id))   
-                   render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros                   
+                   @products_category= Product.products_by_categories(@categories)                   
+                   
+                   @companies_like = ((@user.votes.up).where(votable_type:  "Company" )).pluck(:votable_id)
+                   @products_company = Product.products_distinc_by_company(@companies_like,@products_category.pluck(:id)).limit(15)
+                   
+                   @products_relashion = (@products_category + @products_company)
+                   
+                   @products = @products_relashion + Product.rand_custummer(@products_relashion.pluck(:id))   
+                   render json: @products , :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros                   
+                    
                 else                  
                   render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
        

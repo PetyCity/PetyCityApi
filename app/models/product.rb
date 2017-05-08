@@ -74,12 +74,12 @@ end
 
  
   #ver productos por compañia
-  def self.products_by_company(comp, page = 1, per_page = 10)
+  def self.products_by_company(comp)
       where(products:{
         company_id: comp,
         active: true
       })
-      .paginate(:page => page,:per_page => per_page)
+      .order('random()')
   end
   #para administrador observar los productos que ya estan publicados
   def self.published(page = 1, per_page = 10)
@@ -192,6 +192,18 @@ end
      .where("products.name_product ILIKE ? ",word)
      .where(products: {
         active: true }) 
+  end
+  
+   #ver productos por compañia
+  def self.products_distinc_by_company(comp,pro)
+      where(products:{
+        company_id: comp,
+        active: true
+      })
+      .where.not(products: {
+        id: pro
+      })
+      .order('random()')
   end
 
 end
