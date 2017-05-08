@@ -2,7 +2,8 @@ class Api::V1::CompaniesController < ApplicationController
   before_action :set_company, only: [:index,:show, :update, :destroy,:create,
                                      :votes_dislike,:votes_like,:user_vote,:my_vote]
   before_action :select_company_params, only: [:index,:show, :update, :destroy,:create,:search]
-
+  after_action :actualizate_votes, only: [:user_vote ]
+  
   #/api/v1/companies
   #/api/v1/admin/users/:user_id/companies
   def index     
@@ -40,25 +41,31 @@ class Api::V1::CompaniesController < ApplicationController
         @companies = Company.only_companies 
     
     end
-
-    
     if params.has_key?(:sort)
           str = params[:sort]
           if params[:sort][0] == "-"
               str= str[1,str.length]
              
-              if str == "nit"||str == "name_comp"|| str == "address" || str == "phone" || str == "user_id"  
+              if  str == "c_votes_like"||str == "c_votes_dislike"|| str == "nit"||str == "name_comp"|| str == "address" || str == "phone" || str == "user_id"  
                
-                @companies =  @companies.order("#{str}": :desc)
+                @companies =  @companies.reorder("#{str}": :desc)
                 render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
+              elsif  str == "sales"
+                @companies =  @companies.product_sales
+                render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
+              
               else
                   render status:  :bad_request
               end
           else               
-               if str == "nit"||str == "name_comp"|| str == "address" || str == "phone" || str == "user_id"
+               if str == "c_votes_like"||str == "c_votes_dislike"|| str == "nit"||str == "name_comp"|| str == "address" || str == "phone" || str == "user_id"
                
-                 @companies =  @companies.order("#{str}": :asc)
+                 @companies =  @companies.reorder("#{str}": :asc)
                   render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
+               elsif  str == "sales"
+                @companies =  @companies.product_sales.reorder("Count(companies.id) ASC") 
+                render json: @companies, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
+              
               else
                   render status:  :bad_request
               end  
@@ -77,11 +84,13 @@ class Api::V1::CompaniesController < ApplicationController
                   
                     if !@user.voted_for? @company
                         @user.likes @company
+                        @company.c_votes_like = @company.c_votes_like+1
                         render status: :ok 
                     else
                         if @user.voted_down_on? @company
                           @company.undisliked_by  @user
-                          
+                          @company.c_votes_dislike = @company.c_votes_dislike-1
+                          @company.c_votes_like = @company.c_votes_like+1
                           @user.likes @company
                           render status: :ok
                         else
@@ -91,10 +100,11 @@ class Api::V1::CompaniesController < ApplicationController
                 elsif vote_params[:vote] == '-1'
                     if @user.voted_for? @company
                         if @user.voted_down_on? @company
-                           @company.undisliked_by  @user                         
+                           @company.undisliked_by  @user
+                           @company.c_votes_dislike = @company.c_votes_dislike-1                         
                            render status: :ok
-                        else
-                          
+                        else                          
+                          @company.c_votes_like = @company.c_votes_like-1
                           @company.unliked_by @user
                           render status: :ok       
                         end   
@@ -104,11 +114,14 @@ class Api::V1::CompaniesController < ApplicationController
                 else
                     if !@user.voted_for? @company
                         @user.dislikes @company
+                        @company.c_votes_dislike = @company.c_votes_dislike+1
                         render status: :ok
                     else
                         if @user.voted_up_on? @company
                           @company.unliked_by @user
                           @user.dislikes @company
+                          @company.c_votes_dislike = @company.c_votes_dislike+1
+                          @company.c_votes_like = @company.c_votes_like-1
                           render status: :ok                          
                         else
                             render status: :forbidden #no puede votar dos veces   
@@ -121,25 +134,13 @@ class Api::V1::CompaniesController < ApplicationController
      else
         render status: :bad_request
      end 
-  end
-   
-  #/api/v1/companies/:id/votes_like
-  def votes_like
-    @voteslike =@company.get_likes
-     render json:  @voteslike.count ,  status: :ok
-  end
-  
-  #/api/v1/companies/:id/votes_dislike
-  def votes_dislike    
-    @votesunlike =@company.get_dislikes
-     render json:  @votesunlike.count ,  status: :ok
-  end
+  end 
   #/api/v1/costum/users/10/companies/1/my_vote
   def my_vote
      if !@user.voted_for? @company           
            render json:  false, status: :ok           
      else
-           if @user.voted_up_on? @company                          
+           if @user.voted_uc_on? @company                          
                render json: 1,  status: :ok
            else
                render json:  0,status: :ok    
@@ -155,7 +156,7 @@ class Api::V1::CompaniesController < ApplicationController
             if @company.save
               render  status: :created
             else
-              render json: @company, status: :unprocessable_entity
+              render json: @company.errors, :include =>[], status: :unprocessable_entity, each_serializer: CompanySerializer,render_attribute: @parametros  
             end
       end   
   end
@@ -166,9 +167,9 @@ class Api::V1::CompaniesController < ApplicationController
             render status: :forbidden     
       else#usuario compalñia
             if @company.update(company_params)
-              render json: @company
+              render json: @company, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
             else
-              render json: @company, status: :unprocessable_entity
+              render json: @company, :include =>[], status: :unprocessable_entity, each_serializer: CompanySerializer,render_attribute: @parametros  
             end
       end   
       
@@ -235,14 +236,18 @@ class Api::V1::CompaniesController < ApplicationController
              end
          end
     end
+    def actualizate_votes    
+      @company.update_columns(c_votes_like: @company.c_votes_like,c_votes_dislike: @company.c_votes_dislike)
+    end
     def select_company_params 
         @parametros =  "Company,"+params[:select_company].to_s  
     end
     # Only allow a trusted parameter "white list" through.
     def company_params
-      params.require(:company).permit(:nit, :name_comp, :address, :city, :phone, :permission, :user_id,:image_company)
+      params.require(:company).permit(:latitude,:longitude,:nit, :name_comp, :address, :city, :phone, :permission, :user_id,:image_company,:c_rol)
     end
     def vote_params
       params.permit(:vote)
     end
+    
 end
