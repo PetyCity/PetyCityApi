@@ -137,9 +137,9 @@ class Api::V1::ProductsController < ApplicationController
                 @products =  @products.order("#{str}": :desc)
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
               elsif str == "sales"
-                @products = Product.products_most_sales.reorder("SUM(sales.amount) ASC") 
+                @products = Product.products_most_sales_unique( @products.pluck(:id)).reorder("SUM(sales.amount) ASC") 
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
-          
+               
               else
                   render status:  :bad_request
               end
@@ -148,7 +148,7 @@ class Api::V1::ProductsController < ApplicationController
                   @products =  @products.order("#{str}": :asc)
                   render json: @products, :include =>[:product,:images], each_serializer: ProductSerializer,render_attribute:  @parametros
               elsif str == "sales"
-                @products = Product.products_most_sales 
+                @products = Product.products_most_sales_unique( @products.pluck(:id)) 
                 render json: @products, :include =>[:product,:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
           
               else

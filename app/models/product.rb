@@ -51,7 +51,7 @@ def self.products_images(page = 1, per_page = 10)
      .where(products: {
         active: true
      })
-
+     .order('random()')  
 end
 
 
@@ -130,7 +130,17 @@ end
      .group("products.id")
      .order("SUM(sales.amount) DESC")          
     end
-
+    
+    def self.products_most_sales_unique(ids)
+     joins( :sales)
+     .includes( :images)
+     .where(products: {
+        id: ids,
+        active: true
+     }) 
+     .group("products.id")
+     .order("SUM(sales.amount) DESC")          
+    end
    #producto con su comentario especifico
 
    def self.comment_product_by_id(id, page = 1, per_page = 10)
@@ -183,6 +193,7 @@ end
      .where(products: {
         active: true
      })
+     .order('random()')  
   end
   def self.products_by_category_name(cat,word)
      includes( :categories,:images)
