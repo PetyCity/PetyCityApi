@@ -5,7 +5,7 @@ class Api::V1::CategoryProductsController < ApplicationController
   def index
   
   @category_products=CategoryProduct.all
-  render json: @category_products 
+  render json: @category_products , :include => []
 
    # @category_products = CategoryProduct.products_by_category(2)
     #render json: @category_products, :include => [:product]   
@@ -18,7 +18,7 @@ class Api::V1::CategoryProductsController < ApplicationController
 
   # GET /category_products/1
   def show
-    render json: @category_product
+    render json: @category_product, :include => []
   end
 #http://localhost:3000/api/v1/products/10/catego_product
   def catego_product
@@ -35,16 +35,16 @@ class Api::V1::CategoryProductsController < ApplicationController
     @category_product = CategoryProduct.new(category_product_params)
     #@category_product.save
    if @category_product.save
-      render json: @category_product, status: :created
+      render json: @category_product, :include => [], status: :created
    else
-      render json: @category_product, status: :unprocessable_entity
+      render json: @category_product, :include => [], status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /category_products/1
   def update
     if @category_product.update(category_product_params)
-      render json: @category_product
+      render json: @category_product, :include => []
     else
       render json: @category_product.errors, status: :unprocessable_entity
     end

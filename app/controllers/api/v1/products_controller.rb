@@ -34,8 +34,22 @@ class Api::V1::ProductsController < ApplicationController
         render json: @products, :include => [:images]
     else
       @products= Product.rand
-      render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
-
+      if params.has_key?(:user_id)    
+                @user = User.find_by_id(params[:user_id]) 
+                if  @user.customer?
+                   @products_like = ((@user.votes.up).where(votable_type:  "Product" )).pluck(:votable_id)
+                   @categories = CategoryProduct.categories_by_product(@products_like)
+                   @products_category= Product.products_by_categories(@categories) 
+                   @products= @products_category + Product.rand_custummer(@products_category.pluck(:id))   
+                   render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros                   
+                else                  
+                  render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+       
+                end
+       else
+         
+         render json: @products, :include => [:images] , each_serializer: ProductSerializer,render_attribute:  @parametros
+       end      
     end
   end
   # GET /products/1
@@ -133,7 +147,7 @@ class Api::V1::ProductsController < ApplicationController
     end
   end
 
-#/POST  /api/v1/costum/users/:user_id/products/:id/vote
+#/POST  /api/v1/costum/users/:user_id/products/:id/votes
   # => para custummer 
   def user_vote        
      if  vote_params[:vote] == '1'  || vote_params[:vote] == '2'|| vote_params[:vote] == '3'|| vote_params[:vote] == '4'|| vote_params[:vote] == '5' || vote_params[:vote] == '-1'       
@@ -202,8 +216,7 @@ class Api::V1::ProductsController < ApplicationController
   # /api/v1/costum/users/:user_id/products/:id/stars_prom
   def stars_prom
      @voteslike = @product.get_likes 
-     @prom = Float(@voteslike.sum(:vote_weight)) / Float(@voteslike.count)
-      
+     @prom = Float(@voteslike.sum(:vote_weight)) / Float(@voteslike.count)      
      render json:  @prom ,  status: :ok
   end  
   #/api/v1/costum/users/:user_id/products/:id/num_votes

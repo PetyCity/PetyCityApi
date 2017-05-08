@@ -160,9 +160,9 @@ Rails.application.routes.draw do
                 end
             end
             resources :products do             
-              resources :category_products
-              resources :images
-              resources :comment_products do
+            resources :category_products
+            resources :images
+            resources :comment_products do
                 member do
                   get 'votes_like', to: 'comment_products#votes_like'
                   get 'votes_dislike', to: 'comment_products#votes_dislike' 

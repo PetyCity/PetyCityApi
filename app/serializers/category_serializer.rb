@@ -20,11 +20,7 @@ class CategorySerializer < ActiveModel::Serializer
 
   
    def render?(values,name1,name2)
-      values = values.map {|v| v.downcase} 
-      puts "name1 PROBANDO"
-      puts name1
-      puts "probando values"
-      puts values  
+      values = values.map {|v| v.downcase}       
       if values[0] != "category"
         true
       elsif values.length == 1

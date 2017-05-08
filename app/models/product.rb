@@ -35,6 +35,16 @@ class Product < ApplicationRecord
      })
      .order('random()')
   end
+   def self.rand_custummer(pro,page = 1, per_page = 10)
+     includes( :images)
+     .where(products: {
+        active: true
+     })
+     .where.not(products: {
+        id: pro
+      })
+     .order('random()')
+  end
 
 def self.products_images(page = 1, per_page = 10)
      includes( :images)
@@ -144,10 +154,15 @@ end
      includes( :categories,:images)
      .where(categories: {
         id: cat
-      })     
-      .order('random()')
+      })
+      .where(products: {
+        active: true
+     })   
+     .order('random()')  
+      
   end
-
+  
+ 
 
   def self.products_by_category(cat,pro)
      includes( :categories,:images)
