@@ -33,10 +33,13 @@ class Api::V1::CompaniesController < ApplicationController
 
   def search    
     
-    if params.has_key?(:q)
+    
+    if params.has_key?(:q) and  params.has_key?(:rol_id)
+        @companies = Company.companies_by_name_category("%#{params[:q]}%",params[:rol_id])        
+    elsif params.has_key?(:q)
         @companies = Company.companies_by_name("%#{params[:q]}%")
-#       render json: @products, :include => [:product]##un helado mayor
-    #          
+    elsif params.has_key?(:rol_id) 
+        @companies = Company.company_by_rol(params[:rol_id])
     else
         @companies = Company.only_companies 
     

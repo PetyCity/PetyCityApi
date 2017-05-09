@@ -66,7 +66,22 @@ class Company < ApplicationRecord
      .paginate(:page => page,:per_page => per_page)
   end
 
-  
+  def self.companies_by_name_category(word,rol)
+     includes(:user,:products)
+     .where("companies.name_comp LIKE ? ",word)
+     .where(companies: {
+        c_rol:rol,
+        active: true
+     })
+  end
+  def self.company_by_rol(rol)
+     where(
+        c_rol:rol,
+        active: true
+     )   
+     .order('random()')  
+      
+  end
 
 
 end

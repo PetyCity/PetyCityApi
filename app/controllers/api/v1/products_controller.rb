@@ -12,8 +12,7 @@ class Api::V1::ProductsController < ApplicationController
   #/api/v1/companies/:company_id/product_bycompany(.:format)
   #/api/v1/products
   
-  def index
-   
+  def index   
     if params.has_key?(:company_id)
           @products= Product.products_by_company(params[:company_id])
           if params.has_key?(:user_id)    

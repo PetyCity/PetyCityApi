@@ -13,32 +13,17 @@ Rails.application.routes.draw do
           end
           member do
             get 'preview'
-            get 'catego_product', to: 'category_products#catego_product'
-            get 'stars_prom', to: 'products#stars_prom' 
-            get 'num_votes', to: 'products#num_votes'           
+            get 'catego_product', to: 'category_products#catego_product'         
           end          
-          resources :comment_products, only: [:index, :show] do
-            member do
-              get 'votes_like', to: 'comment_products#votes_like' 
-              get 'votes_dislike', to: 'comment_products#votes_dislike'
-            end              
-          end          
+          resources :comment_products, only: [:index, :show]    
         end
-        resources :publications, only: [:index, :show] do
-          member do
-            get 'votes_like', to: 'publications#votes_like'
-            get 'votes_dislike', to: 'publications#votes_dislike'             
-          end
+        resources :publications, only: [:index, :show] do          
           collection do                 
             get 'search' => "publications#search"
           end
         end       
         resources :companies, only: [:index, :show] do                
-          get 'product_bycompany', to: 'products#index'
-          member do
-            get 'votes_like', to: 'companies#votes_like' 
-            get 'votes_dislike', to: 'companies#votes_dislike' 
-          end
+          get 'product_bycompany', to: 'products#index'          
           collection do
             get 'search' => "companies#search"
           end          
@@ -67,8 +52,6 @@ Rails.application.routes.draw do
               member do
                 get 'preview'
                 get 'catego_product', to: 'category_products#catego_product'
-                get 'stars_prom', to: 'products#stars_prom' 
-                get 'num_votes', to: 'products#num_votes'
               end
               collection do
                 get 'search' => "products#search"                
@@ -83,9 +66,7 @@ Rails.application.routes.draw do
               end              
             end
             resources :publications, only: [:index, :show, :destroy]  do 
-              member do
-                get 'votes_like', to: 'publications#votes_like'
-                get 'votes_dislike', to: 'publications#votes_dislike'
+              member do                
                 get 'my_vote', to: 'publications#my_vote'
               end
               resources :comment_publications,only: [ :show,:create,:update,:destroy] do
@@ -99,12 +80,7 @@ Rails.application.routes.draw do
                  get 'search' => "publications#search"
               end
             end
-            resources :companies, only: [:index, :show, :destroy] do              
-              member do
-                get 'votes_like', to: 'companies#votes_like' 
-                get 'votes_dislike', to: 'companies#votes_dislike'
-                get 'my_vote', to: 'companies#my_vote'               
-              end 
+            resources :companies, only: [:index, :show, :destroy] do 
               get 'product_bycompany', to: 'products#index'
               collection do
                 get 'search' => "companies#search"
@@ -127,11 +103,6 @@ Rails.application.routes.draw do
             resources :users, only: [ :show]            
             resources :companies do                  
               get 'product_bycompany', to: 'products#index'
-              member do
-                 get 'votes_like', to: 'companies#votes_like' 
-                 get 'votes_dislike', to: 'companies#votes_dislike' 
-                 get 'my_vote', to: 'companies#my_vote'
-              end    
               collection do
                 get 'search' => "companies#search"
               end              
@@ -144,8 +115,6 @@ Rails.application.routes.draw do
             end 
             resources :publications, only: [:index, :show]  do 
                 member do
-                  get 'votes_like', to: 'publications#votes_like' 
-                  get 'votes_dislike', to: 'publications#votes_dislike' 
                   get 'my_vote', to: 'publications#my_vote'  
                 end                
                 collection do
@@ -160,24 +129,22 @@ Rails.application.routes.draw do
                 end
             end
             resources :products do             
-            resources :category_products
-            resources :images
-            resources :comment_products do
-                member do
-                  get 'votes_like', to: 'comment_products#votes_like'
-                  get 'votes_dislike', to: 'comment_products#votes_dislike' 
-                  get 'my_vote', to: 'comment_products#my_vote'            
-                end
+              resources :category_products
+              resources :images
+              resources :comment_products do
+                  member do
+                    get 'votes_like', to: 'comment_products#votes_like'
+                    get 'votes_dislike', to: 'comment_products#votes_dislike' 
+                    get 'my_vote', to: 'comment_products#my_vote'            
+                  end
               end
               member do
-                get 'preview'
-                get 'catego_product', to: 'category_products#catego_product' 
-                get 'stars_prom', to: 'products#stars_prom' 
-                get 'num_votes', to: 'products#num_votes'                
+                  get 'preview'
+                  get 'catego_product', to: 'category_products#catego_product'                                
               end
               collection do 
-                get 'search' => "products#search"                 
-                resources :categories, only: [:index]
+                  get 'search' => "products#search"                 
+                  resources :categories, only: [:index]
               end
             end
           end
@@ -191,9 +158,7 @@ Rails.application.routes.draw do
             get 'my_publications' , to: 'publications#my_publications', on: :member
             resources :users, only: [ :show]             
             resources :publications do
-              member do
-                get 'votes_like', to: 'publications#votes_like' 
-                get 'votes_dislike', to: 'publications#votes_dislike' 
+              member do 
                 get 'my_vote', to: 'publications#my_vote'            
                 post 'votes', to: 'publications#user_vote'
               end              
@@ -219,8 +184,6 @@ Rails.application.routes.draw do
                 end
               end
               member do
-                get 'stars_prom', to: 'products#stars_prom' 
-                get 'num_votes', to: 'products#num_votes'
                 get 'my_vote', to: 'products#my_vote'
                 post 'votes', to: 'products#user_vote' 
                 get 'preview'
@@ -234,8 +197,6 @@ Rails.application.routes.draw do
             resources :companies, only: [:index, :show] do
               get 'product_bycompany', to: 'products#index'
               member do
-                get 'votes_like', to: 'companies#votes_like' 
-                get 'votes_dislike', to: 'companies#votes_dislike'
                 get 'my_vote', to: 'companies#my_vote'  
                 post 'votes', to: 'companies#user_vote'
               end
