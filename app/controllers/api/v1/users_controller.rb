@@ -217,9 +217,9 @@ class Api::V1::UsersController < ApplicationController
  def search    
     
     if params.has_key?(:q)
-        @users = User.users_by_name("%#{params[:q]}%")
-#       render json: @products, :include => [:product]##un helado mayor
-    #          
+        @users_name = User.users_by_name("%#{params[:q]}%")
+        @users_email = User.users_by_email("%#{params[:q]}%",@users_name.pluck("users.id"))
+        @users =   @users_name   + @users_email          
     else
         @users = User.only_users
     
@@ -249,6 +249,7 @@ class Api::V1::UsersController < ApplicationController
           end
     else
       render json: @users, :include =>[:user], each_serializer: UserSerializer,render_attribute:  @parametros
+      
     end
   end
 

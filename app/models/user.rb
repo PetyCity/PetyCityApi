@@ -138,9 +138,14 @@ def self.prueba(name)
   end
 
 
-  def self.users_by_name(word)
-     
-      User.where("users.name_user ILIKE ?",word)
+  def self.users_by_name(word)     
+      where("users.name_user ILIKE ?",word)
+  end
+  def self.users_by_email(word,user)     
+      where("users.email ILIKE ?",word)
+      .where.not(  
+      id: user
+      )
   end
 
 end
