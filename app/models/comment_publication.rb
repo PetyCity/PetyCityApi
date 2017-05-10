@@ -7,7 +7,7 @@ class CommentPublication < ApplicationRecord
 
 
   #Queries
-
+  default_scope {order("created_at ASC")}
   #ver comentarios en especifico
   def self.comment_publication(id)
     where(comment_publications: {

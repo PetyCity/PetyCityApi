@@ -1,6 +1,7 @@
 class Api::V1::CommentProductsController < ApplicationController
   before_action :set_comment_product , only: [:show, :update, :destroy,:votes_dislike,
-                                              :votes_like,:user_vote,:my_vote]
+                                         :votes_like,:user_vote,:my_vote]
+  #after_action :actualizate_votes, only: [:user_vote ] 
   # GET /comment_products
   #/api/v1/costum/users/:user_id/products/:product_id/comment_products
   #/api/v1/products/:product_id/comment_products 
@@ -31,12 +32,14 @@ class Api::V1::CommentProductsController < ApplicationController
                   
                     if !@user.voted_for? @comment_product
                         @user.likes @comment_product
+                        @comment_product.c_pro_votes_like = @comment_product.c_pro_votes_like+1
                         render status: :ok 
                     else
                         if @user.voted_down_on? @comment_product
                           @comment_product.undisliked_by  @user
-                          
                           @user.likes @comment_product
+                          @comment_product.c_pro_votes_dislike = @comment_product.c_pro_votes_dislike-1
+                          @comment_product.c_pro_votes_like = @comment_product.c_pro_votes_like+1
                           render status: :ok
                         else
                             render status: :forbidden #no puede votar dos veces   
@@ -45,11 +48,12 @@ class Api::V1::CommentProductsController < ApplicationController
                 elsif vote_params[:vote] == '-1'
                     if @user.voted_for? @comment_product
                         if @user.voted_down_on? @comment_product
-                           @comment_product.undisliked_by  @user                         
+                           @comment_product.undisliked_by  @user
+                           @comment_product.c_pro_votes_dislike = @comment_product.c_pro_votes_dislike-1                        
                            render status: :ok
                         else
-                          
                           @comment_product.unliked_by @user
+                          @comment_product.c_pro_votes_like = @comment_product.c_pro_votes_like-1
                           render status: :ok       
                         end   
                     else
@@ -58,11 +62,14 @@ class Api::V1::CommentProductsController < ApplicationController
                 else
                     if !@user.voted_for? @comment_product
                         @user.dislikes @comment_product
+                        @comment_product.c_pro_votes_dislike = @comment_product.c_pro_votes_dislike+1
                         render status: :ok
                     else
                         if @user.voted_up_on? @comment_product
                           @comment_product.unliked_by @user
                           @user.dislikes @comment_product
+                          @comment_product.c_pro_votes_dislike = @comment_product.c_pro_votes_dislike+1
+                          @comment_product.c_pro_votes_like = @comment_product.c_pro_votes_like-1
                           render status: :ok                          
                         else
                             render status: :forbidden #no puede votar dos veces   
@@ -76,19 +83,7 @@ class Api::V1::CommentProductsController < ApplicationController
         render status: :bad_request
      end 
   end
-   
-  #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/votes_like
-  def votes_like
-    @voteslike = @comment_product.get_likes
-    render json:  @voteslike.count ,  status: :ok
-  end
-  
-  #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/votes_dislike
-  def votes_dislike    
-    @votesunlike =@comment_product.get_dislikes
-     render json:  @votesunlike.count ,  status: :ok
-  end
-  #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/my_vote
+ #/api/v1/costum/users/:user_id/products/:product_id/comment_products/:id/my_vote
   def my_vote
      if !@user.voted_for? @comment_product           
            render json:  false, status: :ok
@@ -174,7 +169,9 @@ class Api::V1::CommentProductsController < ApplicationController
              end
          end 
     end
-
+    def actualizate_votes          
+      @comment_product.update_columns(c_pro_votes_like: @comment_product.c_pro_votes_like,c_pro_votes_dislike: @comment_product.c_pro_votes_dislike)
+    end
     # Only allow a trusted parameter "white list" through.
     def comment_product_params
       params.require(:comment_product).permit(:body_comment_product, :product_id, :user_id)

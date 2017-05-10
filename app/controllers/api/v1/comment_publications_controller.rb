@@ -1,7 +1,7 @@
 class Api::V1::CommentPublicationsController < ApplicationController
   before_action :set_comment_publication, only: [:show, :update, :destroy,:votes_dislike,
                                               :votes_like,:user_vote,:my_vote]
-
+  after_action :actualizate_votes, only: [:user_vote ] 
   
   def show
     if params.has_key?(:user_id)
@@ -19,12 +19,14 @@ class Api::V1::CommentPublicationsController < ApplicationController
                   
                     if !@user.voted_for? @comment_publication
                         @user.likes @comment_publication
+                        @comment_publication.c_pu_votes_like = @comment_publication.c_pu_votes_like+1
                         render status: :ok 
                     else
                         if @user.voted_down_on? @comment_publication
                           @comment_publication.undisliked_by  @user
-                          
                           @user.likes @comment_publication
+                          @comment_publication.c_pu_votes_dislike = @comment_publication.c_pu_votes_dislike-1
+                          @comment_publication.c_pu_votes_like = @comment_publication.c_pu_votes_like+1
                           render status: :ok
                         else
                             render status: :forbidden #no puede votar dos veces   
@@ -33,11 +35,12 @@ class Api::V1::CommentPublicationsController < ApplicationController
                 elsif vote_params[:vote] == '-1'
                     if @user.voted_for? @comment_publication
                         if @user.voted_down_on? @comment_publication
-                           @comment_publication.undisliked_by  @user                         
+                           @comment_publication.undisliked_by  @user
+                           @comment_publication.c_pu_votes_dislike = @comment_publication.c_pu_votes_dislike-1                         
                            render status: :ok
                         else
-                          
                           @comment_publication.unliked_by @user
+                         @comment_publication.c_pu_votes_like = @comment_publication.c_pu_votes_like-1
                           render status: :ok       
                         end   
                     else
@@ -46,11 +49,14 @@ class Api::V1::CommentPublicationsController < ApplicationController
                 else
                     if !@user.voted_for? @comment_publication
                         @user.dislikes @comment_publication
+                        @comment_publication.c_pu_votes_dislike = @comment_publication.c_pu_votes_dislike+1
                         render status: :ok
                     else
                         if @user.voted_up_on? @comment_publication
                           @comment_publication.unliked_by @user
                           @user.dislikes @comment_publication
+                          @comment_publication.c_pu_votes_dislike = @comment_publication.c_pu_votes_dislike+1
+                          @comment_publication.c_pu_votes_like = @comment_publication.c_pu_votes_like-1
                           render status: :ok                          
                         else
                             render status: :forbidden #no puede votar dos veces   
@@ -64,18 +70,7 @@ class Api::V1::CommentPublicationsController < ApplicationController
         render status: :bad_request
      end 
   end
-   
-  #/api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/votes_like
-  def votes_like
-    @voteslike = @comment_publication.get_likes
-    render json:  @voteslike.count ,  status: :ok
-  end
-  
-  #/api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/votes_dislike
-  def votes_dislike    
-    @votesunlike =@comment_publication.get_dislikes
-     render json:  @votesunlike.count ,  status: :ok
-  end
+ 
   # /api/v1/costum/users/:user_id/publications/:publication_id/comment_publications/:id/my_vote
   def my_vote
      if !@user.voted_for? @comment_publication           
@@ -151,7 +146,11 @@ class Api::V1::CommentPublicationsController < ApplicationController
          end 
     end
 
-
+    def actualizate_votes   
+             
+      @comment_publication.update_columns(c_pu_votes_like: @comment_publication.c_pu_votes_like,c_pu_votes_dislike: @comment_publication.c_pu_votes_dislike)
+    end
+    
     # Only allow a trusted parameter "white list" through.
     def comment_publication_params
       params.require(:comment_publication).permit(:body_comment_Publication, :publication_id, :user_id)

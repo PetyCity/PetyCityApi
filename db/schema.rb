@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508225931) do
+ActiveRecord::Schema.define(version: 20170510214226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,8 +45,10 @@ ActiveRecord::Schema.define(version: 20170508225931) do
     t.text     "body_comment_product"
     t.integer  "product_id"
     t.integer  "user_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "c_pro_votes_like",     default: 0
+    t.integer  "c_pro_votes_dislike",  default: 0
     t.index ["product_id"], name: "index_comment_products_on_product_id", using: :btree
     t.index ["user_id"], name: "index_comment_products_on_user_id", using: :btree
   end
@@ -57,6 +59,8 @@ ActiveRecord::Schema.define(version: 20170508225931) do
     t.integer  "user_id",                               null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.integer  "c_pu_votes_like",          default: 0
+    t.integer  "c_pu_votes_dislike",       default: 0
     t.index ["publication_id"], name: "index_comment_publications_on_publication_id", using: :btree
     t.index ["user_id"], name: "index_comment_publications_on_user_id", using: :btree
   end

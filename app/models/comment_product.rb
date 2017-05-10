@@ -4,7 +4,7 @@ class CommentProduct < ApplicationRecord
   belongs_to :user
   validates :user , presence: true
   validates :body_comment_product, presence: true ,allow_blank: false
-  
+  default_scope {order("created_at ASC")} 
   #ver comentarios en especifico
   def self.comment_by_ids(id, page = 1, per_page = 10)
     where(comment_products: {
