@@ -55,13 +55,7 @@ def self.prueba(name)
     .paginate(:page => page,:per_page => per_page)
   end
   
-  #Para ver todos los usuarios segun un rol especifico
-  def self.users_by_rol(type)
-    where(users: {
-        rol: type,
-        active: true
-      })
-  end 
+  
   
   def self.user_by_id_admin(id)
     find_by_id(id)
@@ -147,5 +141,13 @@ def self.prueba(name)
       id: user
       )
   end
-
+  #Para ver todos los usuarios segun un rol especifico
+  def self.users_by_rol(type,user)
+    where.not(  
+      id: user)
+    .where(users: {
+        rol: type,
+        active: true
+      })
+  end 
 end

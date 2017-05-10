@@ -215,15 +215,23 @@ class Api::V1::UsersController < ApplicationController
 
 
  def search    
-    
-    if params.has_key?(:q)
+    if params.has_key?(:q) and  params.has_key?(:rol_id)
         @users_name = User.users_by_name("%#{params[:q]}%")
         @users_email = User.users_by_email("%#{params[:q]}%",@users_name.pluck("users.id"))
-        @users =   @users_name   + @users_email          
+        @users0 =   @users_name   + @users_email 
+        @users =  User.users_by_rol(params[:rol_id],@users0.pluck("users.id"))   
+    elsif params.has_key?(:q)
+        @users_name = User.users_by_name("%#{params[:q]}%")
+        @users_email = User.users_by_email("%#{params[:q]}%",@users_name.pluck("users.id"))
+        @users =   @users_name   + @users_email  
+    elsif params.has_key?(:rol_id) 
+        @users =  User.users_by_rol(params[:rol_id],-1)
     else
-        @users = User.only_users
-    
+        @users = User.only_users       
     end
+
+
+   
 
     
     if params.has_key?(:sort)
