@@ -30,19 +30,26 @@ class Api::V1::CompaniesController < ApplicationController
 
     #@companies = Company.product_sales(1)
     #render json: @companies
-
+#http://localhost:3000/api/v1/companies/search?q=a&rol_id=1
+#http://localhost:3000/api/v1/companies/search?q=huesiots&permission=true&rol_id=1
   def search    
     
-    
-    if params.has_key?(:q) and  params.has_key?(:rol_id)
+    if params.has_key?(:q) and  params.has_key?(:rol_id) and params.has_key?(:permission) 
+        @companies = Company.companies_by_name_category_permission("%#{params[:q]}%",params[:rol_id],params[:permission])    
+    elsif params.has_key?(:q) and  params.has_key?(:rol_id)
         @companies = Company.companies_by_name_category("%#{params[:q]}%",params[:rol_id])        
+    elsif  params.has_key?(:rol_id) and params.has_key?(:permission) 
+        @companies = Company.company_by_rol_permission(params[:rol_id],params[:permission])
+    elsif params.has_key?(:q) and params.has_key?(:permission) 
+        @companies = Company.company_by_name_permission("%#{params[:q]}%",params[:permission])
     elsif params.has_key?(:q)
         @companies = Company.companies_by_name("%#{params[:q]}%")
     elsif params.has_key?(:rol_id) 
-        @companies = Company.company_by_rol(params[:rol_id])
+        @companies = Company.company_by_rol(params[:rol_id])         
+    elsif params.has_key?(:permission) 
+        @companies = Company.company_by_permission(params[:permission])
     else
-        @companies = Company.only_companies 
-    
+        @companies = Company.only_companies     
     end
     if params.has_key?(:sort)
           str = params[:sort]

@@ -27,7 +27,7 @@ class Company < ApplicationRecord
 
   def self.companies_by_name(word)
      includes(:user,:products)
-     .where("companies.name_comp LIKE ? ",word)
+     .where("companies.name_comp ILIKE ? ",word)
      .where(companies: {
         active: true
      })
@@ -68,20 +68,56 @@ class Company < ApplicationRecord
 
   def self.companies_by_name_category(word,rol)
      includes(:user,:products)
-     .where("companies.name_comp LIKE ? ",word)
+     .where("companies.name_comp ILIKE ? ",word)
      .where(companies: {
         c_rol:rol,
         active: true
      })
   end
   def self.company_by_rol(rol)
+    includes(:user,:products)
      where(
         c_rol:rol,
         active: true
      )   
-     .order('random()')  
-      
+     .order('random()')       
   end
-
+  def self.company_by_rol_permission(rol,perm)
+    includes(:user,:products)
+     where(
+        c_rol:rol,
+        permission:perm,
+        active: true
+     )   
+     .order('random()')       
+  end
+  def self.company_by_name_permission(word,perm)
+     includes(:user,:products)
+     .where("companies.name_comp ILIKE ? ",word)
+     .where(
+        permission:  perm,
+        active: true
+     )   
+     .order('random()')       
+  end
+  def self.company_by_permission(perm)
+     includes(:user,:products)
+     .where(
+        permission:perm,
+        active: true
+     )   
+     .order('random()')       
+  end
+  
+  def self.companies_by_name_category_permission(word,rol,perm)
+     includes(:user,:products)
+     .where("companies.name_comp ILIKE ? ",word)
+     .where(
+        c_rol:rol,
+        permission:  perm,
+        active: true
+     )   
+     .order('random()')       
+  end
 
 end

@@ -141,13 +141,41 @@ def self.prueba(name)
       id: user
       )
   end
+  
+  def self.users_by_name_rol(word,ro)     
+      where("users.name_user ILIKE ?",word)
+      .where(
+      rol: ro,
+      active: true
+      ) 
+  end
+  def self.users_by_email_rol(word,user,ro)     
+      where("users.email ILIKE ?",word)
+      .where.not(  
+      id: user
+      )
+      .where(
+      rol: ro,
+      active: true
+      ) 
+  end
   #Para ver todos los usuarios segun un rol especifico
   def self.users_by_rol(type,user)
-    where.not(  
-      id: user)
-    .where(users: {
-        rol: type,
-        active: true
-      })
+    where(  
+      id: user
+      )
+    .where(
+      rol: type,
+      active: true
+      )    
   end 
+  
+  def self.users_by_rol_only(type)
+    where(       
+      rol: type,
+      active: true
+      )    
+  end 
+  
+  
 end

@@ -216,16 +216,16 @@ class Api::V1::UsersController < ApplicationController
 
  def search    
     if params.has_key?(:q) and  params.has_key?(:rol_id)
-        @users_name = User.users_by_name("%#{params[:q]}%")
-        @users_email = User.users_by_email("%#{params[:q]}%",@users_name.pluck("users.id"))
-        @users0 =   @users_name   + @users_email 
-        @users =  User.users_by_rol(params[:rol_id],@users0.pluck("users.id"))   
+        @users_name = User.users_by_name_rol("%#{params[:q]}%",params[:rol_id])
+        @users_email = User.users_by_email_rol("%#{params[:q]}%",@users_name.pluck("users.id"),params[:rol_id])
+        @users =   @users_name   + @users_email 
+       # @users =  User.users_by_rol(params[:rol_id],@users0.pluck("users.id"))   
     elsif params.has_key?(:q)
         @users_name = User.users_by_name("%#{params[:q]}%")
         @users_email = User.users_by_email("%#{params[:q]}%",@users_name.pluck("users.id"))
         @users =   @users_name   + @users_email  
     elsif params.has_key?(:rol_id) 
-        @users =  User.users_by_rol(params[:rol_id],-1)
+        @users =  User.users_by_rol_only(params[:rol_id])
     else
         @users = User.only_users       
     end
@@ -237,10 +237,8 @@ class Api::V1::UsersController < ApplicationController
     if params.has_key?(:sort)
           str = params[:sort]
           if params[:sort][0] == "-"
-              str= str[1,str.length]
-             
+              str= str[1,str.length]            
               if str == "created_at"||str == "document"|| str == "name_user" || str == "rol" || str == "id" || str =="email" 
-               
                 @users =  @users.order("#{str}": :desc)
                 render json: @users, :include =>[:user], each_serializer: UserSerializer,render_attribute:  @parametros
               else
