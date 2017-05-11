@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api do     
     namespace :v1 do 
        root to: "products#index"
+       resources :contacts, only: [:create]
        get 'home/mostsales', to: 'products#productsmostsales'      
        get 'home/lastproducts', to: 'products#lastproducts'
        resources :products, only: [:index, :show] do
