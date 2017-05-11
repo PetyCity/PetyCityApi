@@ -40,6 +40,11 @@ Rails.application.routes.draw do
           resources :users, only: [ :show, :update, :destroy] do                
             get 'home/mostsales', to: 'products#productsmostsales'      
             get 'home/lastproducts', to: 'products#lastproducts'
+            resources :contacts, only: [:index, :show,:destroy,:update] do
+              collection do 
+                get 'search' => "contacts#search"
+              end
+            end
             resources :users, only: [:index, :show, :destroy] do
               collection do
                 get 'my_publications', to: 'publications#my_publications'
@@ -101,6 +106,7 @@ Rails.application.routes.draw do
             get 'home/mostsales', to: 'product#productsmostsales'      
             get 'home/lastproducts', to: 'product#lastproducts'
             get 'shopsales' , to: 'product#productssales'
+            resources :contacts, only: [:create]
             resources :users, only: [ :show]            
             resources :companies do                  
               get 'product_bycompany', to: 'products#index'
@@ -157,6 +163,7 @@ Rails.application.routes.draw do
             get 'home/lastproducts', to: 'products#lastproducts'
             get 'productsbought' , to: 'products#productsbought'            
             get 'my_publications' , to: 'publications#my_publications', on: :member
+            resources :contacts, only: [:create]
             resources :users, only: [ :show]             
             resources :publications do
               member do 

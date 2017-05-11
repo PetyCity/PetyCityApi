@@ -8,12 +8,12 @@ class Company < ApplicationRecord
   has_many :category_products , through: :products, dependent: :destroy
   #has_many :sales, through: :products
   #validates :name, format: { with: /\A[a-zA-Z]+\z/,message: "only allows letters" } , length: { minimum: 5 }
-  validates :name_comp, length: { minimum: 3 }, uniqueness: { case_sensitive: false }, presence: true
-   validates :address, length: { minimum: 5 }, presence: true, uniqueness: { case_sensitive: false }
-   validates :city, length: { minimum: 3 }, presence: true
+  validates :name_comp,  length: { in: 3..30 }, uniqueness: { case_sensitive: false }, presence: true
+   validates :address,  length: { in: 3..30 }, presence: true, uniqueness: { case_sensitive: false }
+   validates :city,  length: { in: 3..30 }, presence: true
    validates :phone, numericality: { only_integer: true ,
-          message: "only allows numbers " }, length: { minimum: 7
-     }   , uniqueness: { case_sensitive: false }
+          message: "only allows numbers " }, length: { in: 6..20 },
+           uniqueness: { case_sensitive: false }
   validates :nit, numericality: { only_integer: true ,
           message: "only allows numbers " }, length: { is: 10
      }, uniqueness: { case_sensitive: false }, presence: true

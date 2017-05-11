@@ -13,7 +13,7 @@ class UserSerializer < ActiveModel::Serializer
     attribute :image,if: :render_image?
     has_one :cart, dependent: :destroy
     has_one :company, dependent: :destroy   
-
+    has_many :contacts
     has_many :publications, dependent: :destroy
     has_many :comment_Publications, dependent: :destroy
     has_many :comment_Products, dependent: :destroy

@@ -12,7 +12,7 @@ class User < ApplicationRecord
    has_many :sales, through: :cart
   has_many :s_products , through: :sales, source: :product
   has_many :t_products , through: :transactions, source: :product
-  
+  has_many :contacts
   has_many :co_sales, through: :c_products, source: :sales
 
 
@@ -26,12 +26,12 @@ def self.prueba(name)
 
   #VALIDACIONES
 
-  validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
-     }, length: { minimum: 5 }, presence: true
+   validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
+     }, length: { in: 5..30 }, presence: true
 
   validates :document, numericality: { only_integer: true ,
-              message: "only allows numbers " }, length: { minimum: 5
-             }, uniqueness: { case_sensitive: false }, presence: true
+              message: "only allows numbers " },  length: { in: 5..14 },
+              uniqueness: { case_sensitive: false }, presence: true
 
   enum rol: [ :admin, :company, :customer, :company_customer ]
 
@@ -70,14 +70,14 @@ def self.prueba(name)
   
    #Para  costummer
   def self.user_custommer_by_id(id)
-    includes(:comment_Products,:comment_Publications,:publications,
+    includes(:contacts,:comment_Products,:comment_Publications,:publications,
     cart: :sales)
      .find_by_id(id)
   end
   
    #Para company-costummer
   def self.user_comp_custommer_by_id(id)
-    includes(:company,:comment_Products,:comment_Publications,:publications,
+    includes(:contacts,:company,:comment_Products,:comment_Publications,:publications,
     cart: :sales, c_products: :sales)
      .find_by_id(id)
   end 

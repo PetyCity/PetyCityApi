@@ -41,13 +41,13 @@ class Api::V1::UsersController < ApplicationController
                        render json: @user, :include => [],  each_serializer: UserSerializer,render_attribute:  @parametros
                 elsif  @user.company?
                        @user = User.user_company_by_id(params[:id])
-                       render json: @user, :include => [ :company, :products], each_serializer: UserSerializer,render_attribute:  @parametros
+                       render json: @user, :include => [:contacts, :company, :products], each_serializer: UserSerializer,render_attribute:  @parametros
                 elsif  @user.company_customer?
                        @user = User.user_custommer_by_id(params[:id])
-                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications, :cart, :sales,:company, :products], each_serializer: UserSerializer,render_attribute:  @parametros
+                       render json: @user, :include => [:contacts,:comment_Products,:comment_Publications,:publications, :cart, :sales,:company, :products], each_serializer: UserSerializer,render_attribute:  @parametros
                 else 
                        @user = User.user_custommer_by_id(params[:id])                   
-                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications,:cart, :sales], each_serializer: UserSerializer,render_attribute:  @parametros 
+                       render json: @user, :include => [:contacts,:comment_Products,:comment_Publications,:publications,:cart, :sales], each_serializer: UserSerializer,render_attribute:  @parametros 
                 end                         
                               
             else                  
@@ -67,17 +67,17 @@ class Api::V1::UsersController < ApplicationController
     else                         
                 if     @user.admin?                                 
                        @user = User.user_by_id_admin(params[:id])
-                       render json: @user, :include => [], each_serializer: UserSerializer,render_attribute:  @parametros
+                       render json: @user, :include => [:contacts], each_serializer: UserSerializer,render_attribute:  @parametros
                 elsif  @user.company?
                        @user = User.user_company_by_id(params[:id])
-                       render json: @user, :include => [ :company,c_products: :sales], each_serializer: UserSerializer,render_attribute:  @parametros
+                       render json: @user, :include => [ :contacts,:company,c_products: :sales], each_serializer: UserSerializer,render_attribute:  @parametros
                 elsif  @user.company_customer?
                        @user = User.user_comp_custommer_by_id(params[:id])
-                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications, :cart, :sales,:company,c_products: :sales], each_serializer: UserSerializer,render_attribute:  @parametros
+                       render json: @user, :include => [:contacts,:comment_Products,:comment_Publications,:publications, :cart, :sales,:company,c_products: :sales], each_serializer: UserSerializer,render_attribute:  @parametros
        
                 else 
                        @user = User.user_custommer_by_id(params[:id])                   
-                       render json: @user, :include => [:comment_Products,:comment_Publications,:publications,:cart, :sales], each_serializer: UserSerializer,render_attribute:  @parametros 
+                       render json: @user, :include => [:contacts,:comment_Products,:comment_Publications,:publications,:cart, :sales], each_serializer: UserSerializer,render_attribute:  @parametros 
                 end         
          end   
   end

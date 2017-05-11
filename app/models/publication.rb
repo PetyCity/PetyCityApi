@@ -9,8 +9,8 @@ class Publication < ApplicationRecord
   has_many :comment_Publications, dependent: :destroy
   has_many :c_user, through: :comment_Publications,source: :user
   
-  validates :title, length: { minimum: 10 }, presence: true ,allow_blank: false
-  validates :body_publication, presence: true ,allow_blank: true
+  validates :title, length: { in: 3..20 },presence: true ,allow_blank: false
+  validates :body_publication, presence: true ,allow_blank: true,length: { maximum: 1000 }
   validates :user , presence: true
 
   #Queries
