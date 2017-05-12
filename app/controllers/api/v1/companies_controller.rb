@@ -122,7 +122,7 @@ class Api::V1::CompaniesController < ApplicationController
                     else
                          render status: :forbidden                     
                     end
-                else
+                else#0
                     if !@user.voted_for? @company
                         @user.dislikes @company
                         @company.c_votes_dislike = @company.c_votes_dislike+1

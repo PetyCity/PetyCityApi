@@ -99,7 +99,8 @@ class Api::V1::ProductsController < ApplicationController
   def productsmostsales
    @products = Product.products_most_sales.limit(4).pluck("products.id") 
    @products = Product.products_by_id(@products)   
-    render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros  end
+    render json: @products, :include => [] , each_serializer: ProductSerializer,render_attribute:  @parametros
+  end
 
   def productrandom
    @products = Product.rand
@@ -251,20 +252,18 @@ class Api::V1::ProductsController < ApplicationController
  # POST /products
 #/api/v1/company/users/:user_id/products
   def create
-    @user = User.find_by_id(params[:user_id])
-
-    if !@user.company? && !@user.company_customer?
+    @user = User.company_by_user_id(params[:user_id])
+    if !@user.company? && !@user.company_customer? 
       render status: :forbidden
-
-    else
-
+    elsif  @user.company.permission == true
       @product = Product.new(product_params)
-
       if @product.save
-        render json: @product, status: :created
+        render json: @product, status: :created, each_serializer: ProductSerializer,render_attribute:  @parametros 
       else
-        render json: @product, status: :unprocessable_entity
+        render json: @product, status: :unprocessable_entity, each_serializer: ProductSerializer,render_attribute:  @parametros 
       end
+    else
+      render status: :forbidden
     end
   end
 
@@ -272,7 +271,6 @@ class Api::V1::ProductsController < ApplicationController
 #/api/v1/company/users/:user_id/products/:id
   def update
     @user = User.find_by_id(params[:user_id])
-
     if !@user.company? && !@user.company_customer?
       render status: :forbidden
     else 
@@ -348,7 +346,6 @@ class Api::V1::ProductsController < ApplicationController
     def select_product_params 
         @parametros =  "product,"+params[:select_product].to_s  
     end
-    # Only allow a trusted parameter "white list" through.
     def product_params
       params.require(:product).permit(:name_product, :description, :status, :value, :amount, :company_id)
     end
