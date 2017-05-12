@@ -1,5 +1,5 @@
 class CompanyMailer < ApplicationMailer
-  default from: "2017petcity@gmail.com"
+  default from: ENV["EMAIL_USERNAME"]
 
   def authorize_company(company)
      @company = company
