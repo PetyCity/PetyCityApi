@@ -3,6 +3,7 @@ class Api::V1::CompaniesController < ApplicationController
                                      :votes_dislike,:votes_like,:user_vote,:my_vote]
   before_action :select_company_params, only: [:index,:show, :update, :destroy,:create,:search]
   after_action :actualizate_votes, only: [:user_vote ]
+  after_action :actualizate_products, only: [:update ]
   
   #/api/v1/companies
   #/api/v1/admin/users/:user_id/companies
@@ -173,18 +174,26 @@ class Api::V1::CompaniesController < ApplicationController
 
   # /api/v1/company/users/:user_id/companies/:id
   def update
-    if  @user.customer? || @user.admin?#cliente y administradores no pueden crear
+    if  @user.customer? #cliente y administradores no pueden crear
             render status: :forbidden     
       else#usuario compalñia
+            @params =company_params
+            @actualizate = 0
+            if @params["permission"] == 'true'  and @company.permission ==  false
+              message = CompanyMailer.authorize_company(@company)
+              message.deliver_now 
+              @actualizate = 1
+            elsif @params["permission"] == 'false'  and @company.permission ==  true  
+               message = CompanyMailer.disavow_company(@company)
+               message.deliver_now 
+               @actualizate = -1
+            end 
             if @company.update(company_params)
-              render json: @company, :include =>[], each_serializer: CompanySerializer,render_attribute: @parametros  
+              render json: @company, :include =>[:user], each_serializer: CompanySerializer,render_attribute: @parametros  
             else
-              render json: @company, :include =>[], status: :unprocessable_entity, each_serializer: CompanySerializer,render_attribute: @parametros  
+              render json: @company, :include =>[:user], status: :unprocessable_entity, each_serializer: CompanySerializer,render_attribute: @parametros  
             end
       end   
-      
-      
-    
   end
 
   # DELETE /companies/1
@@ -228,7 +237,7 @@ class Api::V1::CompaniesController < ApplicationController
             if  @user.nil?
                   render status:  :forbidden
             end
-          #  if  current_user.id != params[:user_id]) 
+          #  if  current_user.id != params[:user_id].to_i 
            #       render status:  :forbidden
            # end    
             if params.has_key?(:id)
@@ -248,6 +257,19 @@ class Api::V1::CompaniesController < ApplicationController
     end
     def actualizate_votes    
       @company.update_columns(c_votes_like: @company.c_votes_like,c_votes_dislike: @company.c_votes_dislike)
+    end
+    def actualizate_products    
+        if @actualizate == -1
+          @company.products.each { |elemento| 
+            elemento.active = false
+            elemento.update_columns(active: false)  
+          }
+        elsif @actualizate == 1
+          @company.products.each { |elemento| 
+            elemento.active = true
+            elemento.update_columns(active: true)  
+          }
+        end
     end
     def select_company_params 
         @parametros =  "Company,"+params[:select_company].to_s  

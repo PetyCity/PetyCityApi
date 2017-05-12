@@ -145,8 +145,11 @@ end
 
 
   def self.products_most_sales
-      joins( :sales)
-      .includes( :images)
+     joins( :sales)
+     .includes( :images)
+     .where(products: {
+        active: true
+     })
      .group("products.id")
      .order("SUM(sales.amount) DESC")          
     end
