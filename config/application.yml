@@ -1,0 +1,9 @@
+DATABASE_USERNAME: PetyCity
+DATABASE_PASSWORD: petycity
+DATABASE_D_NAME: PetyCity_development
+DATABASE_P_NAME: PetyCity_production
+DATABASE_T_NAME: PetyCity_test
+DATABASE_T_NAME: PetyCity_test
+EMAIL_USERNAME: "2017petcity@gmail.com"
+EMAIL_PASSWORD: petycity
+EMAIL_USERNAME_HELP: "pethelp2017@gmail.com"

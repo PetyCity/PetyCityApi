@@ -1,14 +1,14 @@
 class ContactMailer < ActionMailer::Base
-  default from: "2017petcity@gmail.com"
+  default from: ENV["EMAIL_USERNAME"]
 
   def contact_us(user)
      @user = user
-       mail(to: "pethelp2017@gmail.com",
+       mail(to: ENV["EMAIL_USERNAME_HELP"],
          subject: "Support")
   end
   def contact_us_user_active(user)
      @user = user
-       mail(to: "pethelp2017@gmail.com",
+       mail(to: ENV["EMAIL_USERNAME_HELP"],
          subject: "Client Support")
   end
   def confirm(user)
