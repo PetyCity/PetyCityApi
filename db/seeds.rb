@@ -46,7 +46,7 @@ end
 
 
 
- for index in 1..400
+  400.times do |index|
 
 #   puts product_id: index%50
   if index % 6 == 0
@@ -86,37 +86,41 @@ end
      )
    end
  end
+  
+ 
+ 100.times do |index|
 
-
- for index in 1..100
    if index % 4 == 2
+
+     Publication.create(
+       title: Faker::Book.title ,
+       body_publication: Faker::Lorem.paragraph ,
+       user_id: 6,
+       image_publication: File.open(File.join(Rails.root, '/test/img/producto6.png'))
+     )
+    elsif index % 4 == 3
       Publication.create(
-        title: Faker::Lorem.sentence,
-        body_publication: Faker::Lorem.paragraphs,
-        user_id: 4,
-        image_publication:File.open(File.join(Rails.root, '/test/img/producto6.png'))
-      )
-   elsif index % 4 == 3
-      Publication.create(
-        title: Faker::Lorem.sentence,
-        body_publication: Faker::Lorem.paragraphs,
+        title: Faker::Book.title ,
+        body_publication: Faker::Lorem.paragraph ,
         user_id: 5,
-        image_publication:File.open(File.join(Rails.root, '/test/img/producto2.jpg'))
-       )
-   elsif index % 4 == 1
-        Publication.create(
-        title: Faker::Lorem.sentence,
-        body_publication: Faker::Lorem.paragraphs,
-        user_id: 6,
-        image_publication:File.open(File.join(Rails.root, '/test/img/producto1.png'))
+        image_publication: File.open(File.join(Rails.root, '/test/img/producto6.png'))
       )
-   else
-        Publication.create(
-        title: Faker::Lorem.sentence,
-        body_publication: Faker::Lorem.paragraphs,
-        user_id: 7,
-        image_publication:File.open(File.join(Rails.root, '/test/img/producto4.jpg'))
+     elsif index % 4 == 1
+       Publication.create(
+         title: Faker::Book.title ,
+         body_publication: Faker::Lorem.paragraph ,
+         user_id: 7,
+         image_publication: File.open(File.join(Rails.root, '/test/img/producto6.png'))
        )
+
+   else
+
+     Publication.create(
+       title: Faker::Book.title ,
+       body_publication: Faker::Lorem.paragraph ,
+       user_id: 14,
+       image_publication: File.open(File.join(Rails.root, '/test/img/producto6.png'))
+     )
     end
  end
 
