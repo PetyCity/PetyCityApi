@@ -10,8 +10,8 @@ class CreateCompanies < ActiveRecord::Migration[5.0]
       t.references :user, foreign_key: true
       t.boolean :active,default:true
       t.string :image_company
-      t.decimal :longitude, foreign_key: true
-      t.decimal :latitude,default:true
+      t.decimal :longitude
+      t.decimal :latitude
       t.integer :c_rol
       t.integer :c_votes_like,default:0
       t.integer :c_votes_dislike,default:0

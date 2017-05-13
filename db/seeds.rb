@@ -6,7 +6,7 @@ def generate_code(number)
 end
 
 rols = ["admin","company","customer","company_customer"]
-
+rols_comp = ["veterinary","wholesaler","hairdressing","pethotel","trainer"]
 
 # Company
 # 1.times do |index|
@@ -19,7 +19,8 @@ rols = ["admin","company","customer","company_customer"]
 #    phone: Faker::Number.number(7)  ,
 #    permission: false,
 #    user_id: 1 ,
-#    image_company: File.open(File.join(Rails.root, '/test/img/park.png'))
+#    image_company: File.open(File.join(Rails.root, '/test/img/park.png')),
+#    c_rol: rols_comp[ rand 5]
 #   )
   
 # end
