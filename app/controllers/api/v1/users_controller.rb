@@ -20,7 +20,7 @@ class Api::V1::UsersController < ApplicationController
   def users_by_rol    
     if @user_admin.rol == 'admin'   
         if params[:rol] == 'admin' || params[:rol] == 'company' || params[:rol] == 'customer' || params[:rol] == 'company_customer'      
-            @users = User.users_by_rol( params[:rol] )    
+            @users = User.users_by_rol_only( params[:rol] )    
             render json: @users, :include => []  , each_serializer: UserSerializer,render_attribute:  @parametros
         else
             render status: :not_found
