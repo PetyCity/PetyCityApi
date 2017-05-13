@@ -9,35 +9,34 @@ rols = ["admin","company","customer","company_customer"]
 rols_comp = ["veterinary","wholesaler","hairdressing","pethotel","trainer"]
 
 # Company
-# 1.times do |index|
- 
-#  Company.create(
-#    nit: Faker::Number.unique.number(10),
-#    name_comp: Faker::Company.name , 
-#    address: Faker::Address.street_address,
-#    city: Faker::Address.city,
-#    phone: Faker::Number.number(7)  ,
-#    permission: false,
-#    user_id: 1 ,
-#    image_company: File.open(File.join(Rails.root, '/test/img/park.png')),
-#    c_rol: rols_comp[ rand 5]
-#   )
-  
-# end
+ 2.times do |index|
+
+ Company.create(
+    nit: Faker::Number.unique.number(10),
+    name_comp: Faker::Company.name ,
+    address: Faker::Address.street_address,
+    city: Faker::Address.city,
+    phone: Faker::Number.number(7)  ,
+    permission: false,
+    user_id: (index+1) ,
+    image_company: File.open(File.join(Rails.root, '/test/img/park.png')),
+    c_rol: rols_comp[ rand 5]
+   )
+
+ end
 
 
 
 
-49.times do |index|
+200.times do |index|
    Product.create(
-   name_product: Faker::Pokemon.unique.name,
-   description: Faker::Pokemon.unique.location,
+   name_product: Faker::Pokemon.name,
+   description: Faker::Pokemon.location,
    status: true,
    value: Faker::Number.decimal(2, 3) ,
    amount: Faker::Number.between(1, 30),
-   company_id: 2
+   company_id: (index%2)+1
  )
-  
 end
 #for num in 1..100
  # valuee= rand 1..1100
@@ -46,140 +45,119 @@ end
 #end
 
 
-  
-# for index in 1..200
-  
+
+ for index in 1..400
 
 #   puts product_id: index%50
-#  if index % 6 == 0 
-#    Image.create( 
-#     name_image: File.open(File.join(Rails.root, '/test/img/producto1.png')),
-#     product_id: ( index % 50 ) +3
-#    )
-  
-#  elsif index % 6 ==1
-#    Image.create( 
-#     name_image: File.open(File.join(Rails.root, '/test/img/producto2.jpg')),
-#     product_id:  ( index % 50 ) +3
-#    )
-   
-#  elsif index % 6 == 2
-#    Image.create( 
-#    name_image: File.open(File.join(Rails.root, '/test/img/producto3.jpg')),
-#    product_id:  ( index % 50 ) +3
-#    )
+  if index % 6 == 0
+    Image.create(
+     name_image: File.open(File.join(Rails.root, '/test/img/producto1.png')),
+     product_id: ( index % 200 ) +1
+    )
 
-#  elsif index % 6 == 3
-#     Image.create( 
-#     name_image: File.open(File.join(Rails.root, '/test/img/producto4.jpg')),
-#     product_id:  ( index % 50 ) +3
-#     )
+  elsif index % 6 ==1
+    Image.create(
+     name_image: File.open(File.join(Rails.root, '/test/img/producto2.jpg')),
+     product_id:  ( index % 200 ) +1
+    )
 
-#   elsif index % 6 == 4
-#     Image.create( 
-#     name_image: File.open(File.join(Rails.root, '/test/img/producto5.jpg')),
-#     product_id:  ( index % 50 ) +3
-#     )
+  elsif index % 6 == 2
+    Image.create(
+    name_image: File.open(File.join(Rails.root, '/test/img/producto3.jpg')),
+    product_id: ( index % 200 ) +1
+    )
 
-#   else
+  elsif index % 6 == 3
+     Image.create(
+     name_image: File.open(File.join(Rails.root, '/test/img/producto4.jpg')),
+     product_id:  ( index % 200 ) +1
+     )
 
-#     Image.create( 
-#      name_image: File.open(File.join(Rails.root, '/test/img/producto6.png')),
-#      product_id:  ( index % 50 ) +3
-#     )
+   elsif index % 6 == 4
+     Image.create(
+     name_image: File.open(File.join(Rails.root, '/test/img/producto5.jpg')),
+     product_id:  ( index % 200 ) +1
+     )
 
-#   end
-  
-
-# end
+   else
+     Image.create(
+      name_image: File.open(File.join(Rails.root, '/test/img/producto6.png')),
+      product_id:  ( index % 200 ) +1
+     )
+   end
+ end
 
 
-#  for index in 2..12
-
-#   if index % 6 == 2
-
-#      Publication.create( 
-
-#        title: Faker::Lorem.sentence,
-#        body_publication: Faker::Lorem.paragraphs,
-#        user_id: 3,
-#        image_publication:File.open(File.join(Rails.root, '/test/img/producto6.png'))
-#      )
-
-#     elsif index % 6 == 3
-
-
-#      Publication.create( 
-#        title: Faker::Lorem.sentence,
-#        body_publication: Faker::Lorem.paragraphs,
-#        user_id: 3,
-#        image_publication:File.open(File.join(Rails.root, '/test/img/producto2.jpg'))
-#       )
-
-#     elsif index % 6 == 4
-
-#       Publication.create( 
-#       title: Faker::Lorem.sentence,
-#        body_publication: Faker::Lorem.paragraphs,
-#        user_id: 3,
-#        image_publication:File.open(File.join(Rails.root, '/test/img/producto1.png'))
-#      )
-
-#   else
-
-#        Publication.create( 
-#        title: Faker::Lorem.sentence,
-#        body_publication: Faker::Lorem.paragraphs,
-#        user_id: 3,
-#        image_publication:File.open(File.join(Rails.root, '/test/img/producto4.jpg'))
-      
-#       )
-#    end
-# end
+ for index in 1..100
+   if index % 4 == 2
+      Publication.create(
+        title: Faker::Lorem.sentence,
+        body_publication: Faker::Lorem.paragraphs,
+        user_id: 4,
+        image_publication:File.open(File.join(Rails.root, '/test/img/producto6.png'))
+      )
+   elsif index % 4 == 3
+      Publication.create(
+        title: Faker::Lorem.sentence,
+        body_publication: Faker::Lorem.paragraphs,
+        user_id: 5,
+        image_publication:File.open(File.join(Rails.root, '/test/img/producto2.jpg'))
+       )
+   elsif index % 4 == 1
+        Publication.create(
+        title: Faker::Lorem.sentence,
+        body_publication: Faker::Lorem.paragraphs,
+        user_id: 6,
+        image_publication:File.open(File.join(Rails.root, '/test/img/producto1.png'))
+      )
+   else
+        Publication.create(
+        title: Faker::Lorem.sentence,
+        body_publication: Faker::Lorem.paragraphs,
+        user_id: 7,
+        image_publication:File.open(File.join(Rails.root, '/test/img/producto4.jpg'))
+       )
+    end
+ end
 
 
- # 12.times do |index|
- # CommentPublication.create( 
- #   body_comment_Publication: Faker::Lorem.paragraph,
- #   publication_id: index%12 , 
- #   user_id: 2
-  
- # )
+  200.times do |index|
+    CommentPublication.create(
+    body_comment_Publication: Faker::Lorem.paragraph,
+    publication_id: (index%100) +1 ,
+    user_id: (index%8) +4
+  )
+  end
 
- # end
-
-# 200.times do |index|
-
-#     CommentProduct.create(
-#     body_comment_product: Faker::Lorem.paragraph,
-#     product_id: index%50,
-#     user_id: 3
-#   )
-
-# end
+ 400.times do |index|
+     CommentProduct.create(
+     body_comment_product: Faker::Lorem.paragraph,
+     product_id: (index%200)+1,
+     user_id: (index%10) +4
+   )
+ end
 
 
 
- # 5.times do |indes|
-  #  Category.create( 
-   #   name_category: Faker::StarWars.character ,
-   #   details:Faker::StarWars.quote
-    #  )
- # end
+  10.times do |indes|
+    Category.create(
+      name_category: Faker::StarWars.character ,
+      details:Faker::StarWars.quote
+      )
+  end
 
- #for num in 1..50
-  # CategoryProduct.create( product_id:(num%50)+1, category_id:(num%5)+1)
- #end
-
-#for num in 1..100
- # Transaction.create( product_id: num , cart_id: num, amount: 10)
-#end
+ for num in 1..300
+   CategoryProduct.create( product_id:(num%200)+1, category_id:(num%10)+1)
+ end
+ 10.times do |index|
+   Cart.create( user_id:  (index%10)+4,
+   total_price: 0)
+ end
+for num in 1..300
+  Transaction.create( product_id: (num%200)+1 , cart_id: (num%10)+1, amount: (rand 1..100))
+end
 
 
 for num in 100..149
-   Sale.create( product_id: num , cart_id: (num%9)+1 , amount: (rand 1..550) )
+   Sale.create( product_id: (num%200)+1 , cart_id: (num%10)+1, amount: (rand 1..500))
 end
- #15.times do |index|
-  # Cart.create( user_id:index, 
-   #total_price: 0)
-# end
