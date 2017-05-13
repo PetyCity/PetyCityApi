@@ -5,6 +5,9 @@ class CreatePublications < ActiveRecord::Migration[5.0]
       t.text :body_publication, null: false, default: ""
       t.references :user, foreign_key: true, null:  false
       t.string :image_publication 
+      t.integer :p_votes_like ,default:0
+      t.integer :p_votes_dislike ,default:0     
+ 
       t.timestamps
     end
   end
