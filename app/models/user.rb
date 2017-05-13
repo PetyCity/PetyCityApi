@@ -35,9 +35,9 @@ def self.prueba(name)
 
   enum rol: [ :admin, :company, :customer, :company_customer ]
 
-     devise :database_authenticatable, :registerable, :confirmable,
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
-         include DeviseTokenAuth::Concerns::User
+    include DeviseTokenAuth::Concerns::User
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
 

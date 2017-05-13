@@ -1,8 +1,12 @@
 
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'api/v1/auth'
+  mount_devise_token_auth_for 'User', at: 'api/v1/auth', controllers: {
+                              omniauth_callbacks: "api/v1/omniauth_callbacks"
+                            }
   namespace :api do     
     namespace :v1 do 
+    #  get '/auth/:facebook/callback', to: 'sessions#create'
+     # get '/auth/failure', to: redirect('/')
        root to: "products#index"
        resources :contacts, only: [:create]
        get 'home/mostsales', to: 'products#productsmostsales'      
