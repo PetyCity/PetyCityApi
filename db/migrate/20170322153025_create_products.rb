@@ -7,7 +7,7 @@ class CreateProducts < ActiveRecord::Migration[5.0]
       t.decimal :value, null:false
       t.integer :amount, null:false
       t.references :company, foreign_key: true , null:false
-      t.boolean :active,default:true
+      t.boolean :active,default:false
       t.integer :votes_number,default:0
       t.float :votes_average,default:0
       t.timestamps
