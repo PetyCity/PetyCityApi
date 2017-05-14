@@ -260,7 +260,7 @@ class Api::V1::ProductsController < ApplicationController
       if @product.save
         render json: @product, status: :created, each_serializer: ProductSerializer,render_attribute:  @parametros 
       else
-        render json: @product, status: :unprocessable_entity, each_serializer: ProductSerializer,render_attribute:  @parametros 
+        render json: @product.errors, status: :unprocessable_entity, each_serializer: ProductSerializer,render_attribute:  @parametros 
       end
     else
       render status: :forbidden
