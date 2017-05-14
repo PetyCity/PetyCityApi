@@ -129,7 +129,7 @@
             if @publication.save
               render  status: :created
             else
-              render  status: :unprocessable_entity
+              render json: @publication.errors, status: :unprocessable_entity
             end
     end  
    

@@ -86,7 +86,7 @@ Rails.application.routes.draw do
                  get 'search' => "publications#search"
               end
             end
-            resources :companies, only: [:index, :show, :destroy] do 
+            resources :companies, only: [:index, :show, :destroy,:update] do 
               get 'product_bycompany', to: 'products#index'
               collection do
                 get 'search' => "companies#search"
