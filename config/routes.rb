@@ -86,6 +86,9 @@ Rails.application.routes.draw do
                  get 'search' => "publications#search"
               end
             end
+            resources :carts , only: [] do   
+              resources :sales, only:[:show,:index] 
+            end
             resources :companies, only: [:index, :show, :destroy,:update] do 
               get 'product_bycompany', to: 'products#index'
               collection do
@@ -108,7 +111,32 @@ Rails.application.routes.draw do
             get 'shopsales' , to: 'product#productssales'
             resources :contacts, only: [:create]
             resources :users, only: [ :show]            
-            resources :companies do                  
+            resources :companies do 
+              resources :sales, only:[:show, :index]  
+              #############################################               
+              resources :products do
+                resources :sales, only:[:show,:index]             
+                resources :category_products
+                resources :images
+                resources :comment_products do
+                  member do
+                    get 'votes_like', to: 'comment_products#votes_like'
+                    get 'votes_dislike', to: 'comment_products#votes_dislike' 
+                    get 'my_vote', to: 'comment_products#my_vote'            
+                  end
+                end
+                member do
+                  get 'preview'
+                  get 'catego_product', to: 'category_products#catego_product' 
+                  get 'stars_prom', to: 'products#stars_prom' 
+                  get 'num_votes', to: 'products#num_votes'                
+                end
+                collection do 
+                  get 'search' => "products#search"                 
+                  resources :categories, only: [:index]
+                end
+              end
+              #############################################
               get 'product_bycompany', to: 'products#index'
               collection do
                 get 'search' => "companies#search"
@@ -135,7 +163,8 @@ Rails.application.routes.draw do
                   end
                 end
             end
-            resources :products do             
+            resources :products do 
+              resources :sales, only:[:show, :index]         
               resources :category_products
               resources :images
               resources :comment_products do
@@ -181,6 +210,11 @@ Rails.application.routes.draw do
               collection do
                 get 'search' => "publications#search"
               end
+            end
+            resources :carts, only:[:create]
+            resources :carts , only:[] do
+              resources :transactions, only:[:show, :index,:destroy, :create]
+              resources :sales, only:[:create]
             end
             resources :products, only: [:index, :show] do
               resources :comment_products do

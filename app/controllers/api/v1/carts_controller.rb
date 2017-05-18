@@ -15,13 +15,22 @@ class Api::V1::CartsController < ApplicationController
   end
 
   # POST /carts
+  #/api/v1/costum/users/:user_id/carts
   def create
-    @cart = Cart.new(cart_params)
+    @user = User.find_by_id(params[:user_id])
+    #if  current_user.id != params[:user_id]) 
+     #         render status:  :forbidden
+    if !@user.customer?
+      render status: :forbidden
 
-    if @cart.save
-      render json: @cart, status: :created, location: @cart
     else
-      render json: @cart.errors, status: :unprocessable_entity
+        @cart = Cart.new({ :user_id => params[:user_id], :total_price => cart_params[:total_price]})
+
+        if @cart.save
+          render json: @cart, status: :created
+        else
+          render json: @cart.errors, status: :unprocessable_entity
+        end
     end
   end
 
