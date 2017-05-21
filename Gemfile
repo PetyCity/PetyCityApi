@@ -37,6 +37,8 @@ gem 'will_paginate'
 
 gem 'devise_token_auth'
 gem 'omniauth'
+gem 'clockwork'
+gem 'foreman'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
