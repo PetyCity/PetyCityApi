@@ -2,11 +2,18 @@ class Api::V1::CartsController < ApplicationController
   before_action :set_cart, only: [:show, :update, :destroy]
 
   # GET /carts
+  #/api/v1/costum/users/:user_id/carts
   def index
-   @carts = Cart.all
-
-    render json: @carts, :include => []
+   
+    @user = User.find_by_id(params[:user_id])
+    if @user.customer?
+      @carts = Cart.all
+      render json: @carts, :include => []
+    else
+      render status: :forbidden
+    end
   end
+
 
   # GET /carts/1
   def show

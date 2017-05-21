@@ -90,6 +90,11 @@ Rails.application.routes.draw do
               resources :sales, only:[:show,:index] 
             end
             resources :companies, only: [:index, :show, :destroy,:update] do 
+              resources :products, only: [:index, :show] do
+              
+                  resources :sales, only:[:show,:index] 
+              end 
+
               get 'product_bycompany', to: 'products#index'
               collection do
                 get 'search' => "companies#search"
@@ -111,9 +116,11 @@ Rails.application.routes.draw do
             get 'shopsales' , to: 'product#productssales'
             resources :contacts, only: [:create]
             resources :users, only: [ :show]            
+            
             resources :companies do 
               resources :sales, only:[:show, :index]  
               #############################################               
+              
               resources :products do
                 resources :sales, only:[:show,:index]             
                 resources :category_products
@@ -211,7 +218,7 @@ Rails.application.routes.draw do
                 get 'search' => "publications#search"
               end
             end
-            resources :carts, only:[:create]
+            resources :carts, only:[:create,:index]
             resources :carts , only:[] do
               resources :transactions, only:[:show, :index,:destroy, :create]
               resources :sales, only:[:create]
