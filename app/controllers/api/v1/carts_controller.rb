@@ -6,6 +6,9 @@ class Api::V1::CartsController < ApplicationController
   def index
    
     @user = User.find_by_id(params[:user_id])
+    #if  current_user.id != params[:user_id].to_i
+     #         render status:  :forbidden
+    #end
     if @user.customer?
       @carts = Cart.all
       render json: @carts, :include => []
@@ -25,8 +28,9 @@ class Api::V1::CartsController < ApplicationController
   #/api/v1/costum/users/:user_id/carts
   def create
     @user = User.find_by_id(params[:user_id])
-    #if  current_user.id != params[:user_id]) 
-     #         render status:  :forbidden
+    #if  current_user.id != params[:user_id].to_i 
+     #   render status:  :forbidden
+    #end
     if !@user.customer?
       render status: :forbidden
 

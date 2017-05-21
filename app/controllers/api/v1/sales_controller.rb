@@ -1,5 +1,5 @@
 class Api::V1::SalesController < ApplicationController
-  before_action :set_sale, only: [:show, :update, :destroy]
+  before_action :set_sale, only: [:show, :update, :destroy, :index, :create]
 
   # GET /sales
  #//api/v1/admin/users/:user_id/carts/:cart_id/sales
@@ -97,12 +97,47 @@ class Api::V1::SalesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_sale
-      @sale = Sale.find(params[:id])
-    end
+    #def set_sale
+     # @sale = Sale.find(params[:id])
+    #end
 
     # Only allow a trusted parameter "white list" through.
     def sale_params
       params.require(:sale).permit(:transaction_id, :product_id, :cart_id, :amount)
+    end
+
+    def set_sale
+      if params.has_key?(:user_id)         
+            @user = User.find_by_id(params[:user_id]) 
+            if  @user.nil?
+                  render status:  :not_found
+            end
+            #if  current_user.id != params[:user_id].to_i 
+             #     render status:  :forbidden
+            #end    
+            if params.has_key?(:id)
+                   
+                 @sale = Sale.find(params[:id])       
+                if  @sale.nil?  
+                       render status:   :not_found
+                end
+            else
+              @sale = Sale.load_sales                               
+            end
+
+        else            
+            if params.has_key?(:id)
+                  
+                 #if  current_user.id != params[:id]) 
+                 #       render status:  :forbidden
+                 # end                     
+                 @sale = Sale.find(params[:id])   
+                 if  @sale.nil?
+                       render status: :not_found
+                 end
+             else
+                  @sale = Sale.load_sales 
+             end
+         end
     end
 end

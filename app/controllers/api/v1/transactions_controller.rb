@@ -1,5 +1,5 @@
 class Api::V1::TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :update, :destroy]
+  before_action :set_transaction, only: [:show, :update, :destroy, :index, :create]
 
   # GET /transactions
   
@@ -7,8 +7,6 @@ class Api::V1::TransactionsController < ApplicationController
   def index
     #@transactions = Transaction.all
    if params.has_key?(:cart_id)
-    
-   
       @transactions = Transaction.transactions_by_carts(params[:cart_id]) 
       render json: @transactions, status: :ok 
     
@@ -18,16 +16,16 @@ end
   # GET /transactions/1
 
   #/api/v1/costum/users/:user_id/carts/:cart_id/transactions/:id
-  def show
+ def show
     if params.has_key?(:user_id)
       @user = User.find_by_id(params[:user_id])
       @transaction = Transaction.transaction_by_id(params[:id])
-      if !user.customer?
+      if !@user.customer?
         render status: :forbidden
 
       else 
 
-        render json: @transaction, :include =>[:product, :cart]
+        render json: @transaction, :include =>[]
       end        
     end
 end
@@ -80,12 +78,49 @@ end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_transaction
-      @transaction = Transaction.find(params[:id])
-    end
+    #def set_transaction
+    #  @transaction = Transaction.find(params[:id])
+    #end
 
     # Only allow a trusted parameter "white list" through.
     def transaction_params
       params.require(:transaction).permit(:product_id, :cart_id, :amount)
     end
+
+    def set_transaction
+      if params.has_key?(:user_id)         
+            @user = User.find_by_id(params[:user_id]) 
+            if  @user.nil?
+                  render status:  :not_found
+            end
+            if  current_user.id != params[:user_id].to_i 
+                  render status:  :forbidden
+            end    
+            if params.has_key?(:id)
+                   
+                 @transaction = Transaction.find(params[:id])       
+                if  @sale.nil?  
+                       render status:   :not_found
+                end
+            else
+              @transaction = Transaction.load_transactions                               
+            end
+
+        else            
+            if params.has_key?(:id)
+                  
+                 #if  current_user.id != params[:id]) 
+                 #       render status:  :forbidden
+                 # end                     
+                 @transaction = Transaction.find(params[:id])   
+                 if  @transaction.nil?
+                       render status: :not_found
+                 end
+             else
+                  @transaction = Transaction.load_transactions 
+             end
+         end
+    end
+
+
 end
