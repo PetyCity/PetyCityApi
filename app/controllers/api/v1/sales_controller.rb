@@ -1,5 +1,7 @@
 class Api::V1::SalesController < ApplicationController
   before_action :set_sale, only: [:show, :update, :destroy, :index, :create]
+  before_action :select_sales_params, only: [:index,:show]
+
 
   # GET /sales
  #//api/v1/admin/users/:user_id/carts/:cart_id/sales
@@ -14,19 +16,19 @@ class Api::V1::SalesController < ApplicationController
     if @user.admin? || @user.company?
         if params.has_key?(:cart_id)
           @sale= Sale.sales_by_carts(params[:cart_id])
-          render json: @sale , :include =>[]
+          render json: @sale ,:include =>[:product], each_serializer: SalesSerializer,render_attribute: @parametros 
         elsif params.has_key?(:product_id)
           @product = Product.find_by_id(params[:product_id])
 
           if  Integer(params[:company_id]) == @product.company_id
             @sales= Sale.sales_by_products(params[:product_id])
-            render json: @sales, :include =>[]
+            render json: @sales, :include =>[:product], each_serializer: SalesSerializer,render_attribute: @parametros 
           else
             render status: :forbidden
           end
         else 
           @sales = Sale.sales_by_companies(params[:company_id])
-          render json: @sales, :include =>[]
+          render json: @sales, :include =>[:product], each_serializer: SalesSerializer,render_attribute: @parametros 
         end
     else 
       render status: :forbidden
@@ -102,6 +104,10 @@ class Api::V1::SalesController < ApplicationController
     #end
 
     # Only allow a trusted parameter "white list" through.
+    def select_sales_params 
+        @parametros =  "sale,"+params[:select_sale].to_s  
+    end
+
     def sale_params
       params.require(:sale).permit(:transaction_id, :product_id, :cart_id, :amount)
     end
