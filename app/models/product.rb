@@ -251,6 +251,10 @@ end
      .group("products.id")
      .order("Count(products.id) DESC")          
   end
+
+  def self.product_by_id(id)
+      find_by_id(id)
+  end
     
     
 end

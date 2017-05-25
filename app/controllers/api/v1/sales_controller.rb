@@ -1,27 +1,85 @@
 class Api::V1::SalesController < ApplicationController
-  before_action :set_sale, only: [:show, :update, :destroy]
+  before_action :set_sale, only: [:show, :update, :destroy, :index, :create]
+  before_action :select_sales_params, only: [:index,:show]
+
 
   # GET /sales
+ #//api/v1/admin/users/:user_id/carts/:cart_id/sales
+ 
+ # /api/v1/company/users/:user_id/companies/:company_id/products/:product_id/sales
+ #/api/v1/admin/users/:user_id/companies/:company_id/products/:product_id/sales
+ # /api/v1/company/users/:user_id/companies/:company_id/sales
+ 
+
   def index
-    @sales = Sale.all
-    #@sales = Sale.transactions_by_amounts_less(2)
-    render json: @sales
+    @user = User.find_by_id(params[:user_id])
+    if @user.admin? || @user.company?
+        if params.has_key?(:cart_id)
+          @sale= Sale.sales_by_carts(params[:cart_id])
+          render json: @sale ,:include =>[:product], each_serializer: SalesSerializer,render_attribute: @parametros 
+        elsif params.has_key?(:product_id)
+          @product = Product.find_by_id(params[:product_id])
+
+          if  Integer(params[:company_id]) == @product.company_id
+            @sales= Sale.sales_by_products(params[:product_id])
+            render json: @sales, :include =>[:product], each_serializer: SalesSerializer,render_attribute: @parametros 
+          else
+            render status: :forbidden
+          end
+        else 
+          @sales = Sale.sales_by_companies(params[:company_id])
+          render json: @sales, :include =>[:product], each_serializer: SalesSerializer,render_attribute: @parametros 
+        end
+    else 
+      render status: :forbidden
+    end
   end
 
+
+
+#/api/v1/admin/users/:user_id/companies/:company_id/carts/:cart_id/sales/:id(.:format)
+#/api/v1/admin/users/:user_id/companies/:company_id/products/:product_id/sales/:id
+#/api/v1/company/users/:user_id/carts/:cart_id/sales/:id(.:format)
+#/api/v1/company/users/:user_id/products/:product_id/sales/:id(.:format)
   # GET /sales/1
   def show
-    @sales = Sale.sales_by_id(params[:id])
-    render json: @sale, :include => [:product, :cart]
+    if params.has_key?(:user_id)
+      @user = User.find_by_id(params[:user_id])
+      @sales = Sale.sales_by_id(params[:id])
+      if !@user.company? and !@user.admin?
+          render status: :forbidden
+      else
+          render json: @sale, :include => []
+      end
+    end
   end
 
+ 
   # POST /sales
+  #/api/v1/costum/users/:user_id/carts/:cart_id/sales(.:format)s
   def create
-    @sale = Sale.new(sale_params)
-
-    if @sale.save
-      render json: @sale, status: :created
+    @user = User.find_by_id(params[:user_id])
+    if !@user.customer?
+      render status: :forbidden
     else
-      render json: @sale.errors, status: :unprocessable_entity
+      @transactions = Transaction.transactions_by_carts(params[:cart_id])
+      @sales = Array.new
+      begin  
+        Sale.transaction do
+          for transaction in @transactions do 
+             @sale = Sale.new({:product_id => transaction.product_id, :amount => transaction.amount, :cart_id => transaction.cart_id}) 
+             if @sale.save
+              @sales.push(@sale)
+
+              end
+          end
+          Transaction.where(cart_id: params[:cart_id]).destroy_all
+        end
+        render json: @sales, status: :created
+      rescue => e
+          puts e
+          render  status: :unprocessable_entity
+      end
     end
   end
 
@@ -41,12 +99,51 @@ class Api::V1::SalesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_sale
-      @sale = Sale.find(params[:id])
-    end
+    #def set_sale
+     # @sale = Sale.find(params[:id])
+    #end
 
     # Only allow a trusted parameter "white list" through.
+    def select_sales_params 
+        @parametros =  "sale,"+params[:select_sale].to_s  
+    end
+
     def sale_params
       params.require(:sale).permit(:transaction_id, :product_id, :cart_id, :amount)
+    end
+
+    def set_sale
+      if params.has_key?(:user_id)         
+            @user = User.find_by_id(params[:user_id]) 
+            if  @user.nil?
+                  render status:  :not_found
+            end
+            #if  current_user.id != params[:user_id].to_i 
+             #     render status:  :forbidden
+            #end    
+            if params.has_key?(:id)
+                   
+                 @sale = Sale.find(params[:id])       
+                if  @sale.nil?  
+                       render status:   :not_found
+                end
+            else
+              @sale = Sale.load_sales                               
+            end
+
+        else            
+            if params.has_key?(:id)
+                  
+                 #if  current_user.id != params[:id]) 
+                 #       render status:  :forbidden
+                 # end                     
+                 @sale = Sale.find(params[:id])   
+                 if  @sale.nil?
+                       render status: :not_found
+                 end
+             else
+                  @sale = Sale.load_sales 
+             end
+         end
     end
 end

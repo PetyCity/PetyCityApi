@@ -67,4 +67,10 @@ class Sale < ApplicationRecord
 	    where("amount <= ?", amount)
 			.paginate(:page => page,:per_page => per_page)
 	end
+	
+	def self.sales_by_companies(company_id)
+	  joins(:product)
+	  .where(products: {company_id: company_id})
+	end
+
 end

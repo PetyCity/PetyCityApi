@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170511154505) do
+ActiveRecord::Schema.define(version: 20170518183328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,10 +45,10 @@ ActiveRecord::Schema.define(version: 20170511154505) do
     t.text     "body_comment_product"
     t.integer  "product_id"
     t.integer  "user_id"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
     t.integer  "c_pro_votes_like",     default: 0
     t.integer  "c_pro_votes_dislike",  default: 0
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.index ["product_id"], name: "index_comment_products_on_product_id", using: :btree
     t.index ["user_id"], name: "index_comment_products_on_user_id", using: :btree
   end
@@ -57,10 +57,10 @@ ActiveRecord::Schema.define(version: 20170511154505) do
     t.text     "body_comment_Publication", default: "", null: false
     t.integer  "publication_id",                        null: false
     t.integer  "user_id",                               null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
     t.integer  "c_pu_votes_like",          default: 0
     t.integer  "c_pu_votes_dislike",       default: 0
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.index ["publication_id"], name: "index_comment_publications_on_publication_id", using: :btree
     t.index ["user_id"], name: "index_comment_publications_on_user_id", using: :btree
   end
@@ -75,13 +75,13 @@ ActiveRecord::Schema.define(version: 20170511154505) do
     t.integer  "user_id"
     t.boolean  "active",                     default: true
     t.string   "image_company"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
     t.decimal  "longitude"
     t.decimal  "latitude"
+    t.integer  "c_rol"
     t.integer  "c_votes_like",               default: 0
     t.integer  "c_votes_dislike",            default: 0
-    t.integer  "c_rol"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.index ["user_id"], name: "index_companies_on_user_id", using: :btree
   end
 
@@ -100,10 +100,10 @@ ActiveRecord::Schema.define(version: 20170511154505) do
   end
 
   create_table "images", force: :cascade do |t|
-    t.string   "name_image", limit: 20, null: false
-    t.integer  "product_id",            null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.string   "name_image", null: false
+    t.integer  "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_images_on_product_id", using: :btree
   end
 
@@ -115,10 +115,10 @@ ActiveRecord::Schema.define(version: 20170511154505) do
     t.integer  "amount",                        null: false
     t.integer  "company_id",                    null: false
     t.boolean  "active",        default: true
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
     t.integer  "votes_number",  default: 0
     t.float    "votes_average", default: 0.0
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
     t.index ["name_product", "company_id"], name: "index_products_on_name_product_and_company_id", unique: true, using: :btree
   end
@@ -128,10 +128,10 @@ ActiveRecord::Schema.define(version: 20170511154505) do
     t.text     "body_publication",  default: "", null: false
     t.integer  "user_id",                        null: false
     t.string   "image_publication"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
     t.integer  "p_votes_like",      default: 0
     t.integer  "p_votes_dislike",   default: 0
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.index ["user_id"], name: "index_publications_on_user_id", using: :btree
   end
 
@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 20170511154505) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "name_user"
-    t.integer  "image"
+    t.string   "image"
     t.string   "email"
     t.integer  "rol"
     t.boolean  "block",                  default: false

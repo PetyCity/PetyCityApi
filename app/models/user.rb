@@ -26,7 +26,7 @@ def self.prueba(name)
 
   #VALIDACIONES
 
-   validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
+  validates :name_user, format: { with: /[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]/,message: "only allows letters"
      }, length: { in: 5..30 }, presence: true
 
   validates :document, numericality: { only_integer: true ,
