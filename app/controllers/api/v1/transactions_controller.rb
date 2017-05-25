@@ -1,6 +1,8 @@
 class Api::V1::TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :update, :destroy, :index, :create]
 
+  before_action :select_transaction_params, only: [:index,:show]
+
   # GET /transactions
   
   #/api/v1/costum/users/:user_id/carts/:cart_id/transactions
@@ -8,7 +10,10 @@ class Api::V1::TransactionsController < ApplicationController
     #@transactions = Transaction.all
    if params.has_key?(:cart_id)
       @transactions = Transaction.transactions_by_carts(params[:cart_id]) 
-      render json: @transactions, status: :ok 
+      for i in @transactions do
+        puts i.id
+      end
+      render json: @transactions, :include =>[:cart,:product], each_serializer: TransactionSerializer,render_attribute: @parametros  
     
   end
 end
@@ -87,15 +92,19 @@ end
       params.require(:transaction).permit(:product_id, :cart_id, :amount)
     end
 
+    def select_transaction_params 
+        @parametros =  "transaction,"+params[:select_transaction].to_s  
+    end
+
     def set_transaction
       if params.has_key?(:user_id)         
             @user = User.find_by_id(params[:user_id]) 
             if  @user.nil?
                   render status:  :not_found
             end
-            if  current_user.id != params[:user_id].to_i 
-                  render status:  :forbidden
-            end    
+           # if  current_user.id != params[:user_id].to_i 
+            #      render status:  :forbidden
+            #end    
             if params.has_key?(:id)
                    
                  @transaction = Transaction.find(params[:id])       

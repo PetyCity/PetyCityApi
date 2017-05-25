@@ -28,10 +28,10 @@ class Api::V1::CartsController < ApplicationController
   #/api/v1/costum/users/:user_id/carts
   def create
     @user = User.find_by_id(params[:user_id])
-    #if  current_user.id != params[:user_id].to_i 
+    #if  current_user.id != Integer(params[:user_id]) 
      #   render status:  :forbidden
-    #end
-    if !@user.customer?
+    #elsif !@user.customer?
+      if !@user.customer?
       render status: :forbidden
 
     else
