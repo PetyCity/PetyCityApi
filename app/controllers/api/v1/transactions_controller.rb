@@ -1,7 +1,7 @@
 class Api::V1::TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :update, :destroy, :index, :create]
 
-  before_action :select_transaction_params, only: [:index,:show]
+  before_action :select_transaction_params, only: [:index,:show,:create,:destroy]
 
   # GET /transactions
   
@@ -50,7 +50,8 @@ end
         @cart = Cart.cart_by_id(params[:cart_id])
         @total = @product[0].value*Integer(transaction_params[:amount]) + @cart.total_price
         if Cart.update(params[:cart_id], :total_price => @total)
-            render json: @transaction, :include =>[] ,  status: :created
+            render json: @transaction, :include =>[] ,  each_serializer: TransactionSerializer,render_attribute: @parametros  
+    
         end
       else
         render json: @transaction, :include =>[] , status: :unprocessable_entity
@@ -71,9 +72,13 @@ end
   #/api/v1/costum/users/:user_id/carts/:cart_id/transactions/:id
   # DELETE /transactions/1
   def destroy
+
+    puts "*********************************"
     @cart = Cart.cart_by_id(params[:cart_id])
+    
     @product = Product.product_by_id( @transaction.product_id)
-        
+    #@total =  @cart.total_price - @product[0].value*Integer(transaction_params[:amount]) 
+         
     @total =  @cart.total_price - @product.value*Integer(transaction_params[:amount]) 
     
     if Cart.update(params[:cart_id], :total_price => @total)
@@ -96,6 +101,11 @@ end
         @parametros =  "transaction,"+params[:select_transaction].to_s  
     end
 
+    # def set_transaction
+    #   @transaction = Transaction.find(params[:id])
+    # end
+
+
     def set_transaction
       if params.has_key?(:user_id)         
             @user = User.find_by_id(params[:user_id]) 
@@ -108,11 +118,12 @@ end
             if params.has_key?(:id)
                    
                  @transaction = Transaction.find(params[:id])       
-                if  @sale.nil?  
+                if  @transaction.nil?  
                        render status:   :not_found
                 end
             else
-              @transaction = Transaction.load_transactions                               
+              @transaction = Transaction.load_transactions  
+
             end
 
         else            
